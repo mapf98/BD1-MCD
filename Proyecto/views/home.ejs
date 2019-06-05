@@ -6,15 +6,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>MinerUCAB - Plantilla</title>
+    <title>MinerUCAB - HOME</title>
 
-    <link rel="icon" href="IMAGES/favicon.png">
+    <link rel="icon" href="public/images/favicon.png">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link rel="stylesheet" href="CSS/bootstrap.min.css">
-    <link rel="stylesheet" href="CSS/estilos.css">
-    <link rel="stylesheet" href="CSS/animate.css">
-    <link href="CSS/bootstrap.min.css" rel="stylesheet">
-    <link href="CSS/estilos.css" rel="stylesheet">
+    <link rel="stylesheet" href="public/css/animate.css">
+    <link href="public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/css/estilos.css" rel="stylesheet">
   </head>
  
 <body>
@@ -28,15 +26,14 @@
               <section class="cabecera">
                 <div class="row">
                   <div class="col-lg-12">
-                    <img src="IMAGES/favicon.png" class="img-fluid">
+                    <img src="public/images/favicon.png" class="img-fluid">
                   </div>
                 </div>
 
                 <div class="row">
                   <div class="col-lg-12">
-                    <h1 class="text-center">Miguel Fraga</h1>
-                    <p class="text-center">Gestor</p>
-                    <p class="text-center">mpfraga98@gmail.com</p>
+                    <h3 class="text-center"><%= user.nombre %> <%= user.apellido %></h3>
+                    <p class="text-center">Administrador - <%= user.usuario %></p>
                   </div>
                 </div>
               </section>
@@ -74,7 +71,11 @@
                   <ul class="list-group">
                     <li class="list-group-item text-footer"><i class="fas fa-bell"></i>  Notificaciones</li>
                     <li class="list-group-item text-footer"><i class="fas fa-cog"></i>  Configuración</li>
-                    <li class="list-group-item text-footer"><i class="far fa-arrow-alt-circle-left"></i>  Cerrar Sesión</li>
+                    <li class="list-group-item text-footer"> 
+                      <form action="/logOut" method="POST">
+                        <i class="far fa-arrow-alt-circle-left"></i> <button type="submit">Cerrar Sesión</button>
+                      </form> 
+                    </li>
                   </ul>
                 </div>
                 <div class="col-lg-2"></div>
@@ -83,6 +84,7 @@
           </div>
         </nav>
 
+        
         <main role="main" class="ml-sm-auto col-lg-10 content">
           <section class="container-fluid">
             <div class="row">
@@ -110,15 +112,15 @@
                   <h1 class="text-center">Contenido</h1>
               </div>
             </div>
-            <img src="IMAGES/fondo.jpg" class="img-fluid">
+            <img src="public/images/fondo.jpg" class="img-fluid">
           </section>
         </main>
       </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="JS/popper.min.js"></script>
-    <script src="JS/bootstrap.min.js"></script>
+    <script src="public/js/popper.min.js"></script>
+    <script src="public/js/bootstrap.min.js"></script>
   </body>
 
 </html>

@@ -59,3 +59,64 @@
   background-color: gray;
 }
 
+/*LOGIN USERS*/
+
+.formBox{
+  background-color: #292F36;
+  border-radius: 10px;
+  padding: 25px;
+}
+
+.imgLogin{
+  height: 160px;
+  width: 160px;
+}
+
+.containerLogin{
+  margin-top:45px;
+}
+
+.horizontalDivider{
+  background-color: #294936;
+  height: 2px;
+}
+
+.formsField{
+  background-color: transparent;
+  border-color: transparent transparent white transparent;
+  border-width: 1px;
+  border-radius: 2px;
+  transition: 0.2s ease-in-out;
+  color: white;
+}
+
+.form-control.formsField:hover,
+.form-control.formsField:focus{
+  border-radius: 3px;
+  color: white;
+  background-color: transparent;
+  box-shadow: none;
+  border-color: white;
+}
+
+.labelInputs{
+  color: white;
+}
+
+.buttonLogin{
+  margin-top: 40px;
+}
+
+.textErrorUp{
+  color: white;
+  font-size: 14px;
+  margin-top: 40px;
+  transition: 1s ease-in-out;
+}
+
+.textErrorDown{
+  color: white;
+  font-size: 14px;
+  margin-top: 70px;
+  transition: 1s ease-in-out;
+}
