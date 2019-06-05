@@ -1,0 +1,22 @@
+Primer paso
+	-En la carpeta descargada del repositorio o donde quieran trabajar (Pero hay que tener las carpetas de views y public),definir lo de abajo!
+	-npm init (Definen el json con una que otra cosa particular, todo desde consola)
+	-npm install express --save
+	-npm install pg --save
+	-npm install ejs --save
+	-npm install body-parser --save
+	-npm install nodemon -D   ----------> Para usar esto tienen que colocar en package.json en la parte que dice "scripts"
+		                                            "start": "node app.js", ---> Al ejecutar "npm start" se ejecuta el node app.js
+                                                            "dev": "nodemon app.js" ---> Al ejecutar "npm run dev" se ejecuta el nodemon para app.js (Al hacer esto no tienen que estar actualizando a cada rato)
+	
+Segundo paso
+	-Para probar en node solo ponene "node app.js"
+	-Configurar la conexión local a BD 
+	-Arreglar los querys con respecto a la BD local
+Tercer paso
+	-Realizar pruebas
+	-Si se va a subir algo recordar el .gitignore
+
+
+
+Nota: esta versión es de prueba, casi se encuentra en su etapa definitiva, estoy puliendo unos detalles con el ajax.
