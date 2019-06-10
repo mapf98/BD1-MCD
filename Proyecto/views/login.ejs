@@ -8,7 +8,7 @@
 
     <title>MinerUCAB - Login</title>
 
-    <link rel="icon" href="IMAGES/favicon.png">
+    <link rel="icon" href="public/images/favicon.png">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/bootstrap.min.css">
     <link rel="stylesheet" href="public/css/estilos.css">
@@ -24,22 +24,22 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
           <img src="public/images/favicon.png" class="rounded mx-auto d-block imgLogin">
-          <h1 class="text-center">¡Bienvenido a MinerUCAB!</h1>
+          <h1 class="text-center titleLogin">¡Bienvenido a MinerUCAB!</h1>
           <hr class="horizontalDivider">
           <div class="formBox">
             <div class="row">
               <div class="col-md-2"></div>
               <div class="col-md-8">
-                <form action="/login" method="POST">
+                <form action="/login" method="POST" id="formLogin">
                   <div class="form-group">
-                    <label for="user" class="labelInputs">User</label>
-                    <input type="text" class="form-control formsField" id="user" name="user" required>
+                    <label for="userLogin" class="labelInputs">User</label>
+                    <input type="text" class="form-control formsField" id="userLogin" name="user" required>
                   </div>
                   <div class="form-group">
-                    <label for="password" class="labelInputs">Password</label>
-                    <input type="password" class="form-control formsField" id="password" name="password" required>
+                    <label for="passwordLogin" class="labelInputs">Password</label>
+                    <input type="password" class="form-control formsField" id="passwordLogin" name="password" required>
                   </div>
-                  <button type="submit" id="buttonVerify" class="btn btn-primary btn-block buttonLogin">Iniciar Sesión</button>
+                  <button type="submit" id="buttonVerify" class="btn btn-primary btn-login btn-block buttonLogin">Iniciar Sesión</button>
                 </form> 
               </div>
               <div class="col-md-2" id="errorColumLog"></div>  
@@ -49,6 +49,38 @@
         <div class="col-md-2"></div>
       </div>
     </section>
+
+    <footer class="container-fluid footerLogin">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <div class="text-center divlinkLogin">
+            <p id="forgotLink" class="textForgotPassword" data-toggle="modal" data-target="#loginModal">¿Olvidaste la contraseña?</p>
+
+            <!-- Modal -->
+            <div class="modal fade modalUserForgot" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="modalLoginLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalLoginLabel">¿Olvidaste la contraseña?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Para recuperar la contraseña consulta a tu administrador de recursos humanos.
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </footer>
 
     <script
     src="https://code.jquery.com/jquery-3.4.1.min.js"

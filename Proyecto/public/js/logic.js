@@ -1,19 +1,117 @@
-$(document).ready(function(){
+//Login
+$('#userLogin').focus(function(){
+	$('#userLogin').removeClass('formsFieldError');
+});
+
+$('#passwordLogin').focus(function(){
+	$('#passwordLogin').removeClass('formsFieldError');
+});
+
+
+
+$('#formLogin').on('submit',function(e){
+	e.preventDefault();
+	let userLog = $('#userLogin');
+	let passwordLog = $('#passwordLogin');
+	userLogGlobal = userLog;
+	passwordLogGlobal =passwordLog;
 	$.ajax({
-		url: '/loginCheck',
-		success : function(checkLogJSON){
-			if(checkLogJSON.usuario == "error" && checkLogJSON.password == "error"){
-				showErrorColumLog();	
-			}else if(checkLogJSON.usuario == "error"){
-				showErrorUser();
-			}else if(checkLogJSON.password == "error"){
-				showErrorPassword();
+		url: '/login',
+		method: 'POST',
+		data: {
+			user: userLog.val(),
+			password: passwordLog.val()
+		},
+		success: function(response){
+			if(response == 'access'){
+				window.location.href = "/Home";
 			}else{
-				cleanErrorLog();
-			}
+				createdemon = true;
+				userLog.addClass('formsFieldError');
+				passwordLog.addClass('formsFieldError');
+			}			
 		}
 	});
 });
+
+//Home
+
+$('#menuItemAliados').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemSolCompra').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemEmpleados').on('click',function(){
+	window.location.href = "/Empleados";
+});
+
+$('#menuItemVentas').on('click',function(){
+	window.location.href = "/Ventas";
+});
+
+$('#menuItemCaja').on('click',function(){
+	window.location.href = "/Caja";
+});
+
+$('#menuItemMinerales').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemReportes').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemYacimientos').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemExplotaciones').on('click',function(){
+	window.location.href = "/Home";
+});
+
+$('#menuItemGestion').on('click',function(){
+	window.location.href = "/Gestion";
+});
+
+$('#menuItemProyectos').on('click',function(){
+	window.location.href = "/Proyectos";
+});
+
+$('#menuItemPersonal').on('click',function(){
+	window.location.href = "/Personal";
+});
+
+$('#menuItemUsuarios').on('click',function(){
+	window.location.href = "/Usuarios";
+});
+
+$('#backToHome').on('click',function(){
+	window.location.href = "/Home";
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function showErrorColumLog(){
 	let errorColumLog = $('#errorColumLog');
@@ -25,25 +123,3 @@ function showErrorColumLog(){
 	`)
 };
 
-function showErrorPassword(){
-	let errorColumLog = $('#errorColumLog');
-
-	errorColumLog.html('');
-	errorColumLog.append(`
-		<p class="text-center textErrorDown"><i class="far fa-arrow-alt-circle-left"></i> Error en password</p>
-	`)
-};
-
-function showErrorUser(){
-	let errorColumLog = $('#errorColumLog');
-
-	errorColumLog.html('');
-	errorColumLog.append(`
-		<p class="text-center textErrorUp"><i class="far fa-arrow-alt-circle-left"></i>  Error en usuario</p>
-	`)
-};
-
-function cleanErrorLog(){
-	let errorColumLog = $('#errorColumLog');
-	errorColumLog.html('');
-};

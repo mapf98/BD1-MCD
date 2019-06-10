@@ -1,4 +1,23 @@
+/*COLORES BASE
+
+Azul oscuro: #0C084C;
+Azul claro: #096386;
+Verde: #00B7A8;
+Beige: #F0EEC8; 
+
+Colores Logo UCAB
+
+Verde: #1A5B1B;
+Amarillo: #FACB07;
+Azul: #51BBED;
+
+*/
+
 /*PLANTILLA BASE*/
+
+body{
+  background-image: url('../images/prism.png');
+}
 
 .sidebar {
   position: fixed;
@@ -8,7 +27,7 @@
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  background-color: gray;
+  background-color: #F0EEC8;
 }
 
 .sidebar-sticky {
@@ -27,23 +46,9 @@
   }
 }
 
-.content{
-  
-}
-
-.cabecera{
-  margin-top: -60px;
-  margin-bottom: 60px;
-}
-
-.sectionOptions{
-  margin-bottom: 40px;
-  margin-top: -20px;
-}
-
 .text-sidebar{
   font-size: 12px;
-  color: #fff;
+  color: #000;
 }
 
 .text-footer{
@@ -51,13 +56,20 @@
   color: #fff;
 }
 
-.list-group-item {
-  position: relative;
-  display: block;
-  padding: .85rem .05rem;
-  border:none;
-  background-color: gray;
+.iconSideMenu{
+  margin-bottom: -0.2rem;
 }
+
+.footerSideBar{
+  position: absolute;
+  top:520px;
+}
+
+.rowButtonSidebar{
+  margin-top: 20px;
+}
+
+
 
 /*LOGIN USERS*/
 
@@ -77,7 +89,7 @@
 }
 
 .horizontalDivider{
-  background-color: #294936;
+  background-color: #1A5B1B;
   height: 2px;
 }
 
@@ -88,6 +100,11 @@
   border-radius: 2px;
   transition: 0.2s ease-in-out;
   color: white;
+}
+
+.formsFieldError{
+  border-color: transparent transparent red transparent;
+  transition: 0.5s ease-in-out;
 }
 
 .form-control.formsField:hover,
@@ -120,3 +137,135 @@
   margin-top: 70px;
   transition: 1s ease-in-out;
 }
+
+.footerLogin{
+  background-color: #292F36;
+  margin-top: 100px;
+  height: 82px;
+}
+
+.textfooter{
+  color: white;
+}
+
+.divlinkLogin{
+  padding: 8px;
+  margin-top: 20px;
+}
+
+.textForgotPassword{
+  color: white;
+  cursor: pointer;
+}
+
+.modalUserForgot{
+  margin-top: 180px;
+}
+
+.titleLogin{
+  color: white;
+}
+
+
+
+/*HOME*/
+
+.textUser{
+  margin-bottom: 1rem;
+}
+
+.blockTextHomeUser{
+  margin-top: 20px;
+}
+
+.homeBox{
+  margin-top: 120px;
+}
+
+.secondRow{
+  margin-top: 120px;
+}
+
+.lastRowMenu{
+  margin-top: 120px;
+  margin-bottom: 110px;
+}
+
+.iconsMenu{
+  font-size: 70px;
+}
+
+.boxMenuItem{
+  padding: 30px;
+  border-radius:10px; 
+  background-color:#F0EEC8;
+}
+
+.boxMenuItem:hover{
+  background-color: #00B7A8;
+  color: white;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+.btnHome{
+  padding: 5px;
+  background-color: #00B7A8;
+  width: 140px;
+  color: white;
+}
+
+.btnHome:hover{
+  color: white;
+  background-color:#00968a; 
+}
+
+.sideInfo{
+  margin-top: -45px;
+}
+
+/*Caja*/
+
+.rowButtonBack{
+  margin-top: 60px;
+}
+
+.cajaBox{
+  margin-top: 260px;
+}
+
+.btnBack{
+  background-color:#00B7A8;
+  color: white;
+}
+
+.btnBack:hover{
+  color: white;
+  background-color:#00968a; 
+}
+
+.sectionOptions{
+  margin-top: 30px;
+}
+
+.iconsSideMenuGH:hover{
+  cursor: pointer;
+}
+
+.activeOption{
+  color:#fff;
+  background-color: #00B7A8;
+  border-radius: 10px;
+}
+
+/*Proyectos*/
+
+.proyectosBox{
+  margin-top: 120px;
+}
+
+.rowDivider{
+  margin-top: 50px;
+}
+
+/*Empleados*/

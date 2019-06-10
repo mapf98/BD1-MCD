@@ -1,17 +1,13 @@
 //En esta sección requerimos los paquetes instalados para su uso.
 var express = require('express');
 var bodyParser = require('body-parser');
+const morgan = require('morgan');
 var app = express();
 var userJSON ={
   "nombre": "none",
   "apellido":"none",
   "usuario":"none",
   "password":"none"
-};
-
-var checkLogJSON = {
-  "usuario": "correcto",
-  "password": "correcto"
 };
 
 //En esta parte se encuentra la configuración para conectarse a la base de datos
@@ -52,15 +48,26 @@ app.get("/Home",function(req,res){
   }
 });
 
-app.get("/loginVerify",function(req,res){
-  res.json(userJSON);
+app.post('/login',function(req,res){
+  var userCheck = req.body.user;
+  var userPassword = req.body.password;
+  client.query('SELECT nombre,apellido,keyword FROM usuarios WHERE usuario = $1',[userCheck],(err,result)=>{
+      if(result.rows[0] != null && result.rows[1] == null){
+        if (result.rows[0].keyword == userPassword){
+          userJSON.nombre = result.rows[0].nombre;
+          userJSON.apellido = result.rows[0].apellido;
+          userJSON.usuario = userCheck;
+          userJSON.password = userPassword;
+          res.json('access');  
+        }else{
+          res.json('notAccess');
+        }
+      }else{
+        res.json('notAccess');
+      }
+  });
 });
 
-app.get("/loginCheck",function(req,res){
-  res.json(checkLogJSON);
-});
-
-//Lógica para cerrar sesión
 app.post("/logOut",function(req,res){
   userJSON.nombre = "none";
   userJSON.apellido = "none";
@@ -69,40 +76,45 @@ app.post("/logOut",function(req,res){
   res.redirect('login');
 });
 
-//Lógica de login y verificación de usuario
-app.post("/login",function(req,res){
-  var user = req.body.user;
-  var password = req.body.password;
-  console.log("Usuario: " + user);
-  console.log("Keyword: " + password);
-  client.query('SELECT * FROM usuarios WHERE usuario = $1',[user],(err,result)=>{
-      if(result.rows[0] != null && result.rows[1] == null){
-        checkLogJSON.usuario = "correcto";
-        if (result.rows[0].keyword == password){
-          userJSON.nombre = result.rows[0].nombre;
-          userJSON.apellido = result.rows[0].apellido;
-          userJSON.usuario = user;
-          userJSON.password = password;
-          checkLogJSON.password = "correcto";
-          res.redirect('Home');  
-        }else{
-          checkLogJSON.password = "error"; 
-          res.redirect('login');
-        }
-      }else{
-        checkLogJSON.usuario = "error";
-        checkLogJSON.password = "error"; 
-        res.redirect('login');
-      }
-  });
+//Logica home
+
+app.get("/Caja",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('homeCaja',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
 });
 
-//Test para moestrar elementos de base de datos en pantalla
-app.get("/test",function(req,res){
-  client.query('SELECT * FROM usuarios',(err,result)=>{
-    res.render('test',{test: result.rows});
-  });
+app.get("/Proyectos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('homeProyectos',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
 });
+
+app.get("/Gestion",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('homeGestion',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Personal",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('homePersonal',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+
+
+
+
 
 //Test para insertar elemento en base de datos con formulario
 app.post("/users",function(req,res){
