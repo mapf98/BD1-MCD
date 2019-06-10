@@ -1,7 +1,6 @@
 //En esta sección requerimos los paquetes instalados para su uso.
 var express = require('express');
 var bodyParser = require('body-parser');
-const morgan = require('morgan');
 var app = express();
 var userJSON ={
   "nombre": "none",
