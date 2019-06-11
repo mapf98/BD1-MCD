@@ -27,7 +27,7 @@ body{
   z-index: 100; /* Behind the navbar */
   padding: 48px 0 0; /* Height of navbar */
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  background-color: #F0EEC8;
+  background-color: #276FBF;
 }
 
 .sidebar-sticky {
@@ -47,8 +47,7 @@ body{
 }
 
 .text-sidebar{
-  font-size: 12px;
-  color: #000;
+  color: #fff;
 }
 
 .text-footer{
@@ -62,14 +61,12 @@ body{
 
 .footerSideBar{
   position: absolute;
-  top:520px;
+  top:500px;
 }
 
 .rowButtonSidebar{
   margin-top: 20px;
 }
-
-
 
 /*LOGIN USERS*/
 
@@ -198,11 +195,11 @@ body{
 .boxMenuItem{
   padding: 30px;
   border-radius:10px; 
-  background-color:#F0EEC8;
+  background-color:white;
 }
 
 .boxMenuItem:hover{
-  background-color: #00B7A8;
+  background-color: #276FBF;
   color: white;
   cursor: pointer;
   transition: 0.1s ease-in-out;
@@ -210,14 +207,14 @@ body{
 
 .btnHome{
   padding: 5px;
-  background-color: #00B7A8;
+  background-color: #40434E;
   width: 140px;
   color: white;
 }
 
 .btnHome:hover{
   color: white;
-  background-color:#00968a; 
+  background-color:#2D3142; 
 }
 
 .sideInfo{
@@ -235,13 +232,17 @@ body{
 }
 
 .btnBack{
-  background-color:#00B7A8;
+  background-color:#EF233C;
   color: white;
+}
+
+#backToHome:focus{
+  box-shadow: 0 0 0 0.2rem rgba(239, 35, 60, 0.2);
 }
 
 .btnBack:hover{
   color: white;
-  background-color:#00968a; 
+  background-color:#D80032; 
 }
 
 .sectionOptions{
@@ -252,10 +253,22 @@ body{
   cursor: pointer;
 }
 
+.iconsSideMenuGH{
+  color: #fff;
+}
+
 .activeOption{
-  color:#fff;
-  background-color: #00B7A8;
+  background-color: #464F51;
   border-radius: 10px;
+}
+
+.text-sidebar{
+  color: #EDF2F4;
+}
+
+.tagUser{
+  background-color: #40434E;
+  padding: 10px;
 }
 
 /*Proyectos*/

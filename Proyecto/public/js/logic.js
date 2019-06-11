@@ -88,10 +88,17 @@ $('#menuItemUsuarios').on('click',function(){
 	window.location.href = "/Usuarios";
 });
 
+$('#menuItemHome').on('click',function(){
+	window.location.href = "/Home";
+});
+
 $('#backToHome').on('click',function(){
 	window.location.href = "/Home";
 });
 
+$('#backToPersonal').on('click',function(){
+	window.location.href = "/Personal";
+});
 
 
 

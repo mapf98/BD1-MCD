@@ -109,6 +109,13 @@ app.get("/Personal",function(req,res){
   }
 });
 
+app.get("/Empleados",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('empleados',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
 
 
 
