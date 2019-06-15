@@ -52,9 +52,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemPersonal">
-                      <p class="text-center iconSideMenu"><i class="fas fa-id-card-alt"></i></p>
-                      <p class="text-center">Personal</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemEmpleados">
+                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
+                      <p class="text-center">Empleados</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -109,52 +109,93 @@
 
         
         <main role="main" class="ml-sm-auto col-lg-10 content">
-          <section class="container-fluid proyectosBox">
+          <section class="container-fluid empleadosAgregarBox">
+            <div class="row titleRow">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <h1 class="text-center textTitle">Agregar Empleados</h1>
+              </div>
+              <div class="col-2"></div>
+            </div>
             <div class="row">
               <div class="col-2"></div>
-              <div class="col-4" id="menuItemAgregarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-plus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Agregar empleado</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemConsultarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-search iconsMenu"></i></p>
-                  <h2 class="text-center">Cosultar empleados</h2>
+              <div class="col-8">
+                <div class="boxFormAgregarEmpleado animated fadeIn">
+                  <form action="/Empleados-Agregar" method="POST" id="agregarEmpleado">
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <label for="nombreEmpleado">Primer nombre</label>
+                        <input type="text" class="form-control formsCRUD" id="nombreEmpleado" required>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="segundoNombreEmpleado">Segundo nombre</label>
+                        <input type="text" class="form-control formsCRUD" id="segundoNombreEmpleado">
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <label for="apellidoEmpleado">Primer apellido</label>
+                        <input type="text" class="form-control formsCRUD" id="apellidoEmpleado" required>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="segundoApellidoEmpleado">Segundo apellido</label>
+                        <input type="text" class="form-control formsCRUD" id="segundoApellidoEmpleado">
+                      </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="form-row">
+                      <div class="col-md-2 mb-3">
+                        <label for="nacionalidadEmpleado">Nacionalidad</label>
+                        <select class="form-control formsCRUD" id="nacionalidadEmpleado" required>
+                          <option>V</option>
+                          <option>E</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <label for="cedulaEmpleado">Cédula</label>
+                        <input type="text" class="form-control formsCRUD" id="cedulaEmpleado" required>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="fechaNacimientoEmpleado">Fecha Nacimiento</label>
+                        <input type="date" class="form-control formsCRUD" id="fechaNacimientoEmpleado" required>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="col-md-4 mb-3">
+                        <label for="generoEmpleado">Género</label>
+                        <select class="form-control formsCRUD" id="generoEmpleado" required>
+                          <option>Femenino</option>
+                          <option>Masculino</option>
+                          <option>Otro</option>
+                        </select>
+                      </div>
+                      <div class="col-md-8 mb-3">
+                        <label for="telefonoEmpleado">Teléfono</label>
+                        <input type="text" class="form-control formsCRUD" id="telefonoEmpleado" required>
+                      </div>
+                    </div>
+                    
+                    <hr>
+
+                    <button class="btn btnForms btn-block" type="submit">Agregar</button>
+                  </form>
                 </div>
               </div>
               <div class="col-2"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemModificarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-pen iconsMenu"></i></p>
-                  <h2 class="text-center">Modificar empleados</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemEliminarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-minus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Eliminar empleados</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToPersonal"><i class="fas fa-arrow-left"></i> Volver al menú de personal</button>
-              </div>
-              <div class="col-4"></div>
             </div>
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

@@ -1,0 +1,37 @@
+DROP TABLE USUARIO;
+DROP TABLE EMPLEADO;
+
+CREATE TABLE EMPLEADO(
+    id_empleado SERIAL PRIMARY KEY,
+    emp_cedula numeric(10,0) NOT NULL UNIQUE,
+    emp_nacionalidad character(1) NOT NULL,
+    emp_nombre1 character varying(15) NOT NULL,
+    emp_nombre2 character varying(15),
+    emp_apellido1 character varying(20) NOT NULL,
+    emp_apellido2 character varying(20),
+    emp_fechanacimiento date NOT NULL,
+    emp_genero character(1) NOT NULL,
+    emp_telefono numeric(20,0) NOT NULL,
+    CONSTRAINT check_nacionalidad_empleado CHECK (emp_nacionalidad IN ('V','E')),
+    CONSTRAINT chech_genero_empleado CHECK (emp_genero IN ('M','F','O'))
+);
+
+CREATE TABLE USUARIO(
+	ID_usuario SERIAL PRIMARY KEY,
+	USU_usuario varchar(20) NOT NULL UNIQUE,
+	USU_password varchar(10) NOT NULL,
+	fk_empleado integer,
+	CONSTRAINT fk_empleado_usuario FOREIGN KEY (fk_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE CASCADE
+);
+
+INSERT INTO EMPLEADO (emp_cedula,emp_nacionalidad,emp_nombre1,emp_nombre2,emp_apellido1,emp_apellido2,emp_fechanacimiento,emp_genero,emp_telefono)
+VALUES (26530119,'V','Miguel','Antonio','Pena','Fraga','1998-04-03','M',4242855585);
+
+INSERT INTO EMPLEADO (emp_cedula,emp_nacionalidad,emp_nombre1,emp_nombre2,emp_apellido1,emp_apellido2,emp_fechanacimiento,emp_genero,emp_telefono)
+VALUES (27086052,'V','Alba','Sofia','Sanchez','Silvestre','1999-01-31','F',4122765991);
+
+INSERT INTO USUARIO (usu_usuario,usu_password,fk_empleado)
+VALUES ('mfraga','admin',1);
+
+INSERT INTO USUARIO (usu_usuario,usu_password,fk_empleado)
+VALUES ('asilvestre','admin',2);

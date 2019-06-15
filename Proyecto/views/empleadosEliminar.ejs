@@ -52,9 +52,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemPersonal">
-                      <p class="text-center iconSideMenu"><i class="fas fa-id-card-alt"></i></p>
-                      <p class="text-center">Personal</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemEmpleados">
+                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
+                      <p class="text-center">Empleados</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -109,52 +109,48 @@
 
         
         <main role="main" class="ml-sm-auto col-lg-10 content">
-          <section class="container-fluid proyectosBox">
+          <section class="container-fluid empleadosEliminarBox">
+            <div class="row titleRow">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <h1 class="text-center textTitle">Eliminar empleados</h1>
+              </div>
+              <div class="col-2"></div>
+            </div>
             <div class="row">
               <div class="col-2"></div>
-              <div class="col-4" id="menuItemAgregarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-plus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Agregar empleado</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemConsultarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-search iconsMenu"></i></p>
-                  <h2 class="text-center">Cosultar empleados</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemModificarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-pen iconsMenu"></i></p>
-                  <h2 class="text-center">Modificar empleados</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemEliminarEmpleado">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-minus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Eliminar empleados</h2>
-                </div>
+              <div class="col-8">
+                <div class="boxFormElminarEmpleado animated fadeIn">
+                  <form action="/Empleados-Eliminar" method="POST" id="eliminarEmpleado">
+                    <div class="form-row">
+                      <div class="col-md-4 mb-3">
+                        <label for="nacionalidadEmpleadoEliminar">Nacionalidad</label>
+                        <select class="form-control formsCRUD" id="nacionalidadEmpleadoEliminar" required>
+                          <option>V</option>
+                          <option>E</option>
+                        </select>
+                      </div>
+                      <div class="col-md-8 mb-3">
+                        <label for="cedulaEmpleadoEliminar">Cédula</label>
+                        <input type="text" class="form-control formsCRUD" id="cedulaEmpleadoEliminar" required>
+                      </div>
+                    </div>
+                    <hr>
+                    <button class="btn btnForms btn-block" type="submit">Eliminar</button>
+                  </form>
+                </div>                                
               </div>
               <div class="col-2"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToPersonal"><i class="fas fa-arrow-left"></i> Volver al menú de personal</button>
-              </div>
-              <div class="col-4"></div>
             </div>
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

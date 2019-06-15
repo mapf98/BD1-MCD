@@ -1,15 +1,10 @@
 /*COLORES BASE
 
-Azul oscuro: #0C084C;
-Azul claro: #096386;
-Verde: #00B7A8;
-Beige: #F0EEC8; 
-
-Colores Logo UCAB
-
-Verde: #1A5B1B;
-Amarillo: #FACB07;
-Azul: #51BBED;
+Azul: #276FBF;
+Rojo mas claro:#EF233C;
+Rojo mas fuerte:#D80032;
+Gris mas fuerte:#2D3142;
+Gris mas claro:#40434E;
 
 */
 
@@ -214,7 +209,7 @@ body{
 
 .btnHome:hover{
   color: white;
-  background-color:#2D3142; 
+  background-color:#2D3142;
 }
 
 .sideInfo{
@@ -282,3 +277,105 @@ body{
 }
 
 /*Empleados*/
+
+.boxFormAgregarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+  margin-top: 50px;
+}
+
+.textTitle{
+  color: #fff;
+}
+
+.empleadosAgregarBox{
+  margin-top: 30px;
+}
+
+.form-control.formsCRUD:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.1rem rgba(39, 111, 191, 0.7);
+}
+
+.btnForms{
+  background-color:#02A9EA;
+  color: white;
+}
+
+.btnForms:hover{
+  background-color: rgba(39, 111, 191, 1);
+  color: white;
+}
+
+.boxConsultarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+}
+
+.headDataTable{
+  background-color: #276FBF;
+  color: white; 
+}
+
+
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 0.5em;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #40434E;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color:  #276FBF;
+  border-width: 1.2px;
+}
+
+button, select {
+  text-transform: none;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #40434E;
+}
+
+
+.boxFormElminarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.empleadosEliminarBox{
+  margin-top: 220px;
+}
+
+.boxFormModificarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.boxModificarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 20px;
+  height: 480px;
+} 
+
+.hackerText{
+  color: white;
+}
+
+.boxPrevMod{
+  margin-top: 160px;
+  margin-bottom: 160px;
+}
+
+.iconMod{
+  font-size: 60px;
+}
