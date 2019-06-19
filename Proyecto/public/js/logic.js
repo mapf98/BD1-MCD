@@ -106,7 +106,7 @@ $('#verificarEmpleado').on('submit',function(e){
 	                    <div class="form-row animated fadeIn">\n\
 	                      <div class="col-md-6 mb-3">\n\
 	                        <label for="gccedulaEmpleado">Cédula</label>\n\
-	                        <input type="text" class="form-control formsCRUD" id="gccedulaEmpleado" value="'+response.dataV[0].emp_cedula+'" disabled>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gccedulaEmpleado" value="'+response.dataV[0].emp_cedula+'" disabled>\n\
 	                      </div>\n\
 	                      <div class="col-md-6 mb-3">\n\
 	                        <label for="gcfechaNacimientoEmpleado">Fecha Nacimiento</label>\n\
@@ -124,7 +124,7 @@ $('#verificarEmpleado').on('submit',function(e){
 	                      </div>\n\
 	                      <div class="col-md-8 mb-3">\n\
 	                        <label for="gctelefonoEmpleado">Teléfono</label>\n\
-	                        <input type="text" class="form-control formsCRUD" id="gctelefonoEmpleado" value="'+response.dataV[0].emp_telefono+'" required>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gctelefonoEmpleado" value="'+response.dataV[0].emp_telefono+'" required>\n\
 	                      </div>\n\
 	                    </div>\n\
 	                   	<hr>\n\
