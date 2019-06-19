@@ -31,7 +31,7 @@
                 <div class="row">
                   <div class="col-lg-12 tagUser">
                     <h3 class="text-center text-sidebar textUser"><%= user.nombre %> <%= user.apellido %></h3>
-                    <p class="text-center text-sidebar">Administrador</p>
+                    <p class="text-center text-sidebar"><%= user.cargo %></p>
                     <p class="text-center text-sidebar"><%= user.usuario %></p>
                   </div>
                 </div>
@@ -128,40 +128,20 @@
                         <input type="text" class="form-control formsCRUD" id="nombreEmpleado" required>
                       </div>
                       <div class="col-md-6 mb-3">
-                        <label for="segundoNombreEmpleado">Segundo nombre</label>
-                        <input type="text" class="form-control formsCRUD" id="segundoNombreEmpleado">
-                      </div>
-                    </div>
-
-                    <div class="form-row">
-                      <div class="col-md-6 mb-3">
                         <label for="apellidoEmpleado">Primer apellido</label>
                         <input type="text" class="form-control formsCRUD" id="apellidoEmpleado" required>
                       </div>
-                      <div class="col-md-6 mb-3">
-                        <label for="segundoApellidoEmpleado">Segundo apellido</label>
-                        <input type="text" class="form-control formsCRUD" id="segundoApellidoEmpleado">
-                      </div>
                     </div>
 
-                    <hr>
-
                     <div class="form-row">
-                      <div class="col-md-2 mb-3">
-                        <label for="nacionalidadEmpleado">Nacionalidad</label>
-                        <select class="form-control formsCRUD" id="nacionalidadEmpleado" required>
-                          <option>V</option>
-                          <option>E</option>
-                        </select>
-                      </div>
-                      <div class="col-md-4 mb-3">
+                      <div class="col-md-6 mb-3">
                         <label for="cedulaEmpleado">Cédula</label>
                         <input type="text" class="form-control formsCRUD" id="cedulaEmpleado" required>
                       </div>
                       <div class="col-md-6 mb-3">
                         <label for="fechaNacimientoEmpleado">Fecha Nacimiento</label>
                         <input type="date" class="form-control formsCRUD" id="fechaNacimientoEmpleado" required>
-                      </div>
+                      </div>                      
                     </div>
 
                     <div class="form-row">
@@ -178,9 +158,52 @@
                         <input type="text" class="form-control formsCRUD" id="telefonoEmpleado" required>
                       </div>
                     </div>
-                    
-                    <hr>
 
+                    <div class="form-row">
+                      <div class="col-md-3 mb-3">
+                        <label for="cargoEmpleado">Cargo</label>
+                        <select class="form-control formsCRUD" id="cargoEmpleado" required>
+                          <% for(var i=0; i < dataCargo.length; i++) {%>
+                            <option value='<%=dataCargo[i].car_codigo%>'><%=dataCargo[i].car_nombre%></option>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="col-md-3 mb-3">
+                        <label for="estadoEmpleado">Estado</label>
+                        <select class="form-control formsCRUD" id="estadoSelect" required>
+                          <% for(var i=0; i < dataLugar.length; i++) {%>
+                            <% if (dataLugar[i].lug_tipo == 'ESTADO') { %>
+                              <option value='<%=dataLugar[i].lug_codigo%>'><%=dataLugar[i].lug_nombre%></option>
+                            <%}%>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="col-md-3 mb-3">
+                        <label for="municipioEmpleado">Municipio</label>
+                        <select class="form-control formsCRUD" id="municipioSelect" required>
+                          <option>Selecciona un estado</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3 mb-3">
+                        <label for="parroquiaEmpleado">Parroquia</label>
+                        <select class="form-control formsCRUD" id="parroquiaSelect" required>
+                          <option>Selecciona un municipio</option>
+                        </select>
+                      </div>
+                    </div>
+
+
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <label for="usuarioEmpleado">Usuario</label>
+                        <input type="text" class="form-control formsCRUD" id="usuarioEmpleado">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                      <label for="passwordEmpleado">Password</label>
+                        <input type="password" class="form-control formsCRUD" id="passwordEmpleado">
+                      </div>
+                    </div>                    
+                    <hr>
                     <button class="btn btnForms btn-block" type="submit">Agregar</button>
                   </form>
                 </div>
