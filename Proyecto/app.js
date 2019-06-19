@@ -325,8 +325,6 @@ app.post("/Empleados-Modificar",function(req,res){
   var empleadoCargo = req.body.cargoGC;
   var empleadoParroquia = req.body.parroquiaGC;
 
-  console.log(empleadoCargo+' '+empleadoParroquia);
-
   client.query('UPDATE EMPLEADO SET emp_nombre=$1,emp_apellido=$2,emp_fechanacimiento=$3,emp_genero= $4,emp_telefono= $5,fk_emp_cargo= $6,fk_emp_lugar= $7 WHERE emp_cedula= $8',[empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,empleadoCargo,empleadoParroquia,empleadoCedula],(err,result)=>{
     if (err) {
       console.log(err.stack);

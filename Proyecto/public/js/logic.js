@@ -12,10 +12,7 @@ $('#agregarEmpleado').on('submit',function(e){
 	let nombreUsuario = $('#usuarioEmpleado');
 	let passwordUsuario = $('#passwordEmpleado');
 	let cargoEmpleado = $('#cargoEmpleado');
-	let parroquiaEmpleado = $('#parroquiaEmpleado');
-
-	console.log(cargoEmpleado.val());
-	console.log(parroquiaEmpleado.val());
+	let parroquiaEmpleado = $('#parroquiaSelect');
 
 	if((passwordUsuario.val() != "" && nombreUsuario.val() == "") || (passwordUsuario.val() == "" && nombreUsuario.val() != "")){
 		alert('Completa el formulario de usuario o deja en blanco los campos');
@@ -84,9 +81,6 @@ $('#verificarEmpleado').on('submit',function(e){
 				var d = (fechaNac.getDate()).toString();
 				var m = (fechaNac.getMonth()+1).toString();
 				var y = fechaNac.getFullYear().toString();
-				console.log(d);
-				console.log(m);
-				console.log(y);
 
 				if( m < 10 ){
 					m = "0"+m;
@@ -360,7 +354,6 @@ function estadoMunicipio(estado,municipio,parroquia){
 
 	$(estado).on('click',function(){
 		var selectedOption = $(this).children(":selected").val();
-		console.log(selectedOption);
 		$.ajax({
 			url: '/lugar-estado',
 			method: 'POST',
@@ -386,7 +379,6 @@ function estadoMunicipio(estado,municipio,parroquia){
 
 	$(municipio).on('click',function(){
 		var selectedOption = $(this).children(":selected").val();
-		console.log(selectedOption);
 		$.ajax({
 			url: '/lugar-municipio',
 			method: 'POST',
@@ -412,7 +404,6 @@ function estadoMunicipio(estado,municipio,parroquia){
 
 $('#estadoSelect').on('click',function(){
 	var selectedOption = $(this).children(":selected").val();
-	console.log(selectedOption);
 	$.ajax({
 		url: '/lugar-estado',
 		method: 'POST',
@@ -438,7 +429,6 @@ $('#estadoSelect').on('click',function(){
 
 $('#municipioSelect').on('click',function(){
 	var selectedOption = $(this).children(":selected").val();
-	console.log(selectedOption);
 	$.ajax({
 		url: '/lugar-municipio',
 		method: 'POST',
