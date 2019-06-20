@@ -13,6 +13,7 @@ $('#agregarEmpleado').on('submit',function(e){
 	let passwordUsuario = $('#passwordEmpleado');
 	let cargoEmpleado = $('#cargoEmpleado');
 	let parroquiaEmpleado = $('#parroquiaSelect');
+	let rolUsuarioEmpleado = $('#rolUsuarioEmpleado');
 
 	if((passwordUsuario.val() != "" && nombreUsuario.val() == "") || (passwordUsuario.val() == "" && nombreUsuario.val() != "")){
 		alert('Completa el formulario de usuario o deja en blanco los campos');
@@ -30,7 +31,8 @@ $('#agregarEmpleado').on('submit',function(e){
 				password: passwordUsuario.val(),
 				fnac: fnac.val() ,
 				cargo: cargoEmpleado.val(),
-				parroquia: parroquiaEmpleado.val()
+				parroquia: parroquiaEmpleado.val(),
+				rol: rolUsuarioEmpleado.val()
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -74,7 +76,7 @@ $('#verificarEmpleado').on('submit',function(e){
 			cedulaEmpV: cedulaEmpleadoV.val(),
 		},
 		success: function(response){
-			if(response.dataV[0].emp_cedula != null){
+			if(response.dataV != null){
 				var boxModEmp = $('#guardarCambioEmpleado');
 
 				var fechaNac = new Date(response.dataV[0].emp_fechanacimiento);
@@ -129,33 +131,54 @@ $('#verificarEmpleado').on('submit',function(e){
 	                    </div>\n\
 	                   	<hr>\n\
 	                   	<div class="form-row animated fadeIn">\n\
-	                      <div class="col-md-12 mb-3">\n\
+	                      <div class="col-md-3 mb-3">\n\
 	                        <label for="gccargoEmpleado">Cargo</label>\n\
 	                        <select class="form-control formsCRUD" id="gccargoEmpleado" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                      <div class="col-md-3 mb-3">\n\
+	                        <label for="estadoSelect">Estado</label>\n\
+	                        <select class="form-control formsCRUD" id="estadoSelect" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                      <div class="col-md-3 mb-3">\n\
+	                        <label for="municipioSelect">Municipio</label>\n\
+	                        <select class="form-control formsCRUD" id="municipioSelect" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                      <div class="col-md-3 mb-3">\n\
+	                        <label for="parroquiaSelect">Parroquia</label>\n\
+	                        <select class="form-control formsCRUD" id="parroquiaSelect" required>\n\
 	                        </select>\n\
 	                      </div>\n\
 	                    </div>\n\
 	                    <div class="form-row animated fadeIn">\n\
 	                      <div class="col-md-4 mb-3">\n\
-	                        <label for="gestadoEmpleado">Estado</label>\n\
-	                        <select class="form-control formsCRUD" id="estadoSelect" required>\n\
+	                        <label for="gcrolEmpleado">Rol</label>\n\
+	                        <select class="form-control formsCRUD" id="gcrolEmpleado">\n\
 	                        </select>\n\
 	                      </div>\n\
 	                      <div class="col-md-4 mb-3">\n\
-	                        <label for="gcmunicipioEmpleado">Municipio</label>\n\
-	                        <select class="form-control formsCRUD" id="municipioSelect" required>\n\
-	                        </select>\n\
+	                        <label for="gcusuarioEmpleado">Usuario</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcusuarioEmpleado" value="'+response.dataV[0].usu_usuario+'">\n\
 	                      </div>\n\
 	                      <div class="col-md-4 mb-3">\n\
-	                        <label for="gcparroquiaEmpleado">Parroquia</label>\n\
-	                        <select class="form-control formsCRUD" id="parroquiaSelect" required>\n\
-	                        </select>\n\
+	                        <label for="gcpasswordEmpleado">Password</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcpasswordEmpleado" value="'+response.dataV[0].usu_password+'">\n\
 	                      </div>\n\
 	                    </div>\n\
 	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
 	                </div>');
 
 				$("#gcgeneroEmpleado option[value="+ response.dataV[0].emp_genero +"]").attr("selected",true);
+
+				selectRol = $('#gcrolEmpleado');
+				selectRol.html('');
+				for (var i = response.roles.length - 1; i >= 0; i--) {
+					selectRol.append('<option value="'+response.roles[i].rol_codigo+'">'+response.roles[i].rol_nombre+'</option>');
+				}
+				$("#gcrolEmpleado option[value="+ response.dataV[0].rol_codigo +"]").attr("selected",true);
+
 				selectCargo = $('#gccargoEmpleado');
 				selectCargo.html('');
 				for (var i = response.cargos.length - 1; i >= 0; i--) {
@@ -219,6 +242,9 @@ $('#guardarCambioEmpleado').on('submit',function(e){
 	let fnacGC = $('#gcfechaNacimientoEmpleado');
 	let cargoGC = $('#gccargoEmpleado');
 	let parroquiaGC = $('#parroquiaSelect');
+	let usuarioGC = $('#gcusuarioEmpleado');
+	let passwordGC = $('#gcpasswordEmpleado');
+	let rolGC = $('#gcrolEmpleado');
 
 	$.ajax({
 		url: '/Empleados-Modificar',
@@ -231,7 +257,10 @@ $('#guardarCambioEmpleado').on('submit',function(e){
 			generoGC: generoGC.val(),
 			fnacGC: fnacGC.val(),
 			cargoGC: cargoGC.val(),
-			parroquiaGC: parroquiaGC.val()
+			parroquiaGC: parroquiaGC.val(),
+			usuarioGC: usuarioGC.val(),
+			passwordGC: passwordGC.val(),
+			rolGC: rolGC.val()
 		},
 		success: function(response){
 			if(response == 'great'){
@@ -284,7 +313,7 @@ $('#menuItemReportes').on('click',function(){
 });
 
 $('#menuItemYacimientos').on('click',function(){
-	window.location.href = "/Home";
+	window.location.href = "/Yacimientos";
 });
 
 $('#menuItemExplotaciones').on('click',function(){
@@ -402,51 +431,4 @@ function estadoMunicipio(estado,municipio,parroquia){
 	});
 }
 
-$('#estadoSelect').on('click',function(){
-	var selectedOption = $(this).children(":selected").val();
-	$.ajax({
-		url: '/lugar-estado',
-		method: 'POST',
-		data: {
-			filtroEstado: selectedOption 
-		},
-		success: function(response){
-			if(response[0].lug_codigo != null){
-				var dropMunicipio = $('#municipioSelect');
-				dropMunicipio.html('');
-				for(var i=0; i < response.length; i++){
-					if(response[i].lug_tipo == 'MUNICIPIO'){
-						dropMunicipio.append('<option value="'+response[i].lug_codigo+'">'+response[i].lug_nombre+'</option>');
-					} 
-				} 
-				$('#municipioSelect').trigger('click');
-			}else{
-				alert('Fallo filtro ESTADO-MUNICIPO');
-			}			
-		}
-	});
-});
-
-$('#municipioSelect').on('click',function(){
-	var selectedOption = $(this).children(":selected").val();
-	$.ajax({
-		url: '/lugar-municipio',
-		method: 'POST',
-		data: {
-			filtroMunicipio: selectedOption 
-		},
-		success: function(response){
-			if(response[0].lug_codigo != null){
-				var dropParroquia = $('#parroquiaSelect');
-				dropParroquia.html('');
-				for(var i=0; i < response.length; i++){
-					if(response[i].lug_tipo == 'PARROQUIA'){
-						dropParroquia.append('<option value="'+response[i].lug_codigo+'">'+response[i].lug_nombre+'</option>');
-					} 
-				} 
-			}else if(response = 'failed'){
-				alert('Fallo filtro MUNICIPIO-PARROQUIA');
-			}			
-		}
-	});
-});
+estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));

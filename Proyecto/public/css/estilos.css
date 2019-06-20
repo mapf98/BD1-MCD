@@ -379,3 +379,7 @@ button, select {
 .iconMod{
   font-size: 60px;
 }
+
+.userActual{
+  color: transparent;
+}
