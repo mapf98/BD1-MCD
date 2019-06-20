@@ -34,7 +34,6 @@ app.set("view engine","ejs");
 
 //-----Login MinerUCAB-------
 
-
 //METODO GET
 
 app.get("/login",function(req,res){
@@ -48,6 +47,7 @@ app.get("/Home",function(req,res){
     res.redirect('login');
   }
 });
+
 
 app.get("/Caja",function(req,res){
   if(userJSON.usuario != "none"){
@@ -92,6 +92,7 @@ app.get("/Empleados",function(req,res){
 app.get("/Empleados-Agregar",function(req,res){
   let dataCargo;
   let dataLugar;
+  let dataRol;
   if(userJSON.usuario != "none"){
     client.query('SELECT car_nombre,car_codigo FROM CARGO',(err,resultA)=>{
       if (err) {
@@ -105,7 +106,17 @@ app.get("/Empleados-Agregar",function(req,res){
             res.send('failed'); 
           }else if(resultB.rows[0] != null){
             dataLugar = resultB.rows;
-            res.render('empleadosAgregar',{dataLugar: dataLugar,dataCargo: dataCargo, user: userJSON});
+            client.query('SELECT rol_codigo,rol_nombre FROM ROL',(err,resultC)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }else if(resultC.rows[0] != null){
+                dataRol = resultC.rows
+                res.render('empleadosAgregar',{dataLugar: dataLugar, dataRol: dataRol, dataCargo: dataCargo, user: userJSON});
+              }else{
+                res.send('failed');
+              };
+            });
           }else{
             res.send('failed');
           };
@@ -117,7 +128,6 @@ app.get("/Empleados-Agregar",function(req,res){
   }else{
     res.redirect('login');
   };
-
 });
 
 app.get("/Empleados-Consultar",function(req,res){
@@ -213,6 +223,7 @@ app.post("/Empleados-Agregar",function(req,res){
   var passwordUsuario = req.body.password;
   var cargoEmpleado = req.body.cargo;
   var parroquiaEmpleado = req.body.parroquia;
+  var rolUsuarioEmpleado = req.body.rol;
 
   if(empleadoGenero == 'Femenino'){
     empleadoGenero = 'F';
@@ -227,7 +238,7 @@ app.post("/Empleados-Agregar",function(req,res){
       console.log(err.stack);
       res.send('failed'); 
     }else if(empleadoUsuario != "" && passwordUsuario != ""){
-      client.query('INSERT INTO usuario (usu_usuario,usu_password,fk_usu_estatus,fk_usu_empleado_ci,fk_usu_rol) VALUES($1,$2,1,$3,1)',[empleadoUsuario,passwordUsuario,empleadoCedula],(err,result)=>{
+      client.query('INSERT INTO usuario (usu_usuario,usu_password,fk_usu_estatus,fk_usu_empleado_ci,fk_usu_rol) VALUES($1,$2,1,$3,$4)',[empleadoUsuario,passwordUsuario,empleadoCedula,rolUsuarioEmpleado],(err,result)=>{
         if (err) {
           console.log(err.stack);
           res.send('failed'); 
@@ -293,7 +304,7 @@ app.post("/Empleados-Eliminar",function(req,res){
 //URL para verificar empleado en modificacion
 app.post("/Empleados-Verificar",function(req,res){ 
   var cedulaV = req.body.cedulaEmpV;
-  client.query('SELECT E.emp_cedula,E.emp_nombre,E.emp_apellido,E.emp_fechanacimiento,E.emp_genero,E.emp_telefono,Carg.car_nombre,Carg.car_codigo, Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod FROM empleado AS E, cargo AS Carg, lugar AS Par, lugar AS Mun, lugar AS Est WHERE E.emp_cedula = $1 AND E.fk_emp_cargo = Carg.car_codigo AND Par.lug_codigo = E.fk_emp_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo',[cedulaV],(err,result)=>{
+  client.query('SELECT E.emp_cedula,E.emp_nombre,E.emp_apellido,E.emp_fechanacimiento,E.emp_genero,E.emp_telefono,Carg.car_nombre,Carg.car_codigo, Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod, U.usu_usuario,U.usu_password,R.rol_codigo,R.rol_nombre FROM empleado AS E, cargo AS Carg, lugar AS Par, lugar AS Mun, lugar AS Est, usuario AS U, rol AS R WHERE E.emp_cedula = $1 AND E.fk_emp_cargo = Carg.car_codigo AND Par.lug_codigo = E.fk_emp_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo AND U.fk_usu_empleado_ci = E.emp_cedula AND U.fk_usu_rol = R.rol_codigo',[cedulaV],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -312,7 +323,17 @@ app.post("/Empleados-Verificar",function(req,res){
               res.send('failed'); 
             }else if(cargos.rows[0] != null){
               var cargos = cargos.rows;
-              res.send({dataV: dataV,estados: estados,cargos: cargos});
+              client.query('SELECT rol_nombre,rol_codigo FROM ROL',(err,roles)=>{
+                if (err) {
+                  console.log(err.stack);
+                  res.send('failed'); 
+                }else if(roles.rows[0] != null){
+                  var roles = roles.rows;                  
+                  res.send({dataV: dataV,estados: estados,cargos: cargos,roles: roles});
+                }else{
+                  res.send('failed');
+                }
+              });
             }else{
               res.send('failed');
             }
@@ -338,15 +359,28 @@ app.post("/Empleados-Modificar",function(req,res){
   var empleadoTelefono = req.body.telefonoGC;
   var empleadoCargo = req.body.cargoGC;
   var empleadoParroquia = req.body.parroquiaGC;
+  var empleadoUsuario = req.body.usuarioGC;
+  var empleadoPassword = req.body.passwordGC;
+  var empleadoUsuarioRol = req.body.rolGC;
 
   client.query('UPDATE EMPLEADO SET emp_nombre=$1,emp_apellido=$2,emp_fechanacimiento=$3,emp_genero= $4,emp_telefono= $5,fk_emp_cargo= $6,fk_emp_lugar= $7 WHERE emp_cedula= $8',[empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,empleadoCargo,empleadoParroquia,empleadoCedula],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
+    }else if(empleadoUsuario != "" && empleadoPassword != ""){
+      client.query('UPDATE USUARIO SET usu_usuario=$1,usu_password=$2,fk_usu_rol=$3 WHERE usu_usuario_id = (SELECT usu_usuario_id FROM usuario WHERE fk_usu_empleado_ci = $4)',[empleadoUsuario,empleadoPassword,empleadoUsuarioRol,empleadoCedula],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }else{
+          res.send('great'); 
+          console.log('Query procesado correctamente con usuario');
+        };
+      });
     }else{
       res.send('great'); 
       console.log('Query procesado correctamente');
-    };
+    }
   });
 });
 

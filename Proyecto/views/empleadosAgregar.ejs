@@ -169,7 +169,7 @@
                         </select>
                       </div>
                       <div class="col-md-3 mb-3">
-                        <label for="estadoEmpleado">Estado</label>
+                        <label for="estadoSelect">Estado</label>
                         <select class="form-control formsCRUD" id="estadoSelect" required>
                           <% for(var i=0; i < dataLugar.length; i++) {%>
                             <% if (dataLugar[i].lug_tipo == 'ESTADO') { %>
@@ -179,13 +179,13 @@
                         </select>
                       </div>
                       <div class="col-md-3 mb-3">
-                        <label for="municipioEmpleado">Municipio</label>
+                        <label for="municipioSelect">Municipio</label>
                         <select class="form-control formsCRUD" id="municipioSelect" required>
                           <option>Selecciona un estado</option>
                         </select>
                       </div>
                       <div class="col-md-3 mb-3">
-                        <label for="parroquiaEmpleado">Parroquia</label>
+                        <label for="parroquiaSelect">Parroquia</label>
                         <select class="form-control formsCRUD" id="parroquiaSelect" required>
                           <option>Selecciona un municipio</option>
                         </select>
@@ -194,11 +194,19 @@
 
 
                     <div class="form-row">
-                      <div class="col-md-6 mb-3">
+                      <div class="col-md-4 mb-3">
+                        <label for="rolUsuarioEmpleado">Rol</label>
+                        <select class="form-control formsCRUD" id="rolUsuarioEmpleado" required>
+                          <% for(var i=0; i < dataRol.length; i++) {%>
+                            <option value='<%=dataRol[i].rol_codigo%>'><%=dataRol[i].rol_nombre%></option>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mb-3">
                         <label for="usuarioEmpleado">Usuario</label>
                         <input type="text" class="form-control formsCRUD" id="usuarioEmpleado">
                       </div>
-                      <div class="col-md-6 mb-3">
+                      <div class="col-md-4 mb-3">
                       <label for="passwordEmpleado">Password</label>
                         <input type="password" class="form-control formsCRUD" id="passwordEmpleado">
                       </div>
