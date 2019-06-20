@@ -276,7 +276,7 @@ $('#menuItemCaja').on('click',function(){
 });
 
 $('#menuItemMinerales').on('click',function(){
-	window.location.href = "/Home";
+	window.location.href = "/minerales";
 });
 
 $('#menuItemReportes').on('click',function(){
@@ -333,6 +333,11 @@ $('#backToHome').on('click',function(){
 
 $('#backToPersonal').on('click',function(){
 	window.location.href = "/Personal";
+});
+
+
+$('#backToGestion').on('click',function(){
+	window.location.href = "/Gestion";
 });
 
 //Data Table
@@ -450,3 +455,145 @@ $('#municipioSelect').on('click',function(){
 		}
 	});
 });
+
+
+
+
+// MINERALES (METALICOS Y NO METALICOS)
+
+$('#agregarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreMetalico = $('#nombreMetalico');
+	let escalaMaleabilidad = $('#escalaMaleabilidad');
+	let escalaDureza = $('#escalaDureza');
+	let presentacionMetalico = $('#presentacionMetalico');
+	let nombrePresentacion = $('#nombrePresentacion');
+	let precioMP = $('#precioMetalicoPresentacion');
+	
+		$.ajax({
+			url: '/Metalicos-Agregar',
+			method: 'POST',
+			data: {
+				nombreMetalico: nombreMetalico.val(),
+				escalaMaleabilidad: escalaMaleabilidad.val(),
+				escalaDureza: escalaDureza.val(),
+				presentacionMetalico: presentacionMetalico.val(),
+				nombrePresentacion: nombrePresentacion.val(),
+				precioMP: precioMP.val()
+			},
+			success: function(response){
+				if(response == 'great'){
+					alert('El mineral fue registrado satisfactoriamente');
+				}else{
+					alert('El mineral no se pudo agregar, revisa los campos');
+				}			
+			}
+		});
+	
+});
+
+$('#eliminarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let codigoMetalicoEliminar = $('#codigoMetalicoEliminar');
+
+	$.ajax({
+		url: '/Metalicos-Eliminar',
+		method: 'POST',
+		data: {
+			codigoMetalicoEliminar: codigoMetalicoEliminar.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral metálico fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El empleado NO SE PUDO ELIMINAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+$('#agregarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreNoMetalico = $('#nombreNoMetalico');
+	let utilidadNoMetalico = $('#utilidadNoMetalico');
+
+	
+		$.ajax({
+			url: '/NoMetalicos-Agregar',
+			method: 'POST',
+			data: {
+				nombreNoMetalico: nombreNoMetalico.val(),
+				utilidadNoMetalico: utilidadNoMetalico.val(),
+			},
+			success: function(response){
+				if(response == 'great'){
+					alert('El mineral fue registrado satisfactoriamente');
+				}else{
+					alert('El mineral no se pudo agregar, revisa los campos');
+				}			
+			}
+		});
+	
+});
+
+$('#eliminarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let codigoNoMetalicoEliminar = $('#codigoNoMetalicoEliminar');
+
+	$.ajax({
+		url: '/NoMetalicos-Eliminar',
+		method: 'POST',
+		data: {
+			codigoNoMetalicoEliminar: codigoNoMetalicoEliminar.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral no metálico fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El mineral NO SE PUDO ELIMINAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+$('#menuItemMinerales').on('click',function(){
+	window.location.href = "/minerales";
+});
+
+$('#menuItemMetalicos').on('click',function(){
+	window.location.href = "/metalicos";
+});
+
+$('#menuItemNoMetalicos').on('click',function(){
+	window.location.href = "/nometalicos";
+});
+
+$('#menuItemAgregarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Agregar";
+});
+
+$('#menuItemAgregarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Agregar";
+});
+
+$('#menuItemConsultarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Consultar";
+});
+
+$('#menuItemConsultarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Consultar";
+});
+
+$('#menuItemEliminarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Eliminar";
+});
+
+$('#menuItemEliminarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Eliminar";
+});
+
+
+$('#backToMinerales').on('click',function(){
+	window.location.href = "/Minerales";
+});
+
