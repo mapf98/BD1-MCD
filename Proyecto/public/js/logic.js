@@ -436,7 +436,6 @@ function estadoMunicipio(estado,municipio,parroquia){
 	});
 }
 
-<<<<<<< HEAD
 $('#estadoSelect').on('click',function(){
 	var selectedOption = $(this).children(":selected").val();
 	$.ajax({
@@ -627,6 +626,12 @@ $('#backToMinerales').on('click',function(){
 	window.location.href = "/Minerales";
 });
 
-=======
+// SECCION VENTAS
+
+$('#menuItemConsultarVenta').on('click',function(){
+	window.location.href = "/Ventas-Consultar";
+});
+
+
 estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
->>>>>>> 158e94fa56bd34d1a386dd40b7e5518940146b30
+

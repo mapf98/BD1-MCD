@@ -164,19 +164,6 @@ app.get("/Empleados-Eliminar",function(req,res){
   }
 });
 
-// MINERALES
-
-
-
-app.get("/Metalicos-Modificar",function(req,res){
-  if(userJSON.usuario != "none"){
-    res.render('metalicosModificar',{user: userJSON});
-  }else{
-    res.redirect('login');
-  }
-});
-
-
 
 
 //METODOS POST
@@ -564,6 +551,37 @@ app.post("/NoMetalicos-Eliminar",function(req,res){
       res.send('great');
     }
   });
+});
+
+// SECCION Ventas
+
+app.get("/Ventas",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('ventas',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Ventas-Consultar",function(req,res){
+  var fy = 'yyyy';
+  var fm = 'mm';
+  var fd = 'dd';
+  if(userJSON.usuario != "none"){
+    client.query('SELECT V.ven_codigo, to_char(V.ven_fecha,$1) AS year, to_char(V.ven_fecha,$2) AS month, to_char(V.ven_fecha,$3) AS day, ven_montototal, fk_ven_cliente, fk_ven_usuario FROM venta AS V',[fy,fm,fd],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        console.log(result.rows);
+        res.render('ventasConsultar',{dataTable: result.rows, user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
 });
 
 
