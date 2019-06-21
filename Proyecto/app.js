@@ -89,6 +89,14 @@ app.get("/Empleados",function(req,res){
   }
 });
 
+app.get("/Yacimientos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('yacimientos',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.get("/Empleados-Agregar",function(req,res){
   let dataCargo;
   let dataLugar;

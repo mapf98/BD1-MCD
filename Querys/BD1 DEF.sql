@@ -1,4 +1,4 @@
-/*AGREGAR CANTIDAD EN CAR_FASE Y TP_FASE*/
+﻿--AGREGAR LOS ON CASCADE
 
 DROP TABLE DETALLE_VEN;
 DROP TABLE VEN_TIP;
@@ -11,6 +11,7 @@ DROP TABLE ALI_MM;
 DROP TABLE MIN_MIN;
 DROP TABLE YAC_MIN;
 DROP TABLE MAQ_FAS;
+DROP TABLE TM_FASE;
 DROP TABLE SOLICITUD_COMPRA;
 DROP TABLE INVENTARIO;
 DROP TABLE MIN_PRE;
@@ -56,7 +57,7 @@ CREATE TABLE HORARIO (
 
 CREATE TABLE LUGAR (
 	LUG_CODIGO SERIAL,
-	LUG_NOMBRE VARCHAR(50) NOT NULL,
+	LUG_NOMBRE VARCHAR(40) NOT NULL,
 	LUG_TIPO VARCHAR(12) NOT NULL,
 	FK_LUG_LUGAR INTEGER,
 	CONSTRAINT PK_CODIGO_LUGAR PRIMARY KEY (LUG_CODIGO),
@@ -198,6 +199,7 @@ CREATE TABLE YACIMIENTO(
 	YAC_CODIGO SERIAL,
 	YAC_EXTENSION NUMERIC(15) NOT NULL,
 	YAC_FECHAREGISTRO DATE NOT NULL,
+	YAC_NOMBRE VARCHAR (40) NOT NULL,
 	FK_YAC_ESTATUS INTEGER NOT NULL,
 	FK_YAC_LUGAR INTEGER NOT NULL,
 	FK_YAC_EXPLOTACION INTEGER,
@@ -237,7 +239,7 @@ CREATE TABLE FASE(
 
 CREATE TABLE CAR_FAS(
 	CF_CODIGO SERIAL,
-	CF_CANTIDAD INTEGER NOT NULL DEFAULT 0, /*VERIFICAR*/
+	CF_CANTIDAD INTEGER NOT NULL DEFAULT 0,
 	FK_CF_CARGO INTEGER NOT NULL,
 	FK_CF_FASE INTEGER NOT NULL,
 	CONSTRAINT FK_CARGO_CF FOREIGN KEY (FK_CF_CARGO) REFERENCES CARGO (CAR_CODIGO),
@@ -256,9 +258,6 @@ CREATE TABLE EMP_CF(
 	CONSTRAINT CHECK_SUELDO_ECF CHECK (ECF_SUELDO>0)
 );
 
-/*
-REVISAR ///
-
 CREATE TABLE TM_FAS(
 	TMF_CODIGO SERIAL,
 	TMF_CANTIDAD NUMERIC(25) NOT NULL DEFAULT 0,
@@ -268,9 +267,6 @@ CREATE TABLE TM_FAS(
 	CONSTRAINT FK_TMF_TM FOREIGN KEY (FK_TMF_TM) REFERENCES TIPO_MAQUINARIA (TM_CODIGO),
 	CONSTRAINT PK_CODIGO_TMF PRIMARY KEY (TMF_CODIGO)
 );
-
-*/
-
 
 CREATE TABLE HOR_ECF(
 	HECF_CODIGO SERIAL,
@@ -296,7 +292,7 @@ CREATE TABLE MIN_METALICO (
 CREATE TABLE MIN_NO_METALICO (
 	NOM_CODIGO SERIAL,
 	NOM_NOMBRE VARCHAR (15) NOT NULL,
-	NOM_UTILIDAD VARCHAR (15),
+	NOM_UTILIDAD VARCHAR (30),
 	FK_NOM_ESTATUS INTEGER NOT NULL,
 	CONSTRAINT FK_ESTATUS_NOM FOREIGN KEY (FK_NOM_ESTATUS) REFERENCES ESTATUS (EST_CODIGO),
 	CONSTRAINT PK_CODIGO_NOM PRIMARY KEY (NOM_CODIGO)
@@ -345,13 +341,15 @@ CREATE TABLE SOLICITUD_COMPRA(
 
 CREATE TABLE MAQ_FAS (
 	MF_CODIGO SERIAL,
+	MF_COSTO NUMERIC (15) NOT NULL,
 	FK_MF_MAQUINARIA INTEGER NOT NULL,
 	FK_MF_FASE INTEGER NOT NULL,
 	FK_MF_ESTATUS INTEGER NOT NULL,
 	CONSTRAINT PK_CODIGO_MF PRIMARY KEY (MF_CODIGO),
 	CONSTRAINT FK_MAQUINARIA_MF FOREIGN KEY (FK_MF_MAQUINARIA) REFERENCES MAQUINARIA (MAQ_CODIGO),
 	CONSTRAINT FK_FASE_MF FOREIGN KEY (FK_MF_FASE) REFERENCES FASE (FAS_CODIGO),
-	CONSTRAINT FK_ESTATUS_MF FOREIGN KEY (FK_MF_ESTATUS) REFERENCES ESTATUS (EST_CODIGO)
+	CONSTRAINT FK_ESTATUS_MF FOREIGN KEY (FK_MF_ESTATUS) REFERENCES ESTATUS (EST_CODIGO),
+	CONSTRAINT CHECK_ESTATUS_MF CHECK (MF_COSTO>0)
 );
 
 CREATE TABLE YAC_MIN (
@@ -474,6 +472,14 @@ CREATE TABLE DETALLE_VEN(
 	CONSTRAINT CHECK_CANTIDAD_DEV CHECK (DEV_CANTIDAD>0)
 );
 
+INSERT INTO estatus(
+	est_codigo, est_nombre)
+	VALUES 
+	(nextval ('estatus_est_codigo_seq'), 'Disponible'),
+	(nextval ('estatus_est_codigo_seq'), 'Eliminado'),
+	(nextval ('estatus_est_codigo_seq'), 'Ocupado'),
+	(nextval ('estatus_est_codigo_seq'), 'En proceso'),
+	(nextval ('estatus_est_codigo_seq'), 'Pagado');
 
 INSERT INTO lugar(
 	lug_codigo, lug_nombre, lug_tipo, fk_lug_lugar)
@@ -1566,7 +1572,6 @@ INSERT INTO lugar(
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 243, 'Villalba'),
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 244, 'San Juan Bautista'),
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 244, 'Zabala'),
-	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 245, 'Agua Blanca'),
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 246, 'Capital Araure'),
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 246, 'Río Acarigua'),
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 247, 'Capital Esteller'),
@@ -1986,43 +1991,397 @@ INSERT INTO lugar(
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 359, '23 de enero');
 
 
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Jefe');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ingeniero');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Chofer');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Cocinero');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Barrendero');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Contador');
-INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Psicologo');
-
-INSERT INTO ROL (ROL_NOMBRE) VALUES ('ADMINISTRADOR');
-INSERT INTO ROL (ROL_NOMBRE) VALUES ('RH');
-
-INSERT INTO ESTATUS (EST_NOMBRE) VALUES ('DISPONIBLE');
-INSERT INTO ESTATUS (EST_NOMBRE) VALUES ('OCUPADO');
+	INSERT INTO cargo(
+	car_codigo, car_nombre)
+	VALUES 
+	(nextval('cargo_car_codigo_seq'), 'Geologo'),
+	(nextval('cargo_car_codigo_seq'), 'Chofer'),
+	(nextval('cargo_car_codigo_seq'), 'Ayudante de Campaña'),
+	(nextval('cargo_car_codigo_seq'), 'Portamira'),
+	(nextval('cargo_car_codigo_seq'), 'Perforista'),
+	(nextval('cargo_car_codigo_seq'), 'Cocinero');
 
 
-INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
-VALUES (26530119,'Miguel','Apellido','1998-04-03','M',4242855585,1,1470,1);
+	INSERT INTO rol(
+	rol_codigo, rol_nombre)
+	VALUES 
+	(nextval ('rol_rol_codigo_seq'), 'Administrador'),
+	(nextval ('rol_rol_codigo_seq'), 'Vendedor'),
+	(nextval ('rol_rol_codigo_seq'), 'RH'),
+	(nextval ('rol_rol_codigo_seq'), 'Especialista'),
+	(nextval ('rol_rol_codigo_seq'), 'Gestor');
 
-INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
-VALUES ('mfraga','admin',1,26530119,1);
+	INSERT INTO privilegio(
+	pri_codigo, pri_nombre)
+	VALUES 
+	(nextval('privilegio_pri_codigo_seq'), 'CAJA'),
+	(nextval('privilegio_pri_codigo_seq'), 'PERSONAL'),
+	(nextval('privilegio_pri_codigo_seq'), 'PROYECTOS'),
+	(nextval('privilegio_pri_codigo_seq'), 'GESTION');
 
-INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
-VALUES (26530117,'Antonio','Alberto','1998-04-03','M',4242855585,1,1470,1);
+	INSERT INTO rol_pri(
+	rp_codigo, fk_rp_rol, fk_rp_privilegio)
+	VALUES 
+	(nextval('rol_pri_rp_codigo_seq'), 1, 1),
+	(nextval('rol_pri_rp_codigo_seq'), 1, 2),
+	(nextval('rol_pri_rp_codigo_seq'), 1, 3),
+	(nextval('rol_pri_rp_codigo_seq'), 1, 4),
+	(nextval('rol_pri_rp_codigo_seq'), 2, 1),
+	(nextval('rol_pri_rp_codigo_seq'), 3, 2),
+	(nextval('rol_pri_rp_codigo_seq'), 4, 3),
+	(nextval('rol_pri_rp_codigo_seq'), 5, 4);
 
-INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
-VALUES ('aalberto','admin',1,26530117,1);
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Jefe');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ingeniero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Chofer');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Cocinero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Barrendero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Contador');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Psicologo');
+
+	INSERT INTO ROL (ROL_NOMBRE) VALUES ('ADMINISTRADOR');
+	INSERT INTO ROL (ROL_NOMBRE) VALUES ('RH');
+
+	INSERT INTO ESTATUS (EST_NOMBRE) VALUES ('DISPONIBLE');
+	INSERT INTO ESTATUS (EST_NOMBRE) VALUES ('OCUPADO');
 
 
-INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
-VALUES (26530118,'Jesus','Chang','1998-04-03','M',4242855585,1,1470,1);
+	INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
+	VALUES (26530119,'Miguel','Apellido','1998-04-03','M',4242855585,1,1470,1);
 
-INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
-VALUES ('zchang','admin',1,26530118,1);
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
+	VALUES ('mfraga','admin',1,26530119,1);
+
+	INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
+	VALUES (26530117,'Antonio','Alberto','1998-04-03','M',4242855585,1,1470,1);
+
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
+	VALUES ('aalberto','admin',1,26530117,1);
 
 
-INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
-VALUES (26530120,'Alex','Loro','1998-04-03','M',4242855585,1,1470,1);
+	INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
+	VALUES (26530118,'Jesus','Chang','1998-04-03','M',4242855585,1,1470,1);
 
-INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
-VALUES ('aloro','admin',1,26530120,1);
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
+	VALUES ('zchang','admin',1,26530118,1);
+
+
+	INSERT INTO EMPLEADO (EMP_CEDULA,EMP_NOMBRE,EMP_APELLIDO,EMP_FECHANACIMIENTO,EMP_GENERO,EMP_TELEFONO,FK_EMP_CARGO,FK_EMP_LUGAR,FK_EMP_ESTATUS) 
+	VALUES (26530120,'Alex','Loro','1998-04-03','M',4242855585,1,1470,1);
+
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_ESTATUS,FK_USU_EMPLEADO_CI,FK_USU_ROL)
+	VALUES ('aloro','admin',1,26530120,1);
+
+
+
+	INSERT INTO presentacion(pre_codigo, pre_nombre)
+	VALUES 
+	(nextval('presentacion_pre_codigo_seq'), 'Laminas'),
+	(nextval('presentacion_pre_codigo_seq'), 'Lingotes'),
+	(nextval('presentacion_pre_codigo_seq'), 'Fino'),
+	(nextval('presentacion_pre_codigo_seq'), 'Grueso'),
+	(nextval('presentacion_pre_codigo_seq'), 'Pellas'),
+	(nextval('presentacion_pre_codigo_seq'), 'Briquetas');
+
+
+	INSERT INTO ALIADO_COMERCIAL(
+		AC_NUMERO_RIF, AC_NOMBRE, AC_TELEFONO,
+		FK_AC_LUGAR, FK_AC_ESTATUS)
+		VALUES
+		-- AMAZONAS
+		('G-215656985', 'CVG MINERAZONA', 2481698975, 368,1),
+		('G-245944489', 'CARBON GUAYANA', 2485998623, 368,1),
+		-- ANZOÁTEGUI
+		('G-215684565', 'CVG CONACAL', 2812650403, 389,1),
+		('G-245987894', 'DIORCA INDUSTRIAL', 2812767933, 407,1),
+		-- APURE
+		('G-205689999', 'EMINERALCA', 2408998723, 450,1),
+		('G-225688566', 'CVG BIFAMINAS', 2812767933, 450,1),
+		-- ARAGUA
+		('G-205656895', 'METALUNCA', 2435536866, 459,1),
+		('G-212356498', 'INDUSTRIA PERLEBER', 2435516495, 459,1),
+		-- BARINAS
+		('G-225236532', 'BARIMINAS', 2732756537, 527,1),
+		('G-212356498', 'INDUSTRIA PERLEBER', 2435516495, 530,1),
+		-- BOLÍVAR
+		('G-200047062', 'CVG VENALUM', 2869705466, 576,1),
+		('G-201109229', 'CVG ALCASA', 2869801630, 576,1),
+		('G-205556895', 'CVG BAUXILUM', 2869506271, 576,1),
+		('G-205965789', 'CVG MINERVEN', 2887620712, 588,1),
+		('G-205965789', 'CVG CARBONORCA', 2869806231, 576,1),
+		-- CARABOBO
+		('G-202356562', 'METALES AVILA', 2456398236, 627,1),
+		('G-245696633', 'CORPORO CARABOBO', 2455557989, 631,1),
+		-- COJEDES
+		('G-195563562', 'MINEC', 2582148785, 670,1),
+		('G-202020113', 'TINACO METALES', 2582916565, 670,1),
+		-- DTO. CAPITAL
+		('G-214569823', 'COMERMIN', 4128205403, 1494,1),
+		('G-216239856', 'EBSMN', 2125779631, 1493,1),
+		-- DELTA AMACURO
+		('G-211365566', 'PRODELTA', 2872226513, 671,1),
+		('G-218976323', 'IMATACA INDUSTRIAS', 2876561323, 677,1),
+		-- FALCON
+		('G-205667898', 'ASOFAL', 2698951264, 702,1),
+		('G-201475214', 'INTRA MINERVA', 2698953168, 702,1),
+		-- GUARICO
+		('G-212356985', 'MINERSOSA', 2465342113, 794,1),
+		('G-209126552', 'CORPORACION LOS LLANOS', 2466385971, 793,1),
+		-- LARA
+		('G-195896587', 'MINERALES TAMACA', 2517845221, 826,1),
+		('G-222265335', 'CARBOLARA', 2512514337, 825,1),
+		-- MERIDA
+		('G-207896527', 'ANDES METALICOS', 2714683261, 930,1),
+		('G-215465322', 'EXPLOTACIONES MERIDA', 2718956432, 930,1),
+		-- MIRANDA
+		('G-201233219', 'MINERALITICA', 2125856543, 981,1),
+		('G-224575586', 'ALUMIRANDA', 2123656348, 981,1),
+		-- MONAGAS
+		('G-185652556', 'CENTRO MINERAL', 2912754821, 1043,1),
+		('G-200056057', 'BAUXVEN', 2912147632, 1044,1),
+		-- NUEVA ESPARTA
+		('G-198547552', 'VILLA BAUXITA', 2958746315, 1078,1),
+		('G-205654789', 'MINERCARIBE', 2956896842, 1078,1),
+		-- PORTUGUESA
+		('G-201115638', 'INDUGUANARE', 2578452185, 1086,1),
+		('G-216325885', 'PORTORO VENEZUELA', 2578966952, 1088,1),
+		-- SUCRE
+		('G-185693652', 'MINERIA VALDEZ', 2935653219, 1173,1),
+		('G-225643588', 'ASOMINCRE', 2932935417, 1158,1),
+		-- TACHIRA
+		('G-205898741', 'MINERTACHIRA', 2775487711, 1218,1),
+		('G-195638965', 'PROTAVEN DEL TACHIRA', 2772363513, 1218,1),
+		-- TRUJILLO
+		('G-185556589', 'MINERANDES', 2722754631, 1320,1),
+		('G-201356313', 'DIASTRO METALES', 2722933946, 1321,1),
+		-- VARGAS
+		('G-222354277', 'SALES VARGAS', 2125585433, 1337,1),
+		('G-224389942', 'MACUTOVEN', 2124556478, 1344,1),
+		-- YARACUY
+		('G-202055844', 'CARBON COCOROTE', 2533665873, 1352,1),
+		('G-213699988', 'MINERZUELA', 2535667935, 1352,1),
+		-- ZULIA
+		('G-205684983', 'URRI METAL', 2656310483, 1450,1),
+		('G-203568985', 'EMULCA', 2617541587, 1435,1);
+
+
+	INSERT INTO yacimiento(
+	yac_codigo, yac_extension, yac_fecharegistro, yac_nombre, fk_yac_estatus, fk_yac_lugar, fk_yac_explotacion)
+	VALUES 
+
+	--AMAZONAS 
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '14-06-2008', 'Cuenca del Orinoco', 1 , 363, null),
+	(nextval('yacimiento_yac_codigo_seq'), 20000, '03-02-2001', 'Yapacana', 1 , 366, null),
+	(nextval('yacimiento_yac_codigo_seq'), 15000, '01-04-2005', 'Munduapo', 1 , 375, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1000, '25-02-2006', 'Cocuy', 1 , 383, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3000, '25-02-2002', 'Platanillal', 1 , 372, null),
+
+	-- ANZOATEGUI
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '14-06-2017', 'Peñas Blancas', 1 , 389, null),
+	(nextval('yacimiento_yac_codigo_seq'), 14000, '12-06-2014', 'Del Piar', 1 , 407, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '14-06-2011', 'Mallorquín', 1 , 439, null),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '16-08-2004', 'Capiricual', 1 , 439, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6000, '01-05-2006', 'Fila Maestra', 1 , 391, null),
+
+	--APURE
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '12-06-2014', 'Galera de Cinaruco', 1 , 460, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2010', 'Mantecal', 1 , 451, null),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '25-02-2008', 'Biruaca', 1 , 449, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-02-2006', 'El Yagual', 1 , 445, null),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '25-02-2002', 'El Peñal', 1 , 467, null),
+
+
+	--ARAGUA
+	(nextval('yacimiento_yac_codigo_seq'), 3600 , '13-06-2016', 'Villa del Cura', 1 , 516, null),
+	(nextval('yacimiento_yac_codigo_seq'), 21000 , '05-12-2001', 'Santa Isabel', 1 , 480, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6400 , '29-07-2008', 'Taguay', 1 , 510, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '15-03-2016', 'Loma de Hierro', 1 , 506, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '16-05-2011', 'Las Lajitas', 1 , 505, null),
+
+	--BARINAS
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '06-12-2012', 'Ciudad Bolivia', 1 , 559, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Santa Rosa', 1 , 565, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '13-05-2015', 'Ticoporo', 1 , 524, null),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '05-04-2006', 'Barinitas', 1 , 545, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1000, '05-02-2002', 'Guadarrama', 1 , 528, null),
+
+	--BOLIVAR
+	(nextval('yacimiento_yac_codigo_seq'), 15 , '01-04-2005', 'Punta de Cerro', 1 , 601, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '06-09-2006', 'Pico Cerro Paja', 1 , 602, null),
+	(nextval('yacimiento_yac_codigo_seq'), 8600 , '02-05-1998', 'El Pao', 1 , 600, null),
+	(nextval('yacimiento_yac_codigo_seq'), 12000, '03-09-1999', 'Del Callao', 1 , 588, null),
+	(nextval('yacimiento_yac_codigo_seq'), 30000 , '07-05-2009', 'El Dorado', 1 , 610, null),
+
+	--CARABOBO
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '05-06-2014', 'Santa Rosa', 1 , 654, null),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '06-11-2012', 'Gañango', 1 , 639, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1000 , '08-07-2007', 'Guacara', 1 , 627, null),
+	(nextval('yacimiento_yac_codigo_seq'), 25000 , '25-02-2002', 'Yagua', 1 , 628, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6700 , '13-08-2013', 'Los Guayos', 1 , 633, null),
+
+	--COJEDES 
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '21-07-2017', 'Tinaquillo', 1 , 658, null),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '22-11-2015', 'San Carlos', 1 , 658, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Macapo', 1 , 662, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '17-07-2017', 'La Aguadita', 1 , 661, null),
+	(nextval('yacimiento_yac_codigo_seq'), 8000, '25-02-2002', 'Amparo', 1 , 664, null),
+
+	--DELTA AMACURO
+	(nextval('yacimiento_yac_codigo_seq'), 5000, '28-06-2003', 'Imataca', 1 , 677, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4000 , '04-11-2018', 'Piacoa', 1 , 679, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '04-12-2017', 'Los Castillos', 1 , 681, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4500 , '04-11-2008', 'La Represalia', 1 , 676, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '19-06-2006', 'Sacupana', 1 , 679, null),
+
+
+	--FALCON
+	(nextval('yacimiento_yac_codigo_seq'), 11000, '18-11-2003', 'El Trueno', 1 , 740, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '12-06-2015', 'Mauroa', 1 , 743, null),
+	(nextval('yacimiento_yac_codigo_seq'), 11200, '13-06-2014', 'Septentrional', 1 , 692, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6300 , '22-02-2016', 'El Saladillo', 1 , 699, null),
+	(nextval('yacimiento_yac_codigo_seq'), 14500 , '25-11-2012', 'El Cantil', 1 , 747, null),
+
+
+	--GUARICO 
+	(nextval('yacimiento_yac_codigo_seq'), 19000, '15-10-2007', 'Sabana Grande', 1 , 783, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '06-04-2013', 'Jabilillal', 1 , 781, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5600 , '13-07-2015', 'El Corozo', 1 , 798, null),
+	(nextval('yacimiento_yac_codigo_seq'), 17000 , '04-11-2018', 'Serrania del Interior', 1 , 801, null),
+	(nextval('yacimiento_yac_codigo_seq'), 2050, '25-02-2012', 'El chino', 1 , 805, null),
+
+
+	--LARA 
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '01-09-2006', 'El Tocuyo', 1 , 846, null),
+	(nextval('yacimiento_yac_codigo_seq'), 8560 , '07-11-2003', 'San Jacinto', 1 , 823, null),
+	(nextval('yacimiento_yac_codigo_seq'), 16000, '15-09-2006', 'Los Caballos', 1 , 861, null),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '25-01-2012', 'Carorita', 1 , 827, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1400 , '01-02-2002', 'Quibor', 1 , 832, null),
+
+	--MERIDA
+	(nextval('yacimiento_yac_codigo_seq'), 6500 , '02-02-2002', 'Las Tapias', 1 , 919, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9600 , '25-01-2009', 'El Tigre', 1 , 958, null),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '05-12-2012', 'Zea', 1 , 959, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6200, '04-11-2016', 'Guaraque', 1 , 905, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9000 , '25-02-2012', 'Rio Negro', 1 , 907, null),
+
+	--MIRANDA
+	(nextval('yacimiento_yac_codigo_seq'), 4562, '06-02-2006', 'El Carrizo', 1 , 977, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7540 , '23-10-2010', 'Capaya', 1 , 962, null),
+	(nextval('yacimiento_yac_codigo_seq'), 12400, '04-11-2018', 'Colonia Ocumare', 1 , 992, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4510, '04-11-2018', 'Colonia Mendoza', 1 , 992, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4620, '25-02-2002', 'Tacata', 1 , 987, null),
+
+	--MONAGAS
+	(nextval('yacimiento_yac_codigo_seq'), 4800, '15-02-2014', 'Cerro Azul', 1 , 1052, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '12-05-2006', 'El Guacharo', 1 , 1019, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6500, '25-02-2002', 'Teresen', 1 , 1023, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '25-02-2002', 'La Guanota', 1 , 1020, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1200, '25-02-2002', 'Cachipo', 1 , 1052, null),
+
+	--NUEVA ESPARTA
+	(nextval('yacimiento_yac_codigo_seq'), 4530, '25-02-2014', 'Salinas de Pampatar', 1 , 1068, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3000 , '13-06-2018', 'Tubores', 1 , 1075, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '25-06-2002', 'Yaguaraparo', 1 , 1071, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7000, '18-06-2014', 'Zabala', 1 , 1080, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '05-02-2002', 'Los Baleales', 1 , 1076, null),
+
+	--PORTUGUESA
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-06-2000', 'Agua Blanca', 1 , 245, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6100 , '25-02-2002', 'Turen', 1 , 1117, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9100, '25-02-2002', 'Santa Cruz', 1 , 1119, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4000, '25-02-2002', 'Guanarito', 1 , 1090, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5000, '25-02-2002', 'La estación', 1 , 1097, null),
+
+	--SUCRE
+	(nextval('yacimiento_yac_codigo_seq'), 100 , '15-02-2006', 'El Pilar', 1 , 1130, null),
+	(nextval('yacimiento_yac_codigo_seq'), 1300 , '25-01-2003', 'Paria', 1 , 1173, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '04-10-2001', 'Araya', 1 , 1144, null),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '24-09-2013', 'Ayacucho', 1 , 1169, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6100, '02-12-2004', '', 1 , 1358, null),
+
+	--TACHIRA
+	(nextval('yacimiento_yac_codigo_seq'), 4200 , '25-03-2011', 'Lobatera', 1 , 1216, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '06-09-2006', 'Seboruco', 1 , 1233, null),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '02-06-2008', 'Delicias', 1 , 1223, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '14-06-2011', 'San Felix', 1 , 1179, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '14-06-2011', 'Rubio', 1 , 1205, null),
+
+
+	--TRUJILLO
+	(nextval('yacimiento_yac_codigo_seq'), 7200 , '24-01-2001', 'San Miguel', 1 , 1258, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4600 , '15-03-2015', 'Mocoy', 1 , 1324 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'El progreso', 1 , 1285 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '19-06-2007', 'La ceiba', 1 , 1286 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '30-06-2015', 'Motatán', 1 , 1296 , null),
+
+	--VARGAS
+	(nextval('yacimiento_yac_codigo_seq'), 9400 , '15-03-2010', 'Urimare', 1 , 1324 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '15-03-2015', 'Naiguata', 1 , 1346 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '03-09-2014', 'El junko', 1 , 1342 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 6920 , '15-02-2010', 'Caruao', 1 , 1340 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 4560 , '15-03-2011', 'Carayaca', 1 , 1338 , null),
+
+	--YARACUY
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '23-03-2000', 'Sierra de Aroa', 1 , 1349, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-02-2002', 'Cambimba', 1 , 1358, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '25-10-2002', 'La Trinidad', 1 , 1355, null),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '11-11-2011', 'Monge', 1 , 1356, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-03-2008', 'Sucre', 1 , 1365, null),
+
+	--ZULIA
+	(nextval('yacimiento_yac_codigo_seq'), 45000 , '01-09-2012', 'Guasare', 1 , 1425, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-06-2010', 'Cachirí', 1 , 1425, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '14-06-2013', 'El carrasquero', 1 , 1426, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '07-01-2002', 'Socuy', 1 , 1423, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '25-04-2015', 'Inciarte', 1 , 1427, null),
+
+	--DISTRITO CAPITAL
+
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '16-09-2014', 'Altagracia', 1 , 1476 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-03-2015', 'San Pedro', 1 , 1493 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'Macarao', 1 , 1488 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 8000, '01-06-2011', 'San Juan', 1 , 1492 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '15-03-2015', 'San Jose', 1 , 1491 , null);
+
+
+	INSERT INTO min_metalico
+	(met_codigo, met_nombre, met_escalamaleabilidad, met_escaladureza, fk_met_estatus)
+		VALUES 
+		(nextval('min_metalico_met_codigo_seq'), 'Aluminio', 4, 3 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Cobre', 3, 3 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Niquel', 6, 5, 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Zinc', 4, 3 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Oro', 2, 2 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Plata', 3, 3 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Hierro', 5, 4 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Mercurio', 3, 1 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Calcio', 2 , 1 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Sal', 2 , 1 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Magnesio', 6 , 3 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Manganeso', 2 , 5 , 1),
+		(nextval('min_metalico_met_codigo_seq'), 'Bario', 4, 1 , 1);
+
+
+	INSERT INTO min_no_metalico(
+		nom_codigo, nom_nombre, nom_utilidad, fk_nom_estatus)
+		VALUES 
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Carbon', 'Generación de electricidad', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Talco', 'Cosmetica', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Mica', 'Aislante Electrico', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Sal', 'Cocina', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Yeso', 'Fertilizante', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Vitrita', null, 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Fusita', null, 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Clarita', null, 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Durita', 'Pegamento', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Diamante', 'Industria Joyera', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Caolin', 'Pigmento', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Arena', 'Cristales y hormigón', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Fosfato', 'Industria Alimenticia', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Marmol', 'Decoración', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Caliza', 'Fabricación de cemento', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Azufre', 'Fertilizante', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Cal', 'Construcción de viviendas', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Granito', 'Construcción de viviendas', 1),
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Arcilla', 'Fabricación de cemento', 1),	
+		(nextval('min_no_metalico_nom_codigo_seq'), 'Baritina', 'Pigmento', 1);
