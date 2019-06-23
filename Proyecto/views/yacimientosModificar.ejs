@@ -7,7 +7,6 @@
     <title>MinerUCAB - Empleados</title>
 
     <link rel="icon" href="public/images/favicon.png">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/animate.css">
     <link href="public/css/bootstrap.min.css" rel="stylesheet">
@@ -114,39 +113,43 @@
             <div class="row titleRow">
               <div class="col-2"></div>
               <div class="col-8">
-                <h1 class="text-center textTitle">Empleados</h1>
+                <h1 class="text-center textTitle">Modificar Empleados</h1>
               </div>
               <div class="col-2"></div>
             </div>
             <div class="row">
-              <div class="col-12">
-                <div class="boxConsultarEmpleado animated fadeIn">
-                  <table id="table_id_empleados" class="display">
-                    <thead class="headDataTable">
-                        <tr>
-                          <th class="text-center">Nombre</th>
-                          <th class="text-center">Apellido</th>
-                          <th class="text-center">Cédula</th>                           
-                          <th class="text-center">Género</th>
-                          <th class="text-center">Cargo</th>
-                          <th class="text-center">Parroquia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <% for(var i=0; i < dataTable.length; i++) {%>
-                        <tr>
-                          <td class="text-center"><%=dataTable[i].emp_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].emp_apellido%></td>
-                          <td class="text-center"><%=dataTable[i].emp_cedula%></td>
-                          <td class="text-center"><%=dataTable[i].emp_genero%></td>
-                          <td class="text-center"><%=dataTable[i].car_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].lug_nombre%></td>
-                        </tr>
-                      <%}%>
-                    </tbody>
-                  </table>
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="boxFormModificarEmpleado animated fadeIn">
+                  <form action="/Empleados-Verificar" method="POST" id="verificarEmpleado">
+                    <div class="form-row">
+                      <div class="col-md-8 mb-3">
+                        <label for="cedulaEmpleadoVerificar">Cédula</label>
+                        <input type="number" class="form-control formsCRUD" id="cedulaEmpleadoVerificar" required>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <label for="labelF" class="hackerText">Hackers</label>
+                        <button class="btn btnForms btn-block" id="labelF" type="submit">Modificar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div> 
+              </div>
+              <div class="col-2"></div>
+            </div>
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="boxModificarEmpleado animated fadeIn">
+                  <form action="/Empleados-Modificar" method="POST" id="guardarCambioEmpleado">
+                    <div class="boxPrevMod animated fadeIn">
+                      <h4 class="text-center">Selecciona un usuario para modificar su ficha</h4>
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>
+                    </div>
+                  </form>
                 </div>
               </div>
+              <div class="col-2"></div>
             </div>
           </section>
         </main>
@@ -157,7 +160,6 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

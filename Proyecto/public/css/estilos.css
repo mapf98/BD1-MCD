@@ -368,7 +368,7 @@ button, select {
 } 
 
 .hackerText{
-  color: white;
+  color: transparent;
 }
 
 .boxPrevMod{
@@ -382,4 +382,30 @@ button, select {
 
 .userActual{
   color: transparent;
+}
+
+/*Yacimiento*/
+.boxFormAgregarYacimiento{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+  margin-top: 20px;
+}
+  
+.blockMin{
+  background-color: #40434E;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.boxMinText{
+  color: white;
+}
+
+.boxAgregarMinID{
+  margin-bottom: 10px;
+}
+
+.listMin{
+  margin-top: 10px;
 }

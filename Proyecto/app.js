@@ -173,6 +173,159 @@ app.get("/Empleados-Eliminar",function(req,res){
 });
 
 
+
+//Yacimientos
+app.get("/Yacimientos-Agregar",function(req,res){
+  let dataLugar;
+  let dataMM;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        dataLugar = result.rows;
+        res.render('yacimientosAgregar',{dataLugar: dataLugar,user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.post("/Yacimientos-Agregar",function(req,res){
+  var nombreYac = req.body.nombreYacimiento;
+  var extensionYac = req.body.extensionYacimiento;
+  var parroquiaYac = req.body.parroquia;
+  var minTipo = req.body.minTipo;
+  var minMin = req.body.minMin;
+  var minCantidad = req.body.minCantidad;
+
+  if(userJSON.usuario != "none"){
+    client.query('INSERT INTO YACIMIENTO (yac_extension,yac_fecharegistro,yac_nombre,fk_yac_estatus,fk_yac_lugar) VALUES($1,(SELECT NOW()),$2,1,$3)',[extensionYac,nombreYac,parroquiaYac],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(minTipo!= null){
+
+        for (var i = minTipo.length - 1; i >= 0; i--) {
+
+          if(minTipo[i]=='MIN_METALICO'){
+
+            client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minmetalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nombreYac,minMin[i],minCantidad[i]],(err,resultM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+            });
+
+          }else{
+
+            client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minnometalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nombreYac,minMin[i],minCantidad[i]],(err,resultN)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+            });
+
+          }
+        }
+        res.send('great');
+      }else{
+        res.send('great');
+      }
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.get("/Yacimientos-Consultar",function(req,res){
+  var fy = 'yyyy';
+  var fm = 'mm';
+  var fd = 'dd';
+  if(userJSON.usuario != "none"){
+    client.query('SELECT Y.yac_codigo,Y.yac_extension,Y.yac_nombre, to_char(Y.yac_fecharegistro,$1) AS year,to_char(Y.yac_fecharegistro,$2) AS month,to_char(Y.yac_fecharegistro,$3) AS day FROM yacimiento AS Y',[fy,fm,fd],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var infoYac = result.rows;
+        client.query('SELECT YM.fk_ym_yacimiento, MM.met_nombre FROM yac_min AS YM, min_metalico AS MM WHERE YM.fk_ym_minmetalico = MM.met_codigo ',(err,resultMET)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(resultMET.rows[0] != null){
+            var metYac = resultMET.rows;
+           client.query('SELECT YM.fk_ym_yacimiento, NOM.nom_nombre FROM yac_min AS YM, min_no_metalico AS NOM WHERE YM.fk_ym_minnometalico = NOM.nom_codigo ',(err,resultNOM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }else if(resultNOM.rows[0] != null){
+                var nomYac = resultNOM.rows;
+                res.render('yacimientosConsultar',{dataTable: infoYac,metYac: metYac,nomYac: nomYac, user: userJSON});
+              }else{
+                res.send('failed');
+              };
+            });
+          }else{
+            res.send('failed');
+          };
+        });
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+//QUERY DINAMICO
+app.post("/Yacimientos-AgregarMin",function(req,res){
+  var filtro = req.body.filtroMin;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var min = result.rows;
+        res.send({min: min});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/Yacimientos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('empleadosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Yacimientos-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('empleadosEliminar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
 //METODOS POST
 
 //URL para login

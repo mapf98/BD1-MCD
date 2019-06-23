@@ -190,7 +190,7 @@ CREATE TABLE YACIMIENTO(
 	YAC_CODIGO SERIAL,
 	YAC_EXTENSION NUMERIC(15) NOT NULL,
 	YAC_FECHAREGISTRO DATE NOT NULL,
-	YAC_NOMBRE VARCHAR (50) NOT NULL,
+	YAC_NOMBRE VARCHAR (50) NOT NULL UNIQUE,
 	FK_YAC_ESTATUS INTEGER NOT NULL,
 	FK_YAC_LUGAR INTEGER NOT NULL,
 	FK_YAC_EXPLOTACION INTEGER,
@@ -2067,9 +2067,7 @@ INSERT INTO lugar(
 	(nextval('presentacion_pre_codigo_seq'), 'Briquetas');
 
 
-	INSERT INTO ALIADO_COMERCIAL(
-		AC_NUMERO_RIF, AC_NOMBRE, AC_TELEFONO,
-		FK_AC_LUG)
+	INSERT INTO ALIADO_COMERCIAL(AC_NUMERO_RIF, AC_NOMBRE, AC_TELEFONO, FK_AC_LUGAR)
 		VALUES
 		-- AMAZONAS
 		('G-215656985', 'CVG MINERAZONA', 2481698975, 368),
@@ -2196,7 +2194,7 @@ INSERT INTO lugar(
 	(nextval('yacimiento_yac_codigo_seq'), 30000 , '07-05-2009', 'El Dorado', 1 , 610, null),
 
 	--CARABOBO
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '05-06-2014', 'Santa Rosa', 1 , 654, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '05-06-2014', 'Santa Rosa BB', 1 , 654, null),
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '06-11-2012', 'Gañango', 1 , 639, null),
 	(nextval('yacimiento_yac_codigo_seq'), 1000 , '08-07-2007', 'Guacara', 1 , 627, null),
 	(nextval('yacimiento_yac_codigo_seq'), 25000 , '25-02-2002', 'Yagua', 1 , 628, null),
@@ -2342,7 +2340,7 @@ INSERT INTO lugar(
 		(nextval('min_metalico_met_codigo_seq'), 'Sal', 2 , 1 ),
 		(nextval('min_metalico_met_codigo_seq'), 'Magnesio', 6 , 3 ),
 		(nextval('min_metalico_met_codigo_seq'), 'Manganeso', 2 , 5 ),
-		(nextval('min_metalico_met_codigo_seq'), 'Bario', 4, 1 , 1);
+		(nextval('min_metalico_met_codigo_seq'), 'Bario', 4, 1 );
 
 
 	INSERT INTO min_no_metalico(

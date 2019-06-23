@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>MinerUCAB - Empleados</title>
+    <title>MinerUCAB - Yacimientos</title>
 
     <link rel="icon" href="public/images/favicon.png">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/animate.css">
     <link href="public/css/bootstrap.min.css" rel="stylesheet">
@@ -53,9 +52,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemEmpleados">
-                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
-                      <p class="text-center">Empleados</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemYacimientos">
+                      <p class="text-center iconSideMenu"><i class="fas fa-toolbox"></i></p>
+                      <p class="text-center">Yacimientos</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -114,39 +113,73 @@
             <div class="row titleRow">
               <div class="col-2"></div>
               <div class="col-8">
-                <h1 class="text-center textTitle">Empleados</h1>
+                <h1 class="text-center textTitle">Agregar Yacimiento</h1>
               </div>
               <div class="col-2"></div>
             </div>
             <div class="row">
-              <div class="col-12">
-                <div class="boxConsultarEmpleado animated fadeIn">
-                  <table id="table_id_empleados" class="display">
-                    <thead class="headDataTable">
-                        <tr>
-                          <th class="text-center">Nombre</th>
-                          <th class="text-center">Apellido</th>
-                          <th class="text-center">Cédula</th>                           
-                          <th class="text-center">Género</th>
-                          <th class="text-center">Cargo</th>
-                          <th class="text-center">Parroquia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                      <% for(var i=0; i < dataTable.length; i++) {%>
-                        <tr>
-                          <td class="text-center"><%=dataTable[i].emp_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].emp_apellido%></td>
-                          <td class="text-center"><%=dataTable[i].emp_cedula%></td>
-                          <td class="text-center"><%=dataTable[i].emp_genero%></td>
-                          <td class="text-center"><%=dataTable[i].car_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].lug_nombre%></td>
-                        </tr>
-                      <%}%>
-                    </tbody>
-                  </table>
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="boxFormAgregarYacimiento animated fadeIn">
+
+                  <form action="/Yacimientos-Agregar" method="POST" id="agregarYacimiento">
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3">
+                        <label for="nombreYacimiento">Nombre yacimiento</label>
+                        <input type="text" class="form-control formsCRUD" id="nombreYacimiento" required>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label for="extensionYacimiento">Extensión (kmts2)</label>
+                        <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="extensionYacimiento" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-4 mb-3">
+                        <label for="estadoSelect">Estado</label>
+                        <select class="form-control formsCRUD" id="estadoSelect" required>
+                          <% for(var i=0; i < dataLugar.length; i++) {%>
+                            <% if (dataLugar[i].lug_tipo == 'ESTADO') { %>
+                              <option value='<%=dataLugar[i].lug_codigo%>'><%=dataLugar[i].lug_nombre%></option>
+                            <%}%>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <label for="municipioSelect">Municipio</label>
+                        <select class="form-control formsCRUD" id="municipioSelect" required>
+                          <option>Selecciona un estado</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <label for="parroquiaSelect">Parroquia</label>
+                        <select class="form-control formsCRUD" id="parroquiaSelect" required>
+                          <option>Selecciona un municipio</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                      <div class="col-4"></div>
+                      <div class="col-4">
+                        <button class="btn btn-success btn-block" id="addMin">Asignar mineral</button>
+                      </div>
+                      <div class="col-4"></div>
+                    </div>
+
+                    <div class="listMin" id="listMin">
+
+                    </div>                      
+
+
+                    <hr>
+
+                    <button class="btn btnForms btn-block" id="test" type="submit">Agregar</button>
+                  </form>
                 </div>
               </div>
+              <div class="col-2"></div>
             </div>
           </section>
         </main>
@@ -157,7 +190,6 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

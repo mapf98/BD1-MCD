@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>MinerUCAB - Empleados</title>
+    <title>MinerUCAB - Yacimientos</title>
 
     <link rel="icon" href="public/images/favicon.png">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
@@ -53,9 +53,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemEmpleados">
-                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
-                      <p class="text-center">Empleados</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemYacimientos">
+                      <p class="text-center iconSideMenu"><i class="fas fa-toolbox"></i></p>
+                      <p class="text-center">Yacimientos</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -114,33 +114,43 @@
             <div class="row titleRow">
               <div class="col-2"></div>
               <div class="col-8">
-                <h1 class="text-center textTitle">Empleados</h1>
+                <h1 class="text-center textTitle">Yacimientos</h1>
               </div>
               <div class="col-2"></div>
             </div>
             <div class="row">
               <div class="col-12">
                 <div class="boxConsultarEmpleado animated fadeIn">
-                  <table id="table_id_empleados" class="display">
+                  <table id="table_id_yacimientos" class="display">
                     <thead class="headDataTable">
                         <tr>
                           <th class="text-center">Nombre</th>
-                          <th class="text-center">Apellido</th>
-                          <th class="text-center">Cédula</th>                           
-                          <th class="text-center">Género</th>
-                          <th class="text-center">Cargo</th>
-                          <th class="text-center">Parroquia</th>
+                          <th class="text-center">Extensión</th>
+                          <th class="text-center">Fecha registro</th> 
+                          <th class="text-center">Minerales albergados</th>                          
                         </tr>
                     </thead>
                     <tbody>
                       <% for(var i=0; i < dataTable.length; i++) {%>
                         <tr>
-                          <td class="text-center"><%=dataTable[i].emp_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].emp_apellido%></td>
-                          <td class="text-center"><%=dataTable[i].emp_cedula%></td>
-                          <td class="text-center"><%=dataTable[i].emp_genero%></td>
-                          <td class="text-center"><%=dataTable[i].car_nombre%></td>
-                          <td class="text-center"><%=dataTable[i].lug_nombre%></td>
+                          <td class="text-center"><%=dataTable[i].yac_nombre%></td>
+                          <td class="text-center"><%=dataTable[i].yac_extension%> kmts</td>
+                          <td class="text-center"><%=dataTable[i].day%>-<%=dataTable[i].month%>-<%=dataTable[i].year%></td>
+                          <td class="text-center">
+                            <select>
+                              <% for(var j=0; j < metYac.length; j++) {%>
+                                <% if(metYac[j].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
+                                  <option class="text-center"><%=metYac[j].met_nombre%></option>
+                                <%}%>
+                              <%}%>
+
+                              <% for(var k=0; k < nomYac.length; k++) {%>
+                                <% if(nomYac[k].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
+                                  <option class="text-center"><%=nomYac[k].nom_nombre%></option>
+                                <%}%>
+                              <%}%>
+                            </select>                            
+                          </td>
                         </tr>
                       <%}%>
                     </tbody>
