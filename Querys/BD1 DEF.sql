@@ -2369,3 +2369,185 @@ INSERT INTO lugar(
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Granito', 'Construcción de viviendas'),
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Arcilla', 'Fabricación de cemento'),	
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Baritina', 'Pigmento');
+
+INSERT INTO yac_min(
+	ym_codigo, fk_ym_yacimiento, fk_ym_minmetalico, fk_ym_minnometalico, ym_cantidad)
+		VALUES 
+		--AMAZONAS
+		(nextval('yac_min_ym_codigo_seq'), 1, 1 , null , 8000),
+		(nextval('yac_min_ym_codigo_seq'), 2, null, 1, 75000),
+		(nextval('yac_min_ym_codigo_seq'), 3, null, 1, 25000000),
+		(nextval('yac_min_ym_codigo_seq'), 4, 2, null, 360000),
+		(nextval('yac_min_ym_codigo_seq'), 5, null, 1, 65000000),
+
+		--ANZOATEGUI
+		(nextval('yac_min_ym_codigo_seq'), 6, null , 15 , 10000),
+		(nextval('yac_min_ym_codigo_seq'), 7, null, 1, 25000),
+		(nextval('yac_min_ym_codigo_seq'), 8, null, 1, 5000000),
+		(nextval('yac_min_ym_codigo_seq'), 9, null, 1, 60000),
+		(nextval('yac_min_ym_codigo_seq'), 10, null, 1, 650000),
+
+		--APURE
+		(nextval('yac_min_ym_codigo_seq'), 11, 7 , null , 18000000),
+		(nextval('yac_min_ym_codigo_seq'), 12, null, 17, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 13, null, 1, 4000000),
+		(nextval('yac_min_ym_codigo_seq'), 14, null, 1, 90000000),
+		(nextval('yac_min_ym_codigo_seq'), 15, null, 1, 650000),
+
+		--ARAGUA
+		(nextval('yac_min_ym_codigo_seq'), 16, 2 , null , 80000),
+		(nextval('yac_min_ym_codigo_seq'), 17, 3, null, 5000),
+		(nextval('yac_min_ym_codigo_seq'), 17, 2, null, 130000),
+		(nextval('yac_min_ym_codigo_seq'), 17, 4, 1, 4000),
+		(nextval('yac_min_ym_codigo_seq'), 18, null, 1, 120000),
+		(nextval('yac_min_ym_codigo_seq'), 19, 4, null, 120000),
+		(nextval('yac_min_ym_codigo_seq'), 19, 3, null, 70000),
+		(nextval('yac_min_ym_codigo_seq'), 20, null, 1, 5000000),
+
+		--BARINAS
+		(nextval('yac_min_ym_codigo_seq'), 21, 5 , null , 180500),
+		(nextval('yac_min_ym_codigo_seq'), 22, 1, null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 23, 3, null, 500000),
+		(nextval('yac_min_ym_codigo_seq'), 24, null, 1, 60000000),
+		(nextval('yac_min_ym_codigo_seq'), 25, 11, null, 7000),
+
+		--BOLIVAR
+		(nextval('yac_min_ym_codigo_seq'), 26, 7 , null , 16000000),
+		(nextval('yac_min_ym_codigo_seq'), 27, 7, null, 258000000),
+		(nextval('yac_min_ym_codigo_seq'), 28, 7, null, 25000000),
+		(nextval('yac_min_ym_codigo_seq'), 29, 5, null, 9000),
+		(nextval('yac_min_ym_codigo_seq'), 30, null, 1, 650000),
+
+		--CARABOBO
+		(nextval('yac_min_ym_codigo_seq'), 31, null, 14 , 18050),
+		(nextval('yac_min_ym_codigo_seq'), 32, null, 1, 700),
+		(nextval('yac_min_ym_codigo_seq'), 33, null, 1, 5000),
+		(nextval('yac_min_ym_codigo_seq'), 34, null, 11, 600000),
+		(nextval('yac_min_ym_codigo_seq'), 35, 3, null, 7050),
+
+		--COJEDES
+		(nextval('yac_min_ym_codigo_seq'), 36, 3 , null , 90000),
+		(nextval('yac_min_ym_codigo_seq'), 37, 11, null, 25000),
+		(nextval('yac_min_ym_codigo_seq'), 38, 1, null, 23000),
+		(nextval('yac_min_ym_codigo_seq'), 39, 7, null, 900000),
+		(nextval('yac_min_ym_codigo_seq'), 40, 11, null, 6500000),
+
+		--DELTA AMACURO
+		(nextval('yac_min_ym_codigo_seq'), 41, 7, null , 1850),
+		(nextval('yac_min_ym_codigo_seq'), 41, 12, null , 1500),
+		(nextval('yac_min_ym_codigo_seq'), 41, 1, null , 10000),
+		(nextval('yac_min_ym_codigo_seq'), 41, null, 11 , 50000),
+		(nextval('yac_min_ym_codigo_seq'), 41, null, 14 , 2000),
+		(nextval('yac_min_ym_codigo_seq'), 42, 7, null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 43, 7, null, 5000),
+		(nextval('yac_min_ym_codigo_seq'), 44, 7, null, 600000),
+		(nextval('yac_min_ym_codigo_seq'), 45, 7, null, 7050),
+
+		--FALCON
+		(nextval('yac_min_ym_codigo_seq'), 46, 7 , null , 150000000),
+		(nextval('yac_min_ym_codigo_seq'), 47, null, 1, 7000000),
+		(nextval('yac_min_ym_codigo_seq'), 48, null, 1, 210000),
+		(nextval('yac_min_ym_codigo_seq'), 49, null, 1, 700000),
+		(nextval('yac_min_ym_codigo_seq'), 50, null, 15, 650000),
+
+		--GUARICO
+		(nextval('yac_min_ym_codigo_seq'), 51, null, 1 , 42000),
+		(nextval('yac_min_ym_codigo_seq'), 52, 3, null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 53, null, 1, 51000),
+		(nextval('yac_min_ym_codigo_seq'), 54, null, 1, 6400000),
+		(nextval('yac_min_ym_codigo_seq'), 55, 2, null, 700500),
+
+		--LARA
+		(nextval('yac_min_ym_codigo_seq'), 56, null, 1 , 150000),
+		(nextval('yac_min_ym_codigo_seq'), 57, null, 19, 8000),
+		(nextval('yac_min_ym_codigo_seq'), 58, null, 19, 6000),
+		(nextval('yac_min_ym_codigo_seq'), 59, 7, null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 60, 8, null, 6500),
+
+		--MERIDA
+		(nextval('yac_min_ym_codigo_seq'), 61, 2, null , 40000),
+		(nextval('yac_min_ym_codigo_seq'), 62, 2, null, 8000),
+		(nextval('yac_min_ym_codigo_seq'), 63, null, 1, 51000),
+		(nextval('yac_min_ym_codigo_seq'), 64, 2, null, 90000),
+		(nextval('yac_min_ym_codigo_seq'), 65, 7, null, 700500),
+
+		--MIRANDA
+		(nextval('yac_min_ym_codigo_seq'), 66, 2, null , 15000),
+		(nextval('yac_min_ym_codigo_seq'), 67, 7, null, 70000),
+		(nextval('yac_min_ym_codigo_seq'), 68, null, 14, 150000),
+		(nextval('yac_min_ym_codigo_seq'), 69, null, 14, 6000),
+		(nextval('yac_min_ym_codigo_seq'), 70, null, 1, 60000),
+
+		--MONAGAS
+		(nextval('yac_min_ym_codigo_seq'), 71, null, 15 , 6000),
+		(nextval('yac_min_ym_codigo_seq'), 72, null, 1, 1000000),
+		(nextval('yac_min_ym_codigo_seq'), 73, 7, null, 400000),
+		(nextval('yac_min_ym_codigo_seq'), 74, null, 1, 900000),
+		(nextval('yac_min_ym_codigo_seq'), 75, 7, null, 700500),
+
+		--NUEVA ESPARTA
+		(nextval('yac_min_ym_codigo_seq'), 76, null, 4 , 150000),
+		(nextval('yac_min_ym_codigo_seq'), 77, 11, null, 70000),
+		(nextval('yac_min_ym_codigo_seq'), 78, null, 4, 60000),
+		(nextval('yac_min_ym_codigo_seq'), 79, 6,  null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 80, 12, null, 80000000),
+
+		--PORTUGUESA 
+		(nextval('yac_min_ym_codigo_seq'), 81, null, 15 , 6000000),
+		(nextval('yac_min_ym_codigo_seq'), 82, 5, null, 100000),
+		(nextval('yac_min_ym_codigo_seq'), 83, 7, null, 4000),
+		(nextval('yac_min_ym_codigo_seq'), 84, null, 1, 9000),
+		(nextval('yac_min_ym_codigo_seq'), 85, null, 6, 70000),
+
+		--SUCRE
+		(nextval('yac_min_ym_codigo_seq'), 86, null, 16 , 800000),
+		(nextval('yac_min_ym_codigo_seq'), 87, null, 5, 700000),
+		(nextval('yac_min_ym_codigo_seq'), 88, null, 4, 60000),
+		(nextval('yac_min_ym_codigo_seq'), 89, 12,  null, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 90, null, 1, 80000000),
+
+		--TACHIRA
+		(nextval('yac_min_ym_codigo_seq'), 91, null, 1 , 600000000),
+		(nextval('yac_min_ym_codigo_seq'), 92, 2, null, 100000),
+		(nextval('yac_min_ym_codigo_seq'), 93, null, 1, 40000000),
+		(nextval('yac_min_ym_codigo_seq'), 94, null, 1, 9000000),
+		(nextval('yac_min_ym_codigo_seq'), 95, null, 1, 7000000),
+
+		--TRUJILLO
+		(nextval('yac_min_ym_codigo_seq'), 96, 2, null , 60000),
+		(nextval('yac_min_ym_codigo_seq'), 97, 2, null, 700000),
+		(nextval('yac_min_ym_codigo_seq'), 98, 2, null, 200000),
+		(nextval('yac_min_ym_codigo_seq'), 99, null,  1, 700500),
+		(nextval('yac_min_ym_codigo_seq'), 100, null, 4, 1000),
+
+		--VARGAS
+		(nextval('yac_min_ym_codigo_seq'), 101, null, 4 , 600),
+		(nextval('yac_min_ym_codigo_seq'), 102, null, 4 , 10000),
+		(nextval('yac_min_ym_codigo_seq'), 103, null, 4 , 4000),
+		(nextval('yac_min_ym_codigo_seq'), 104, null, 4 , 90000),
+		(nextval('yac_min_ym_codigo_seq'), 105, null, 13 , 700),
+		(nextval('yac_min_ym_codigo_seq'), 105, null, 5 , 1500),
+
+		--YARACUY
+		(nextval('yac_min_ym_codigo_seq'), 106, 2, null , 30000),
+		(nextval('yac_min_ym_codigo_seq'), 106, 3, null , 6000),
+		(nextval('yac_min_ym_codigo_seq'), 106, 4, null , 100000),
+		(nextval('yac_min_ym_codigo_seq'), 107, null, 2, 7000),
+		(nextval('yac_min_ym_codigo_seq'), 108, 2, null, 200000),
+		(nextval('yac_min_ym_codigo_seq'), 109, 2,  null, 2000),
+		(nextval('yac_min_ym_codigo_seq'), 110, null, 1, 100000),
+
+		--ZULIA
+
+		(nextval('yac_min_ym_codigo_seq'), 111, null, 1 , 6000),
+		(nextval('yac_min_ym_codigo_seq'), 112, null, 1 , 1000),
+		(nextval('yac_min_ym_codigo_seq'), 113, null, 1 , 400000),
+		(nextval('yac_min_ym_codigo_seq'), 114, 2, null, 40000),
+		(nextval('yac_min_ym_codigo_seq'), 115, null, 1 , 7000),
+
+		--DISTRITO CAPITAL 
+		(nextval('yac_min_ym_codigo_seq'), 116, null, 1, 60000),
+		(nextval('yac_min_ym_codigo_seq'), 117, null, 1, 700000),
+		(nextval('yac_min_ym_codigo_seq'), 118, null, 1, 200000),
+		(nextval('yac_min_ym_codigo_seq'), 119, null, 1, 700500),
+		(nextval('yac_min_ym_codigo_seq'), 120, null, 1, 1000);
