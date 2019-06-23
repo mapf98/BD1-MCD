@@ -52,9 +52,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemGesion">
-                      <p class="text-center iconSideMenu"><i class="fas fa-id-card-alt"></i></p>
-                      <p class="text-center">Gestion</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemEmpleados">
+                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
+                      <p class="text-center">Empleados</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -109,42 +109,57 @@
 
         
         <main role="main" class="ml-sm-auto col-lg-10 content">
-          <section class="container-fluid proyectosBox">
+          <section class="container-fluid empleadosAgregarBox">
+            <div class="row titleRow">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <h1 class="text-center textTitle">Modificar Empleados</h1>
+              </div>
+              <div class="col-2"></div>
+            </div>
             <div class="row">
-              <div class="col-3"></div>
-              <div class="col-6" id="menuItemMetalicos">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far  iconsMenu"></i></p>
-                  <h2 class="text-center">Minerales metálicos</h2>
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="boxFormModificarEmpleado animated fadeIn">
+                  <form action="/Empleados-Verificar" method="POST" id="verificarEmpleado">
+                    <div class="form-row">
+                      <div class="col-md-8 mb-3">
+                        <label for="cedulaEmpleadoVerificar">Cédula</label>
+                        <input type="number" class="form-control formsCRUD" id="cedulaEmpleadoVerificar" required>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <label for="labelF" class="hackerText">Hackers</label>
+                        <button class="btn btnForms btn-block" id="labelF" type="submit">Modificar</button>
+                      </div>
+                    </div>
+                  </form>
+                </div> 
+              </div>
+              <div class="col-2"></div>
+            </div>
+            <div class="row">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <div class="boxModificarEmpleado animated fadeIn">
+                  <form action="/Empleados-Modificar" method="POST" id="guardarCambioEmpleado">
+                    <div class="boxPrevMod animated fadeIn">
+                      <h4 class="text-center">Selecciona un usuario para modificar su ficha</h4>
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>
+                    </div>
+                  </form>
                 </div>
               </div>
-              
-              <div class="col-3"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-3"></div>
-              <div class="col-6" id="menuItemNoMetalicos">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas iconsMenu"></i></p>
-                  <h2 class="text-center">Minerales no metálicos</h2>
-                </div>
-              </div>
-            
-              <div class="col-3"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToGestion"><i class="fas fa-arrow-left"></i> Volver al menú de gestión</button>
-              </div>
-              <div class="col-4"></div>
+              <div class="col-2"></div>
             </div>
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

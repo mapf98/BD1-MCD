@@ -1,6 +1,10 @@
+var globalIDMineralYacimiento = 1;
+var globalIDPresentacionMineral = 1;
+var globalIDPresentacionMineralNM = 1;
 
 //PETICIONES AJAX
 
+//Empleado
 $('#agregarEmpleado').on('submit',function(e){
 	e.preventDefault();
 	let nombre = $('#nombreEmpleado');
@@ -38,7 +42,7 @@ $('#agregarEmpleado').on('submit',function(e){
 				if(response == 'great'){
 					alert('El empleado fue registrado satisfactoriamente');
 				}else{
-					alert('El empleado no se pudo agregar, revisa los campos');
+					alert('El empleado no se pudo agregar, revisa los campos por informacion duplicada ');
 				}			
 			}
 		});
@@ -59,7 +63,7 @@ $('#eliminarEmpleado').on('submit',function(e){
 			if(response == 'great'){
 				alert('El empleado fue ELIMINADO satisfactoriamente');
 			}else{
-				alert('El empleado NO SE PUDO ELIMINAR, revisa los campos');
+				alert('El empleado NO SE PUDO ELIMINAR, revisa los campos por informacion duplicada');
 			}			
 		}
 	});
@@ -210,28 +214,6 @@ $('#verificarEmpleado').on('submit',function(e){
 	});
 });
 
-$('#formLogin').on('submit',function(e){
-	e.preventDefault();
-	let userLog = $('#userLogin');
-	let passwordLog = $('#passwordLogin');
-	$.ajax({
-		url: '/login',
-		method: 'POST',
-		data: {
-			user: userLog.val(),
-			password: passwordLog.val()
-		},
-		success: function(response){
-			if(response == 'access'){
-				window.location.href = "/Home";
-			}else{
-				userLog.addClass('formsFieldError');
-				passwordLog.addClass('formsFieldError');
-			}			
-		}
-	});
-});
-
 $('#guardarCambioEmpleado').on('submit',function(e){
 	e.preventDefault();
 	let nombreGC = $('#gcnombreEmpleado');
@@ -276,11 +258,159 @@ $('#guardarCambioEmpleado').on('submit',function(e){
                     </div>\n\
 				`);
 			}else{
-				alert('El empleado NO SE PUDO MOFICAR, revisa los campos');
+				alert('El empleado NO SE PUDO MOFICAR, revisa los campos por informacion duplicada');
 			}			
 		}
 	});
 });
+
+//Login
+$('#formLogin').on('submit',function(e){
+	e.preventDefault();
+	let userLog = $('#userLogin');
+	let passwordLog = $('#passwordLogin');
+	$.ajax({
+		url: '/login',
+		method: 'POST',
+		data: {
+			user: userLog.val(),
+			password: passwordLog.val()
+		},
+		success: function(response){
+			if(response == 'access'){
+				window.location.href = "/Home";
+			}else{
+				userLog.addClass('formsFieldError');
+				passwordLog.addClass('formsFieldError');
+			}			
+		}
+	});
+});
+
+
+//Yacimiento
+$('#addMin').on('click',function(e){
+	e.preventDefault();
+	listMin = $('#listMin');
+
+	var nextID = globalIDMineralYacimiento;
+				listMin.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Mineral</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="MIN_METALICO">Metalico</option>\n\
+	                    <option value="MIN_NO_METALICO">No metalico</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					    <label for="c'+nextID+'" class="boxMinText">Cantidad</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">Ton</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mb-3">\n\
+					  <label for="removeMin" class="hackerText">Hacker</label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	mineralTipo($('#t'+nextID+''),$('#'+nextID+''));
+
+	$('#remove'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+
+	globalIDMineralYacimiento++;
+
+});
+
+function verifyElementVal(){
+	var start=1;
+	while(globalIDMineralYacimiento>=start){
+		var flag =1;
+		while(globalIDMineralYacimiento>=flag){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined) && ($('#t'+start+'').children(":selected").val() == $('#t'+flag+'').children(":selected").val()) ){
+				return false;
+				start = globalIDMineralYacimiento+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
+	}
+	return true;
+}
+
+
+
+//AGREGAR YACIMIENTOS
+//Primero mostrar las presentaciones disponibles en cada drop nuevo, esto se hace en addMin
+//Luego registrar con un json
+$('#agregarYacimiento').on('submit',function(e){
+	e.preventDefault();
+	var nombreYacimiento = $('#nombreYacimiento');
+	var extensionYacimiento = $('#extensionYacimiento');
+	var parroquiaYacimiento = $('#parroquiaSelect');
+
+	var start = 1;
+	var minTipo = [];
+	var minMin = [];
+	var minCantidad = [];
+	while(globalIDMineralYacimiento>=start){
+		minTipo.push( $('#t'+start+'').val() );
+		minMin.push( $('#'+start+'').val() );
+		minCantidad.push($('#c'+start+'').val());
+		start++;
+	}
+
+	if(parroquiaYacimiento.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if(verifyElementVal()==true){
+			$.ajax({
+			url: '/Yacimientos-Agregar',
+			method: 'POST',
+			data: {
+				nombreYacimiento: nombreYacimiento.val(),
+				extensionYacimiento: extensionYacimiento.val(),
+				parroquia: parroquiaYacimiento.val(),
+				minTipo: minTipo,
+				minMin: minMin,
+				minCantidad: minCantidad
+			},
+			success: function(response){
+					if(response == 'great'){
+						alert('El yacimiento fue registrado satisfactoriamente');
+					}else{
+						alert('El yacimiento no se pudo agregar, revisa los campos por informacion duplicados');
+					}			
+				}
+			});
+			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+		}
+	}
+});
+
 
 //MOVIMIENTOS DE RUTA
 
@@ -305,7 +435,7 @@ $('#menuItemCaja').on('click',function(){
 });
 
 $('#menuItemMinerales').on('click',function(){
-	window.location.href = "/minerales";
+	window.location.href = "/Home";
 });
 
 $('#menuItemReportes').on('click',function(){
@@ -356,6 +486,22 @@ $('#menuItemModificarEmpleado').on('click',function(){
 	window.location.href = "/Empleados-Modificar";
 });
 
+$('#menuItemAgregarYacimiento').on('click',function(){
+	window.location.href = "/Yacimientos-Agregar";
+});
+
+$('#menuItemConsultarYacimiento').on('click',function(){
+	window.location.href = "/Yacimientos-Consultar";
+});
+
+$('#menuItemEliminarYacimiento').on('click',function(){
+	window.location.href = "/Yacimientos-Eliminar";
+});
+
+$('#menuItemModificarYacimiento').on('click',function(){
+	window.location.href = "/Yacimientos-Modificar";
+});
+
 $('#backToHome').on('click',function(){
 	window.location.href = "/Home";
 });
@@ -365,14 +511,18 @@ $('#backToPersonal').on('click',function(){
 });
 
 
-$('#backToGestion').on('click',function(){
-	window.location.href = "/Gestion";
+$('#backToProyectos').on('click',function(){
+	window.location.href = "/Proyectos";
 });
 
 //Data Table
 $(document).ready( function () {
-    $('#table_id').DataTable();
-} );
+    $('#table_id_empleados').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_yacimientos').DataTable();
+});
 
 //ESTILOS
 $('#userLogin').focus(function(){
@@ -436,79 +586,90 @@ function estadoMunicipio(estado,municipio,parroquia){
 	});
 }
 
-$('#estadoSelect').on('click',function(){
-	var selectedOption = $(this).children(":selected").val();
-	$.ajax({
-		url: '/lugar-estado',
-		method: 'POST',
-		data: {
-			filtroEstado: selectedOption 
-		},
-		success: function(response){
-			if(response[0].lug_codigo != null){
-				var dropMunicipio = $('#municipioSelect');
-				dropMunicipio.html('');
-				for(var i=0; i < response.length; i++){
-					if(response[i].lug_tipo == 'MUNICIPIO'){
-						dropMunicipio.append('<option value="'+response[i].lug_codigo+'">'+response[i].lug_nombre+'</option>');
-					} 
-				} 
-				$('#municipioSelect').trigger('click');
-			}else{
-				alert('Fallo filtro ESTADO-MUNICIPO');
-			}			
-		}
-	});
-});
+estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
 
-$('#municipioSelect').on('click',function(){
-	var selectedOption = $(this).children(":selected").val();
-	$.ajax({
-		url: '/lugar-municipio',
-		method: 'POST',
-		data: {
-			filtroMunicipio: selectedOption 
-		},
-		success: function(response){
-			if(response[0].lug_codigo != null){
-				var dropParroquia = $('#parroquiaSelect');
-				dropParroquia.html('');
-				for(var i=0; i < response.length; i++){
-					if(response[i].lug_tipo == 'PARROQUIA'){
-						dropParroquia.append('<option value="'+response[i].lug_codigo+'">'+response[i].lug_nombre+'</option>');
-					} 
-				} 
-			}else if(response = 'failed'){
-				alert('Fallo filtro MUNICIPIO-PARROQUIA');
-			}			
-		}
+function mineralTipo(tipo,minerales){
+	$(tipo).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+		$.ajax({
+			url: '/Yacimientos-AgregarMin',
+			method: 'POST',
+			data:{
+				filtroMin: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.min != null){
+						if(optionTipo == 'MIN_METALICO'){
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].met_codigo+'">'+response.min[i].met_nombre+'</option>');
+							}
+						}else{
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].nom_codigo+'">'+response.min[i].nom_nombre+'</option>');
+							}
+						}
+					}	
+			}
+		});	
 	});
-});
-
+}
 
 
 
 // MINERALES (METALICOS Y NO METALICOS)
+
+$(document).ready( function () {
+    $('#table_id_metalicos').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_no_metalicos').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_ventas').DataTable();
+});
 
 $('#agregarMetalico').on('submit',function(e){
 	e.preventDefault();
 	let nombreMetalico = $('#nombreMetalico');
 	let escalaMaleabilidad = $('#escalaMaleabilidad');
 	let escalaDureza = $('#escalaDureza');
-	let presentacionMetalico = $('#presentacionMetalico');
-	let nombrePresentacion = $('#nombrePresentacion');
-	let precioMP = $('#precioMetalicoPresentacion');
+	// let presentacionMetalico = $('#presentacionMetalico');
+	// let nombrePresentacion = $('#nombrePresentacion');
+	// let precioMP = $('#precioMetalicoPresentacion');
+
+
+	var start = 1;
+	var prePresentacion = [];
+	var prePrecio = [];
+	var preTipo = [];
 	
-		$.ajax({
+	while(globalIDPresentacionMineral>=start){
+
+		preTipo.push( $('#'+start+'').val() );
+		prePresentacion.push( $('#'+start+'').val() );
+		prePrecio.push($('#c'+start+'').val());
+		start++;
+	}
+
+	if(escalaDureza.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if(verifyElementValPre()==true){
+			$.ajax({
 			url: '/Metalicos-Agregar',
 			method: 'POST',
 			data: {
 				nombreMetalico: nombreMetalico.val(),
 				escalaMaleabilidad: escalaMaleabilidad.val(),
 				escalaDureza: escalaDureza.val(),
-				presentacionMetalico: presentacionMetalico.val(),
-				nombrePresentacion: nombrePresentacion.val(),
-				precioMP: precioMP.val()
+				// presentacionMetalico: presentacionMetalico.val(),
+				nombrePresentacion: prePresentacion,
+				precioMP: prePrecio,
+				preTipo: preTipo
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -518,7 +679,65 @@ $('#agregarMetalico').on('submit',function(e){
 				}			
 			}
 		});
+			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+		}
+	}
 	
+});
+
+//Presentacion
+$('#addPre').on('click',function(e){
+	e.preventDefault();
+	listPre = $('#listPre');
+
+	var nextID = globalIDPresentacionMineral;
+				listPre.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxPre" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Asignar</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="PRESENTACION">Presentacion</option>\n\
+					  </select>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Presentacion</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					    <label for="c'+nextID+'" class="boxMinText">Precio</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">BsS</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mb-3">\n\
+					  <label for="removeMin" class="hackerText">Hacker</label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	presentacionSelect($('#t'+nextID+''),$('#'+nextID+''));
+
+	$('#remove'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+
+	globalIDPresentacionMineral++;
+
 });
 
 $('#eliminarMetalico').on('submit',function(e){
@@ -541,18 +760,142 @@ $('#eliminarMetalico').on('submit',function(e){
 	});
 });
 
+$('#verificarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let codigoMetalicoV = $('#codigoMetalicoVerificar');
+
+	$.ajax({
+		url: '/Metalicos-Verificar',
+		method: 'POST',
+		data: {
+			codigoMetV: codigoMetalicoV.val(),
+		},
+		success: function(response){
+			if(response.dataV != null){
+
+				var boxModMet = $('#guardarCambioMetalico');
+
+				boxModMet.html('');
+				boxModMet.append(' \n\
+					<div class="animated" id="boxGC">\n\
+	                    <div class="form-row animated fadeIn animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gccodigo">Código</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gccodigo" value="'+response.dataV[0].met_codigo+'" disabled>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcnombreMetalico">Nombre</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcnombreMetalico" value="'+response.dataV[0].met_nombre+'" required>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcmaleabilidad">Escala de Maleabilidad</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gcmaleabilidad" value="'+response.dataV[0].met_escalamaleabilidad+'" required>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcdureza">Escala de Dureza</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gcdureza" value="'+response.dataV[0].met_escaladureza+'" required>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                   	<hr>\n\
+	                   	<div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-4 mb-3">\n\
+	                        <label for="gcestatus">Estatus</label>\n\
+	                        <select class="form-control formsCRUD" id="gcestatus">\n\
+	                        </select>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	                </div>');
+
+				selectEstatus = $('#gcestatus');
+				selectEstatus.html('');
+				for (var i = response.estatuses.length - 1; i >= 0; i--) {
+					selectEstatus.append('<option value="'+response.estatuses[i].est_codigo+'">'+response.estatuses[i].est_nombre+'</option>');
+				}
+				$("#gcestatus option[value="+ response.dataV[0].est_codigo +"]").attr("selected",true);
+
+
+				
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a mineral para modificar');				
+			}			
+		}
+	});
+});
+
+$('#guardarCambioMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreMetalico');
+	let maleabilidadGC = $('#gcmaleabilidad');
+	let durezaGC = $('#gcdureza');
+	let estatusGC = $('#gcestatus');
+	let codigoGC = $('#gccodigo');
+
+	$.ajax({
+		url: '/Metalicos-Modificar',
+		method: 'POST',
+		data: {
+			codigoGC: codigoGC.val(),
+			nombreGC: nombreGC.val(),
+			maleabilidadGC: maleabilidadGC.val(),
+			durezaGC: durezaGC.val(),
+			estatusGC: estatusGC.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral fue MODIFICADO satisfactoriamente');
+				var boxGCMet = $('#boxGC');
+				boxGCMet.addClass('fadeOut');
+				boxGCMet.html('');
+				var boxModMet = $('#guardarCambioMetalico');
+				boxModMet.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un mineral para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+			}else{
+				alert('El mineral NO SE PUDO MOFICAR, revisa los campos');
+			}			
+		}
+	});
+});
+
 $('#agregarNoMetalico').on('submit',function(e){
 	e.preventDefault();
 	let nombreNoMetalico = $('#nombreNoMetalico');
 	let utilidadNoMetalico = $('#utilidadNoMetalico');
 
+	var start = 1;
+	var prePresentacion = [];
+	var prePrecio = [];
+	var preTipo = [];
 	
-		$.ajax({
+	while(globalIDPresentacionMineralNM>=start){
+
+		preTipo.push( $('#'+start+'').val() );
+		prePresentacion.push( $('#'+start+'').val() );
+		prePrecio.push($('#c'+start+'').val());
+		start++;
+	}
+
+	if(utilidadNoMetalico.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if(verifyElementValPre()==true){
+			$.ajax({
 			url: '/NoMetalicos-Agregar',
 			method: 'POST',
 			data: {
 				nombreNoMetalico: nombreNoMetalico.val(),
 				utilidadNoMetalico: utilidadNoMetalico.val(),
+				// presentacionMetalico: presentacionMetalico.val(),
+				nombrePresentacion: prePresentacion,
+				precioMP: prePrecio,
+				preTipo: preTipo
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -562,6 +905,11 @@ $('#agregarNoMetalico').on('submit',function(e){
 				}			
 			}
 		});
+			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+		}
+	}
 	
 });
 
@@ -584,6 +932,8 @@ $('#eliminarNoMetalico').on('submit',function(e){
 		}
 	});
 });
+
+
 
 $('#menuItemMinerales').on('click',function(){
 	window.location.href = "/minerales";
@@ -613,6 +963,15 @@ $('#menuItemConsultarNoMetalico').on('click',function(){
 	window.location.href = "/NoMetalicos-Consultar";
 });
 
+$('#menuItemModificarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Modificar";
+});
+
+$('#menuItemModificarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Modificar";
+});
+
+
 $('#menuItemEliminarMetalico').on('click',function(){
 	window.location.href = "/Metalicos-Eliminar";
 });
@@ -632,6 +991,44 @@ $('#menuItemConsultarVenta').on('click',function(){
 	window.location.href = "/Ventas-Consultar";
 });
 
+function verifyElementValPre(){
+	var start=1;
+	while(globalIDPresentacionMineral>=start){
+		var flag =1;
+		while(globalIDPresentacionMineral>=flag){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined) && ($('#t'+start+'').children(":selected").val() == $('#t'+flag+'').children(":selected").val()) ){
+				return false;
+				start = globalIDPresentacionMineral+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
+	}
+	return true;
+}
 
-estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
+function presentacionSelect(tipo,presentaciones){
+	$(tipo).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+		$.ajax({
+			url: '/Metalicos-AgregarPre',
+			method: 'POST',
+			data:{
+				filtroPre: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.pre != null){
+						
+							presentaciones.html('');
+							for (var i = response.pre.length - 1; i >= 0; i--) {
+								presentaciones.append('<option value="'+response.pre[i].pre_codigo+'">'+response.pre[i].pre_nombre+'</option>');
+							}
+						
+					}	
+			}
+		});	
+	});
+}
+
 

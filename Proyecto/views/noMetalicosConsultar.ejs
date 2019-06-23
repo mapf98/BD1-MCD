@@ -121,12 +121,13 @@
             <div class="row">
               <div class="col-12">
                 <div class="boxConsultarEmpleado animated fadeIn">
-                  <table id="table_id" class="display">
+                  <table id="table_id_no_metalicos" class="display">
                     <thead class="headDataTable">
                         <tr>
                           <th class="text-center">Código</th>
                           <th class="text-center">Nombre</th>
-                          <th class="text-center">Utilidad</th>                           
+                          <th class="text-center">Utilidad</th>
+                          <th class="text-center">Presentaciones</th>                           
                         </tr>
                     </thead>
                     <tbody>
@@ -135,6 +136,18 @@
                           <td class="text-center"><%=dataTable[i].nom_codigo%></td>
                           <td class="text-center"><%=dataTable[i].nom_nombre%></td>
                           <td class="text-center"><%=dataTable[i].nom_utilidad%></td>
+
+                           <td class="text-center">
+                            <select>
+                              <% for(var j=0; j < preNoMet.length; j++) {%>
+                                <% if(preNoMet[j].fk_mp_nometalico == dataTable[i].nom_codigo) {%>                              
+                                  <option class="text-center"><%=preNoMet[j].pre_nombre%> (<%=preNoMet[j].mp_precio%> BsS)</option>
+                                <%}%>
+                              <%}%>
+                              
+                            </select>                            
+                          </td>
+
                         </tr>
                       <%}%>
                     </tbody>

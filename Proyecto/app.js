@@ -89,6 +89,14 @@ app.get("/Empleados",function(req,res){
   }
 });
 
+app.get("/Yacimientos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('yacimientos',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.get("/Empleados-Agregar",function(req,res){
   let dataCargo;
   let dataLugar;
@@ -164,6 +172,160 @@ app.get("/Empleados-Eliminar",function(req,res){
   }
 });
 
+
+
+//Yacimientos
+app.get("/Yacimientos-Agregar",function(req,res){
+  let dataLugar;
+  let dataMM;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        dataLugar = result.rows;
+        res.render('yacimientosAgregar',{dataLugar: dataLugar,user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.post("/Yacimientos-Agregar",function(req,res){
+  var nombreYac = req.body.nombreYacimiento;
+  var extensionYac = req.body.extensionYacimiento;
+  var parroquiaYac = req.body.parroquia;
+  var minTipo = req.body.minTipo;
+  var minMin = req.body.minMin;
+  var minCantidad = req.body.minCantidad;
+
+  if(userJSON.usuario != "none"){
+    client.query('INSERT INTO YACIMIENTO (yac_extension,yac_fecharegistro,yac_nombre,fk_yac_estatus,fk_yac_lugar) VALUES($1,(SELECT NOW()),$2,1,$3)',[extensionYac,nombreYac,parroquiaYac],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(minTipo!= null){
+
+        for (var i = minTipo.length - 1; i >= 0; i--) {
+
+          if(minTipo[i]=='MIN_METALICO'){
+
+            client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minmetalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nombreYac,minMin[i],minCantidad[i]],(err,resultM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+            });
+
+          }else{
+
+            client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minnometalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nombreYac,minMin[i],minCantidad[i]],(err,resultN)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+            });
+
+          }
+        }
+        res.send('great');
+      }else{
+        res.send('great');
+      }
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.get("/Yacimientos-Consultar",function(req,res){
+  var fy = 'yyyy';
+  var fm = 'mm';
+  var fd = 'dd';
+  if(userJSON.usuario != "none"){
+    client.query('SELECT Y.yac_codigo,Y.yac_extension,Y.yac_nombre, to_char(Y.yac_fecharegistro,$1) AS year,to_char(Y.yac_fecharegistro,$2) AS month,to_char(Y.yac_fecharegistro,$3) AS day FROM yacimiento AS Y',[fy,fm,fd],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var infoYac = result.rows;
+        client.query('SELECT YM.fk_ym_yacimiento, MM.met_nombre FROM yac_min AS YM, min_metalico AS MM WHERE YM.fk_ym_minmetalico = MM.met_codigo ',(err,resultMET)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(resultMET.rows[0] != null){
+            var metYac = resultMET.rows;
+           client.query('SELECT YM.fk_ym_yacimiento, NOM.nom_nombre FROM yac_min AS YM, min_no_metalico AS NOM WHERE YM.fk_ym_minnometalico = NOM.nom_codigo ',(err,resultNOM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }else if(resultNOM.rows[0] != null){
+                var nomYac = resultNOM.rows;
+                res.render('yacimientosConsultar',{dataTable: infoYac,metYac: metYac,nomYac: nomYac, user: userJSON});
+              }else{
+                res.send('failed');
+              };
+            });
+          }else{
+            res.send('failed');
+          };
+        });
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+//QUERY DINAMICO
+app.post("/Yacimientos-AgregarMin",function(req,res){
+  var filtro = req.body.filtroMin;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var min = result.rows;
+        res.send({min: min});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+
+
+app.get("/Yacimientos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('empleadosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Yacimientos-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('empleadosEliminar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
 
 
 //METODOS POST
@@ -334,7 +496,7 @@ app.post("/Empleados-Verificar",function(req,res){
       res.send('failed');
     }
   });
-});      
+});         
 
 //ARREGLAR
 app.post("/Empleados-Modificar",function(req,res){ 
@@ -371,13 +533,6 @@ app.post("/Empleados-Modificar",function(req,res){
   });
 });
 
-
-
-
-
-
-
-// MINERALES (METALICOS Y NO METALICOS, DAVID)
 
 app.get("/Minerales",function(req,res){
   if(userJSON.usuario != "none"){
@@ -422,8 +577,19 @@ app.get("/Metalicos-Consultar",function(req,res){
         console.log(err.stack);
         res.send('failed'); 
       }else if(result.rows[0] != null){
-        console.log(result.rows);
-        res.render('metalicosConsultar',{dataTable: result.rows, user: userJSON});
+        var infoMet = result.rows;
+        client.query('SELECT MP.fk_mp_presentacion, P.pre_nombre, MP.mp_precio, MP.fk_mp_metalico FROM min_pre AS MP, presentacion AS P WHERE P.pre_codigo = MP.fk_mp_presentacion',(err,resultPre)=>{
+          if (err){
+            console.log(err,stack);
+            res.send("failed");
+          } else if (resultPre.rows[0] != null){
+            var preMet = resultPre.rows;
+            res.render('metalicosConsultar',{dataTable: result.rows, preMet: preMet, user: userJSON});
+            } else {
+              res.send('failed');
+            }
+          });
+        
       }else{
         res.send('failed');
       };
@@ -432,6 +598,8 @@ app.get("/Metalicos-Consultar",function(req,res){
     res.redirect('login');
   }
 });
+
+
 
 app.get("/Metalicos-Eliminar",function(req,res){
   if(userJSON.usuario != "none"){
@@ -464,8 +632,19 @@ app.get("/NoMetalicos-Consultar",function(req,res){
         console.log(err.stack);
         res.send('failed'); 
       }else if(result.rows[0] != null){
-        console.log(result.rows);
-        res.render('noMetalicosConsultar',{dataTable: result.rows, user: userJSON});
+        var infoMet = result.rows;
+        client.query('SELECT MP.fk_mp_presentacion, P.pre_nombre, MP.mp_precio, MP.fk_mp_nometalico FROM min_pre AS MP, presentacion AS P WHERE P.pre_codigo = MP.fk_mp_presentacion',(err,resultPre)=>{
+          if (err){
+            console.log(err,stack);
+            res.send("failed");
+          } else if (resultPre.rows[0] != null){
+            var preNoMet = resultPre.rows;
+            res.render('noMetalicosConsultar',{dataTable: result.rows, preNoMet: preNoMet, user: userJSON});
+            } else {
+              res.send('failed');
+            }
+          });
+        
       }else{
         res.send('failed');
       };
@@ -489,30 +668,62 @@ app.post("/Metalicos-Agregar",function(req,res){
   var metalicoDureza = req.body.escalaDureza;
   var nombrePresentacion = req.body.nombrePresentacion;
   var precioMP = req.body.precioMP;
+  var preTipo = req.body.preTipo;
+
+  if(userJSON.usuario != "none"){
 
   client.query('INSERT INTO min_metalico (met_nombre,met_escalamaleabilidad, met_escaladureza,fk_met_estatus) VALUES ($1,$2,$3,1)',[metalicoNombre, metalicoMaleabilidad, metalicoDureza],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
     }else if (nombrePresentacion != ""){
-      client.query('INSERT INTO presentacion (pre_nombre) VALUES ($1)',[nombrePresentacion],(err,result)=>{
+
+      for (var i = preTipo.length - 1; i >= 0; i--) {
+
+        client.query('INSERT INTO min_pre (mp_precio, fk_mp_presentacion, fk_mp_metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[precioMP[i],nombrePresentacion[i],metalicoNombre],(err,result)=>{
         if (err) {
           console.log(err.stack);
           res.send('failed'); 
-        }else{
-          res.send('great'); 
-          console.log('Query procesado correctamente (Mineral metálico)');
-        }
+        }        
       });
+      }
+
+
+      
     }else{
       res.send('great'); 
       console.log('Query procesado correctamente (Mineral metálico)');
     }
   });
-
-  
-
+  }else{
+    res.redirect('login');
+  }
 });   
+
+app.post("/Metalicos-AgregarPre",function(req,res){
+  var filtro = req.body.filtroPre;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var pre = result.rows;
+        res.send({pre: pre});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
+
 
 app.post("/Metalicos-Eliminar",function(req,res){ 
   var codigoMetalicoEliminar = req.body.codigoMetalicoEliminar;
@@ -527,18 +738,39 @@ app.post("/Metalicos-Eliminar",function(req,res){
 });
 
 
+
 app.post("/NoMetalicos-Agregar",function(req,res){
   var noMetalicoNombre = req.body.nombreNoMetalico;
   var noMetalicoUtilidad = req.body.utilidadNoMetalico;
+  var nombrePresentacion = req.body.nombrePresentacion;
+  var precioMP = req.body.precioMP;
+  var preTipo = req.body.preTipo;
+
+  if(userJSON.usuario != "none"){
+
   client.query('INSERT INTO min_no_metalico (nom_nombre,nom_utilidad, fk_nom_estatus) VALUES ($1,$2,1)',[noMetalicoNombre, noMetalicoUtilidad],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
+    }else if (nombrePresentacion != ""){
+
+      for (var i = preTipo.length - 1; i >= 0; i--) {
+
+        client.query('INSERT INTO min_pre (mp_precio, fk_mp_presentacion, fk_mp_nometalico) VALUES ($1,$2, (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $3))',[precioMP[i],nombrePresentacion[i],noMetalicoNombre],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+        });
+      }
     }else{
       res.send('great'); 
       console.log('Query procesado correctamente (Mineral no metálico)');
     }
   });
+  }else{
+      res.send('great');
+    }
 });   
 
 app.post("/NoMetalicos-Eliminar",function(req,res){ 
@@ -549,6 +781,114 @@ app.post("/NoMetalicos-Eliminar",function(req,res){
       res.send('failed'); 
     }else{
       res.send('great');
+    }
+  });
+});
+
+app.get("/Metalicos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('metalicosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Metalicos-Verificar",function(req,res){ 
+  var codigoM = req.body.codigoMetV;
+  client.query('SELECT M.met_codigo, M.met_escalamaleabilidad, M.met_nombre, M.met_escaladureza, M.fk_met_estatus  FROM min_metalico AS M WHERE M.met_codigo = $1',[codigoM],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var dataV = result.rows;
+      var estatusDisponible = 'Disponible';
+      var estatusEliminado = 'Eliminado';
+      client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
+                if (err) {
+                  console.log(err.stack);
+                  res.send('failed'); 
+                }else if(estatuses.rows[0] != null){
+                  var estatuses = estatuses.rows;                  
+                  res.send({dataV: dataV, estatuses: estatuses});
+                }else{
+                  res.send('failed');
+                }
+              });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/Metalicos-Modificar",function(req,res){ 
+  var metalicoCodigo = req.body.codigoGC;
+  var metalicoNombre = req.body.nombreGC;
+  var metalicoMaleabilidad = req.body.maleabilidadGC;
+  var metalicoDureza = req.body.durezaGC;
+  var metalicoEstatus = req.body.estatusGC;
+
+  client.query('UPDATE MIN_METALICO SET met_nombre=$1,met_escalamaleabilidad=$2,met_escaladureza=$3,fk_met_estatus= $4 WHERE met_codigo= $5',[metalicoNombre,metalicoMaleabilidad,metalicoDureza,metalicoEstatus,metalicoCodigo],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente (modificar mineral)');
+    }
+  });
+});
+
+app.get("/NoMetalicos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('noMetalicosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/NoMetalicos-Verificar",function(req,res){ 
+  var codigoM = req.body.codigoNoMetV;
+  client.query('SELECT M.nom_codigo, M.nom_utilidad, M.nom_nombre M.fk_nom_estatus  FROM min_no_metalico AS M WHERE M.nom_codigo = $1',[codigoM],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var dataV = result.rows;
+      var estatusDisponible = 'Disponible';
+      var estatusEliminado = 'Eliminado';
+      client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatusesNM)=>{
+                if (err) {
+                  console.log(err.stack);
+                  res.send('failed'); 
+                }else if(estatusesNM.rows[0] != null){
+                  var estatusesNM = estatusesNM.rows;                  
+                  res.send({dataV: dataV, estatusesNM: estatusesNM});
+                }else{
+                  res.send('failed');
+                }
+              });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/NoMetalicos-Modificar",function(req,res){ 
+  var noMetalicoCodigo = req.body.codigoGC;
+  var noMetalicoNombre = req.body.nombreGC;
+  var noMetalicoUtilidad = req.body.durezaGC;
+  var noMetalicoEstatus = req.body.estatusGC;
+
+
+  client.query('UPDATE MIN_NO_METALICO SET nom_nombre=$1,nom_utilidad=$2,fk_nom_estatus= $3 WHERE nom_codigo= $4',[noMetalicoNombre,noMetalicoUtilidad,noMetalicoEstatus,noMetalicoCodigo],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente (modificar mineral)');
     }
   });
 });
@@ -583,7 +923,6 @@ app.get("/Ventas-Consultar",function(req,res){
     res.redirect('login');
   }
 });
-
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
