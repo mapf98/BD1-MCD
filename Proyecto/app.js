@@ -206,10 +206,11 @@ app.post("/Yacimientos-Agregar",function(req,res){
   if(userJSON.usuario != "none"){
     client.query('INSERT INTO YACIMIENTO (yac_extension,yac_fecharegistro,yac_nombre,fk_yac_estatus,fk_yac_lugar) VALUES($1,(SELECT NOW()),$2,1,$3)',[extensionYac,nombreYac,parroquiaYac],(err,result)=>{
       if (err) {
+        console.log('Entro en el error esperado');
         console.log(err.stack);
         res.send('failed'); 
-      }else if(minTipo!= null){
-
+      }else if(minTipo != null){
+        console.log('Entro en la insersion de minerales');
         for (var i = minTipo.length - 1; i >= 0; i--) {
 
           if(minTipo[i]=='MIN_METALICO'){
@@ -233,7 +234,9 @@ app.post("/Yacimientos-Agregar",function(req,res){
           }
         }
         res.send('great');
+
       }else{
+        console.log('Entro en la insersion del yacimiento sin minerales');
         res.send('great');
       }
     });
@@ -253,13 +256,13 @@ app.get("/Yacimientos-Consultar",function(req,res){
         res.send('failed'); 
       }else if(result.rows[0] != null){
         var infoYac = result.rows;
-        client.query('SELECT YM.fk_ym_yacimiento, MM.met_nombre FROM yac_min AS YM, min_metalico AS MM WHERE YM.fk_ym_minmetalico = MM.met_codigo ',(err,resultMET)=>{
+        client.query('SELECT YM.fk_ym_yacimiento, MM.met_nombre,YM.ym_cantidad FROM yac_min AS YM, min_metalico AS MM WHERE YM.fk_ym_minmetalico = MM.met_codigo ',(err,resultMET)=>{
           if (err) {
             console.log(err.stack);
             res.send('failed'); 
           }else if(resultMET.rows[0] != null){
             var metYac = resultMET.rows;
-           client.query('SELECT YM.fk_ym_yacimiento, NOM.nom_nombre FROM yac_min AS YM, min_no_metalico AS NOM WHERE YM.fk_ym_minnometalico = NOM.nom_codigo ',(err,resultNOM)=>{
+           client.query('SELECT YM.fk_ym_yacimiento, YM.ym_cantidad, NOM.nom_nombre FROM yac_min AS YM, min_no_metalico AS NOM WHERE YM.fk_ym_minnometalico = NOM.nom_codigo ',(err,resultNOM)=>{
               if (err) {
                 console.log(err.stack);
                 res.send('failed'); 
@@ -283,8 +286,6 @@ app.get("/Yacimientos-Consultar",function(req,res){
   }
 });
 
-
-//QUERY DINAMICO
 app.post("/Yacimientos-AgregarMin",function(req,res){
   var filtro = req.body.filtroMin;
   if(userJSON.usuario != "none"){
@@ -308,7 +309,6 @@ app.post("/Yacimientos-AgregarMin",function(req,res){
   }
 });
 
-
 app.get("/Yacimientos-Modificar",function(req,res){
   if(userJSON.usuario != "none"){
     res.render('empleadosModificar',{user: userJSON});
@@ -319,10 +319,22 @@ app.get("/Yacimientos-Modificar",function(req,res){
 
 app.get("/Yacimientos-Eliminar",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('empleadosEliminar',{user: userJSON});
+    res.render('yacimientosEliminar',{user: userJSON});
   }else{
     res.redirect('login');
   }
+});
+
+app.post("/Yacimientos-Eliminar",function(req,res){
+  var eliminarYac = req.body.nombreYac;
+  client.query('DELETE FROM yacimiento AS Y WHERE Y.yac_nombre = $1',[eliminarYac],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });
 });
 
 

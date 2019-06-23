@@ -62,7 +62,7 @@ $('#eliminarEmpleado').on('submit',function(e){
 			if(response == 'great'){
 				alert('El empleado fue ELIMINADO satisfactoriamente');
 			}else{
-				alert('El empleado NO SE PUDO ELIMINAR, revisa los campos por informacion duplicada');
+				alert('El empleado NO SE PUDO ELIMINAR, verifique que la cedula exista');
 			}			
 		}
 	});
@@ -294,7 +294,7 @@ $('#addMin').on('click',function(e){
 
 	var nextID = globalIDMineralYacimiento;
 				listMin.append(' \n\
-					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
 					<div class="form-row blockMin">\n\
 					\n\
 					<div class="col-md-4 mb-3">\n\
@@ -332,13 +332,18 @@ $('#addMin').on('click',function(e){
 	$('#remove'+nextID+'').on('click',function(e){
 		e.preventDefault();
 		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		$('#c'+nextID+'').attr('value',$('#c'+nextID+'').val()*0);
 		boxButtonDelete = $(this).parent();
 		boxMinDelete = $(boxButtonDelete).parent();
-		boxMinDelete.remove();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		setTimeout(function(){
+			boxMinDelete.remove();
+		},300);
 	});
 
 	globalIDMineralYacimiento++;
-
 });
 
 function verifyElementVal(){
@@ -358,6 +363,20 @@ function verifyElementVal(){
 	return true;
 }
 
+function verifyMin(){
+	var start=1;
+	var ready = false;
+	while(globalIDMineralYacimiento>=start){
+		if($('#'+start+'').children(":selected").val() != null){
+			ready = true;
+			start = globalIDMineralYacimiento+1;
+		}else{
+			start++;
+		}
+	}
+	return ready;
+}
+
 //AGREGAR YACIMIENTOS
 //Primero mostrar las presentaciones disponibles en cada drop nuevo, esto se hace en addMin
 //Luego registrar con un json
@@ -372,16 +391,18 @@ $('#agregarYacimiento').on('submit',function(e){
 	var minMin = [];
 	var minCantidad = [];
 	while(globalIDMineralYacimiento>=start){
-		minTipo.push( $('#t'+start+'').val() );
-		minMin.push( $('#'+start+'').val() );
-		minCantidad.push($('#c'+start+'').val());
-		start++;
+		if($('#'+start+'').val() > 0){
+			minTipo.push( $('#t'+start+'').val() );
+			minMin.push( $('#'+start+'').val() );
+			minCantidad.push($('#c'+start+'').val());
+		}
+		start++;		
 	}
 
 	if(parroquiaYacimiento.val() == 'Selecciona un municipio'){
 		alert('Selecciona lugar valido, elige un estado primero!')
 	}else{
-		if(verifyElementVal()==true){
+		if(verifyElementVal()==true && verifyMin()==true){
 			$.ajax({
 			url: '/Yacimientos-Agregar',
 			method: 'POST',
@@ -403,7 +424,7 @@ $('#agregarYacimiento').on('submit',function(e){
 			});
 			alert('Fino!');
 		}else{
-			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+			alert('Existen minerales repetidos o no ha asignado al menos un mineral, porfavor verifique el formulario para continuar!');
 		}
 	}
 });
@@ -612,3 +633,23 @@ function mineralTipo(tipo,minerales){
 		});	
 	});
 }
+
+$('#eliminarYacimiento').on('submit',function(e){
+	e.preventDefault();
+	let nombreYacimiento = $('#nombreYacimientoEliminar');
+
+	$.ajax({
+		url: '/Yacimientos-Eliminar',
+		method: 'POST',
+		data: {
+			nombreYac: nombreYacimiento.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El yacimiento fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El yacimiento NO SE PUDO ELIMINAR, revisa los campos por informacion duplicada');
+			}			
+		}
+	});
+});

@@ -140,13 +140,13 @@
                             <select>
                               <% for(var j=0; j < metYac.length; j++) {%>
                                 <% if(metYac[j].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
-                                  <option class="text-center"><%=metYac[j].met_nombre%></option>
+                                  <option class="text-center"><%=metYac[j].met_nombre%> (<%=metYac[j].ym_cantidad%> Ton)</option>
                                 <%}%>
                               <%}%>
 
                               <% for(var k=0; k < nomYac.length; k++) {%>
                                 <% if(nomYac[k].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
-                                  <option class="text-center"><%=nomYac[k].nom_nombre%></option>
+                                  <option class="text-center"><%=nomYac[k].nom_nombre%> (<%=nomYac[k].ym_cantidad%> Ton)</option>
                                 <%}%>
                               <%}%>
                             </select>                            
