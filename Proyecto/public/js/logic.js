@@ -2,6 +2,27 @@ var globalIDMineralYacimiento = 1;
 var globalIDPresentacionMineral = 1;
 var globalIDPresentacionMineralNM = 1;
 
+var modMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+var modNoMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+function clearArray(array){
+	var start = 0;
+	var k = array.length;
+	while(k >= start){
+		array.splice(k-start, 1);
+		start++;
+	}
+}
+
 //PETICIONES AJAX
 
 //Empleado
@@ -687,8 +708,11 @@ $('#agregarMetalico').on('submit',function(e){
 	
 });
 
+addPre($('#addPre'),$('#listPre'));
+
 //Presentacion
-$('#addPre').on('click',function(e){
+function addPre(button,list){
+		button.on('click',function(e){
 	e.preventDefault();
 	listPre = $('#listPre');
 
@@ -718,7 +742,7 @@ $('#addPre').on('click',function(e){
 					</div>\n\
 					\n\
 					<div class="col-md-2 mb-3">\n\
-					  <label for="removeMin" class="hackerText">Hacker</label>\n\
+					  <label for="removePre" class="hackerText">Hacker</label>\n\
 					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
 					</div>\n\
 					</div>\n\
@@ -728,27 +752,43 @@ $('#addPre').on('click',function(e){
 
 	presentacionSelect($('#t'+nextID+''),$('#'+nextID+''));
 
+	// $('#remove'+nextID+'').on('click',function(e){
+	// 	e.preventDefault();
+	// 	$('#'+nextID+'').attr('id',(nextID)*(-1));
+	// 	boxButtonDelete = $(this).parent();
+	// 	boxMinDelete = $(boxButtonDelete).parent();
+	// 	boxMinDelete.remove();
+	// });
+
 	$('#remove'+nextID+'').on('click',function(e){
-		e.preventDefault();
-		$('#'+nextID+'').attr('id',(nextID)*(-1));
-		boxButtonDelete = $(this).parent();
-		boxMinDelete = $(boxButtonDelete).parent();
-		boxMinDelete.remove();
-	});
+			e.preventDefault();
+			modMet.d.push({"cod":$('#'+nextID+'').val(),"p":$('#p'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#p'+nextID+'').attr('value',$('#p'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
 
 	globalIDPresentacionMineral++;
 
 });
+	}
 
 $('#eliminarMetalico').on('submit',function(e){
 	e.preventDefault();
-	let codigoMetalicoEliminar = $('#codigoMetalicoEliminar');
+	let nombreMetalico = $('#nombreMetalico');
 
 	$.ajax({
 		url: '/Metalicos-Eliminar',
 		method: 'POST',
 		data: {
-			codigoMetalicoEliminar: codigoMetalicoEliminar.val(),
+			nombreMetalico: nombreMetalico.val(),
 		},
 		success: function(response){
 			if(response == 'great'){
@@ -760,15 +800,17 @@ $('#eliminarMetalico').on('submit',function(e){
 	});
 });
 
+
+
 $('#verificarMetalico').on('submit',function(e){
 	e.preventDefault();
-	let codigoMetalicoV = $('#codigoMetalicoVerificar');
+	let nombreMetalicoV = $('#nombreMetalicoVerificar');
 
 	$.ajax({
 		url: '/Metalicos-Verificar',
 		method: 'POST',
 		data: {
-			codigoMetV: codigoMetalicoV.val(),
+			nombreMetV: nombreMetalicoV.val(),
 		},
 		success: function(response){
 			if(response.dataV != null){
@@ -785,7 +827,7 @@ $('#verificarMetalico').on('submit',function(e){
 	                      </div>\n\
 	                      <div class="col-md-6 mb-3">\n\
 	                        <label for="gcnombreMetalico">Nombre</label>\n\
-	                        <input type="text" class="form-control formsCRUD" id="gcnombreMetalico" value="'+response.dataV[0].met_nombre+'" required>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcnombreMetalico" value="'+response.dataV[0].met_nombre+'" disabled>\n\
 	                      </div>\n\
 	                    </div>\n\
 	                    <div class="form-row animated fadeIn">\n\
@@ -798,25 +840,46 @@ $('#verificarMetalico').on('submit',function(e){
 	                        <input type="number" class="form-control formsCRUD" id="gcdureza" value="'+response.dataV[0].met_escaladureza+'" required>\n\
 	                      </div>\n\
 	                    </div>\n\
-	                   	<hr>\n\
-	                   	<div class="form-row animated fadeIn">\n\
-	                      <div class="col-md-4 mb-3">\n\
-	                        <label for="gcestatus">Estatus</label>\n\
-	                        <select class="form-control formsCRUD" id="gcestatus">\n\
-	                        </select>\n\
-	                      </div>\n\
-	                    </div>\n\
+	                    <hr>\n\
+						<div class="row">\n\
+	                    <div class="col-4"></div>\n\
+						<div class="col-4">\n\
+						<button class="btn btn-success btn-block" id="addPre">Asignar presentacion</button>\n\
+						</div>\n\
+						<div class="col-4"></div>\n\
+						</div>\n\
+						<div class="listPre" id="listPre">\n\
+						</div>\n\
+						</div>\n\
 	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
 	                </div>');
 
-				selectEstatus = $('#gcestatus');
-				selectEstatus.html('');
-				for (var i = response.estatuses.length - 1; i >= 0; i--) {
-					selectEstatus.append('<option value="'+response.estatuses[i].est_codigo+'">'+response.estatuses[i].est_nombre+'</option>');
+				// selectEstatus = $('#gcestatus');
+				// selectEstatus.html('');
+				// for (var i = response.estatuses.length - 1; i >= 0; i--) {
+				// 	selectEstatus.append('<option value="'+response.estatuses[i].est_codigo+'">'+response.estatuses[i].est_nombre+'</option>');
+				// }
+				// $("#gcestatus option[value="+ response.dataV[0].est_codigo +"]").attr("selected",true);
+
+				addPre($('#addPre'),$('#listPre'));
+
+				function setPre(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
 				}
-				$("#gcestatus option[value="+ response.dataV[0].est_codigo +"]").attr("selected",true);
 
-
+				var pre=0;
+				while(response.preMet.length>pre){
+					if(response.preMet[pre].fk_mp_metalico == response.dataV[0].met_codigo){
+						$('#addPre').trigger('click');
+						$('#t'+(globalIDPresentacionMineral-1)+'').trigger('click');
+						setPre(globalIDPresentacionMineral-1,response.preMet[pre].pre_codigo);
+						$('#c'+(globalIDPresentacionMineral-1)+'').attr("value",response.preMet[pre].mp_precio);
+						modMet.u.push({"cod":response.preMet[pre].pre_codigo,"p":response.preMet[pre].mp_precio,"id":globalIDPresentacionMineral-1,"o":response.preMet[pre].pre_codigo});
+					}
+					pre++;
+				}
 				
 
 			}else if(response == 'failed'){
@@ -831,8 +894,43 @@ $('#guardarCambioMetalico').on('submit',function(e){
 	let nombreGC = $('#gcnombreMetalico');
 	let maleabilidadGC = $('#gcmaleabilidad');
 	let durezaGC = $('#gcdureza');
-	let estatusGC = $('#gcestatus');
 	let codigoGC = $('#gccodigo');
+
+	var start = 1;
+	clearArray(modMet.i);
+	while(globalIDPresentacionMineral>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var p = $('#c'+start+'').val();
+			
+			modMet.i.push({"cod": cod ,"p": p, "id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrder(modMet.u,modMet.i);
+	verifyAndOrder(modMet.d,modMet.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modMet.u.length>test){
+		console.log(modMet.u[test].p + "/"+modMet.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modMet.i.length>test){
+		console.log(modMet.i[test].p+ "/"+modMet.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modMet.d.length>test){
+		console.log(modMet.d[test].p+ "/"+modMet.d[test].cod);
+		test++;
+	}
 
 	$.ajax({
 		url: '/Metalicos-Modificar',
@@ -842,7 +940,8 @@ $('#guardarCambioMetalico').on('submit',function(e){
 			nombreGC: nombreGC.val(),
 			maleabilidadGC: maleabilidadGC.val(),
 			durezaGC: durezaGC.val(),
-			estatusGC: estatusGC.val(),
+			modMet: modMet
+
 		},
 		success: function(response){
 			if(response == 'great'){
@@ -857,6 +956,10 @@ $('#guardarCambioMetalico').on('submit',function(e){
                       <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
                     </div>\n\
 				`);
+				globalIDPresentacionMineral =1;
+				clearArray(modMet.i);
+				clearArray(modMet.d);
+				clearArray(modMet.u);
 			}else{
 				alert('El mineral NO SE PUDO MOFICAR, revisa los campos');
 			}			
@@ -915,13 +1018,13 @@ $('#agregarNoMetalico').on('submit',function(e){
 
 $('#eliminarNoMetalico').on('submit',function(e){
 	e.preventDefault();
-	let codigoNoMetalicoEliminar = $('#codigoNoMetalicoEliminar');
+	let nombreNoMetalico = $('#nombreNoMetalico');
 
 	$.ajax({
 		url: '/NoMetalicos-Eliminar',
 		method: 'POST',
 		data: {
-			codigoNoMetalicoEliminar: codigoNoMetalicoEliminar.val(),
+			nombreNoMetalico: nombreNoMetalico.val(),
 		},
 		success: function(response){
 			if(response == 'great'){
@@ -933,6 +1036,166 @@ $('#eliminarNoMetalico').on('submit',function(e){
 	});
 });
 
+$('#verificarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreNoMetalicoV = $('#nombreNoMetalicoVerificar');
+
+	$.ajax({
+		url: '/NoMetalicos-Verificar',
+		method: 'POST',
+		data: {
+			nombreNoMetV: nombreNoMetalicoV.val(),
+		},
+		success: function(response){
+			if(response.dataV != null){
+
+				var boxModNoMet = $('#guardarCambioNoMetalico');
+
+				boxModNoMet.html('');
+				boxModNoMet.append(' \n\
+					<div class="animated" id="boxGC">\n\
+	                    <div class="form-row animated fadeIn animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gccodigo">Código</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gccodigo" value="'+response.dataV[0].nom_codigo+'" disabled>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcnombreNoMetalico">Nombre</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcnombreNoMetalico" value="'+response.dataV[0].nom_nombre+'" disabled>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcutilidad">Utilidad</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcutilidad" value="'+response.dataV[0].nom_utilidad+'" required>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <hr>\n\
+						<div class="row">\n\
+	                    <div class="col-4"></div>\n\
+						<div class="col-4">\n\
+						<button class="btn btn-success btn-block" id="addPre">Asignar presentacion</button>\n\
+						</div>\n\
+						<div class="col-4"></div>\n\
+						</div>\n\
+						<div class="listPre" id="listPre">\n\
+						</div>\n\
+						</div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	                </div>');
+
+				// selectEstatus = $('#gcestatus');
+				// selectEstatus.html('');
+				// for (var i = response.estatuses.length - 1; i >= 0; i--) {
+				// 	selectEstatus.append('<option value="'+response.estatuses[i].est_codigo+'">'+response.estatuses[i].est_nombre+'</option>');
+				// }
+				// $("#gcestatus option[value="+ response.dataV[0].est_codigo +"]").attr("selected",true);
+
+				addPre($('#addPre'),$('#listPre'));
+
+				function setPre(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
+				}
+
+				var pre=0;
+				while(response.preNoMet.length>pre){
+					if(response.preNoMet[pre].fk_mp_nometalico == response.dataV[0].nom_codigo){
+						$('#addPre').trigger('click');
+						$('#t'+(globalIDPresentacionMineral-1)+'').trigger('click');
+						setPre(globalIDPresentacionMineral-1,response.preNoMet[pre].pre_codigo);
+						$('#p'+(globalIDPresentacionMineral-1)+'').attr("value",response.preNoMet[pre].mp_precio);
+						modNoMet.u.push({"cod":response.preNoMet[pre].pre_codigo,"p":response.preNoMet[pre].mp_precio,"id":globalIDPresentacionMineral-1,"o":response.preNoMet[pre].pre_codigo});
+					}
+					pre++;
+				}
+				
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a mineral para modificar');				
+			}			
+		}
+	});
+});
+
+$('#guardarCambioNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreNoMetalico');
+	let utilidadGC = $('#gcutilidad');
+	let codigoGC = $('#gccodigo');
+
+	console.log(nombreGC.val() + utilidadGC.val() + codigoGC.val());
+
+	var start = 1;
+	clearArray(modNoMet.i);
+	while(globalIDPresentacionMineral>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var p = $('#c'+start+'').val();
+			modNoMet.i.push({"cod": cod ,"p": p ,"id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrder(modNoMet.u,modNoMet.i);
+	verifyAndOrder(modNoMet.d,modNoMet.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modNoMet.u.length>test){
+		console.log(modNoMet.u[test].t + "/"+ modNoMet.u[test].p + "/"+modNoMet.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modNoMet.i.length>test){
+		console.log(modNoMet.i[test].t + "="+modNoMet.i[test].p+ "/"+modNoMet.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modNoMet.d.length>test){
+		console.log(modNoMet.d[test].t + "="+modNoMet.d[test].p+ "/"+modNoMet.d[test].cod);
+		test++;
+	}
+
+	$.ajax({
+		url: '/NoMetalicos-Modificar',
+		method: 'POST',
+		data: {
+			codigoGC: codigoGC.val(),
+			nombreGC: nombreGC.val(),
+			utilidadGC: utilidadGC.val(),
+			modNoMet: modNoMet
+
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral fue MODIFICADO satisfactoriamente');
+				console.log("hola");
+				var boxGCNoMet = $('#boxGC');
+				boxGCNoMet.addClass('fadeOut');
+				boxGCNoMet.html('');
+				var boxmodNoMet = $('#guardarCambioNoMetalico');
+				boxmodNoMet.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un mineral para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+				globalIDPresentacionMineral =1;
+				clearArray(modNoMet.i);
+				clearArray(modNoMet.d);
+				clearArray(modNoMet.u);
+			}else{
+				alert('El mineral NO SE PUDO MOFICAR, revisa los campos');
+			}			
+		}
+	});
+});
 
 
 $('#menuItemMinerales').on('click',function(){
@@ -1029,6 +1292,30 @@ function presentacionSelect(tipo,presentaciones){
 			}
 		});	
 	});
+}
+
+function verifyAndOrder(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].c = b[flag].c;
+				a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
 }
 
 

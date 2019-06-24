@@ -136,7 +136,6 @@ CREATE TABLE ALIADO_COMERCIAL (
 CREATE TABLE TIPO_MAQUINARIA(
 	TM_CODIGO SERIAL, 
 	TM_NOMBRE VARCHAR(50) NOT NULL,
-	FK_TM_TIPO INTEGER NOT NULL,
 	CONSTRAINT PK_CODIGO_TIPO_MAQUINARIA PRIMARY KEY (TM_CODIGO)
 );
 
@@ -173,9 +172,9 @@ CREATE TABLE VENTA(
 
 CREATE TABLE EXPLOTACION(
 	EXP_CODIGO SERIAL,
-	EXP_FECHAINICIO DATE NOT NULL,
+	EXP_FECHAINICIO DATE,
 	EXP_FECHAFIN DATE,
-	EXP_COSTOTOTAL NUMERIC(15,2) NOT NULL,
+	EXP_COSTOTOTAL NUMERIC(15,2),
 	FK_EXP_ESTATUS INTEGER NOT NULL,
 	FK_EXP_VENTA INTEGER,
 	CONSTRAINT PK_CODIGO_EXPLOTACION PRIMARY KEY (EXP_CODIGO),
@@ -201,9 +200,9 @@ CREATE TABLE YACIMIENTO(
 CREATE TABLE ETAPA (
 	ETA_CODIGO SERIAL,
 	ETA_NOMBRE VARCHAR(50) NOT NULL,
-	ETA_FECHAINICIO DATE NOT NULL,
+	ETA_FECHAINICIO DATE,
 	ETA_FECHAFIN DATE,
-	ETA_COSTOTOTAL NUMERIC(15,2) NOT NULL,
+	ETA_COSTOTOTAL NUMERIC(15,2),
 	FK_ETA_EXPLOTACION INTEGER,
 	FK_ETA_ESTATUS INTEGER NOT NULL,
 	CONSTRAINT PK_CODIGO_ETAPA PRIMARY KEY (ETA_CODIGO),
@@ -215,9 +214,9 @@ CREATE TABLE ETAPA (
 CREATE TABLE FASE(
 	FAS_CODIGO SERIAL,
 	FAS_NOMBRE VARCHAR(50) NOT NULL,
-	FAS_FECHAINICIO DATE NOT NULL,
+	FAS_FECHAINICIO DATE,
 	FAS_FECHAFIN DATE,
-	FAS_COSTOTOTAL NUMERIC(15,2) NOT NULL,
+	FAS_COSTOTOTAL NUMERIC(15,2),
 	FK_FAS_ETAPA INTEGER NOT NULL,
 	FK_FAS_ESTATUS INTEGER NOT NULL,
 	CONSTRAINT PK_CODIGO_FASE PRIMARY KEY (FAS_CODIGO),
@@ -270,15 +269,15 @@ CREATE TABLE HOR_ECF(
 
 CREATE TABLE MIN_METALICO (
 	MET_CODIGO SERIAL,
-	MET_NOMBRE VARCHAR (50) NOT NULL,
-	MET_ESCALAMALEABILIDAD VARCHAR (2) NOT NULL,
-	MET_ESCALADUREZA VARCHAR(2) NOT NULL,
+	MET_NOMBRE VARCHAR (50) NOT NULL UNIQUE,
+	MET_ESCALAMALEABILIDAD NUMERIC(10) NOT NULL,
+	MET_ESCALADUREZA NUMERIC(10) NOT NULL,
 	CONSTRAINT PK_CODIGO_MET PRIMARY KEY (MET_CODIGO)
 );
 
 CREATE TABLE MIN_NO_METALICO (
 	NOM_CODIGO SERIAL,
-	NOM_NOMBRE VARCHAR (50) NOT NULL,
+	NOM_NOMBRE VARCHAR (50) NOT NULL UNIQUE,
 	NOM_UTILIDAD VARCHAR (50),
 	CONSTRAINT PK_CODIGO_NOM PRIMARY KEY (NOM_CODIGO)
 );
@@ -354,11 +353,15 @@ CREATE TABLE YAC_MIN (
 CREATE TABLE MIN_MIN (
 	MM_CODIGO SERIAL,
 	MM_PROPORCIONM1M2 NUMERIC(10,2),
-	FK_MM_METALICO INTEGER ,
-	FK_MM_NOMETALICO INTEGER,
+	FK_MM_1METALICO INTEGER ,
+	FK_MM_1NOMETALICO INTEGER,
+	FK_MM_2METALICO INTEGER ,
+	FK_MM_2NOMETALICO INTEGER,
 	CONSTRAINT PK_CODIGO_MM PRIMARY KEY (MM_CODIGO),
-	CONSTRAINT FK_METALICO_MM FOREIGN KEY (FK_MM_METALICO) REFERENCES MIN_METALICO (MET_CODIGO),
-	CONSTRAINT FK_NOMETALICO_MM FOREIGN KEY (FK_MM_NOMETALICO) REFERENCES MIN_NO_METALICO (NOM_CODIGO)
+	CONSTRAINT FK_1METALICO_MM FOREIGN KEY (FK_MM_1METALICO) REFERENCES MIN_METALICO (MET_CODIGO),
+	CONSTRAINT FK_1NOMETALICO_MM FOREIGN KEY (FK_MM_1NOMETALICO) REFERENCES MIN_NO_METALICO (NOM_CODIGO),
+	CONSTRAINT FK_2METALICO_MM FOREIGN KEY (FK_MM_2METALICO) REFERENCES MIN_METALICO (MET_CODIGO),
+	CONSTRAINT FK_2NOMETALICO_MM FOREIGN KEY (FK_MM_2NOMETALICO) REFERENCES MIN_NO_METALICO (NOM_CODIGO)
 );
 
 CREATE TABLE ALI_MM (
@@ -2024,27 +2027,36 @@ INSERT INTO lugar(
 	VALUES (26530120,'Alex','Loro','1998-04-03','M',4242855585,1,1470);
 
 	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21581939,'Brett','Stephens','1993-02-02','M','4241484768',2,768),(13579621,'Simon','Mclean','1993-03-18','M','4246271427',7,411),(21241238,'Armand','Cummings','1969-05-18','M','4241268875',1,1321),(24906978,'Kelly','Kline','1995-09-20','M','4245094798',7,978),(19774717,'Tyler','Clay','1963-06-06','M','4241185186',6,863);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21462771,'Hayden','Diaz','1974-02-26','M','4246387144',2,1152),(22451913,'Hyatt','Leach','1975-12-06','M','4243374903',3,596),(11708061,'Arden','Rutledge','1966-03-28','M','4241091382',5,1147),(25468025,'Vernon','Cardenas','1973-09-07','M','4242132466',6,774),(21197410,'Baxter','Aguirre','1972-04-09','M','4242849903',7,1218);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (12035119,'Lars','Curry','1973-10-31','M','4246072869',1,1162),(16443308,'Baker','Allison','1985-05-13','M','4248902386',7,1322),(11997017,'Stuart','Soto','1994-02-01','M','4247817393',7,478),(23649003,'Jasper','Macias','1967-02-21','M','4245219341',5,1372),(18575440,'Carl','Glass','1986-10-14','M','4248288861',4,764);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (17274300,'Dorian','Scott','1967-10-09','M','4242278643',6,360),(18461790,'Norman','Robbins','1986-05-10','M','4249249749',4,1433),(20243157,'Oren','Chandler','1961-07-02','M','4247364331',2,1175),(24696038,'Gregory','Wong','1971-11-02','M','4243833684',4,520),(13061159,'Price','Delacruz','1969-01-10','M','4244846326',3,1398);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21839011,'Tyrone','Mcgowan','1989-11-05','M','4242251424',5,1223),(20438671,'Drake','Vinson','1990-07-28','M','4245346453',5,1462),(18689327,'Carlos','Lewis','1967-01-17','M','4243399096',1,670),(18280596,'Samuel','Joyner','1990-03-20','M','4249742088',5,1268),(21605265,'Stuart','Herrera','1964-09-05','M','4246152050',3,934);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (23603171,'Graham','Robles','1990-12-30','M','4244332833',4,1400),(22285267,'Hashim','Phelps','1971-09-12','M','4245528736',5,1146),(12593643,'Kermit','Pena','1997-12-23','M','4241568138',1,666),(25673501,'Wing','Yang','1961-06-04','M','4248776260',2,1486),(17896357,'Fletcher','Gates','1966-08-29','M','4248051935',1,1261);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21875608,'Brenden','Long','1963-07-02','M','4242577594',4,578),(13953243,'Thomas','Short','1994-04-22','M','4246659690',3,1018),(19510695,'Chester','Bass','1975-01-18','M','4241332019',5,1339),(21410705,'Wing','Douglas','1980-03-20','M','4242721755',6,1360),(18796042,'Moses','Jacobson','1997-03-17','M','4245724913',6,831);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (15285673,'Logan','Richmond','1990-01-06','M','4242184383',7,1105),(14735579,'Nehru','Gardner','1963-10-18','M','4248354005',6,840),(16837751,'Timothy','English','1963-01-17','M','4243391350',6,1221),(23161977,'Brody','Sloan','1971-07-14','M','4244371280',2,690),(19387958,'Hop','Kirkland','1985-08-19','M','4248675092',3,729);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16746782,'Bernard','Ruiz','1967-12-13','M','4248676289',2,968),(19975938,'Brent','Higgins','1991-12-07','M','4243101348',7,998),(25455131,'Jin','Underwood','1986-11-26','M','4241532386',2,1271),(23392661,'Blake','Gomez','1986-09-01','M','4249387999',7,1383),(17162379,'Owen','Hurst','1974-07-10','M','4248842533',5,1378);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16275352,'Jonas','Morse','1961-02-13','M','4244234938',5,1442),(17860483,'Yoshio','Leon','1972-08-03','M','4242205002',3,1457),(19425911,'Nathaniel','Patel','1967-11-22','M','4244022599',5,1118),(19506998,'Armand','Burt','1985-10-25','M','4247597117',7,1210),(15366545,'Russell','Kline','1977-01-15','M','4247489949',7,1122);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21462771,'Hayden','Diaz','1974-02-26','M','4246387144',2,1152),(22451913,'Hyatt','Leach','1975-12-06','M','4243374903',3,596),(11708061,'Arden','Rutledge','1966-03-28','M','4241091382',5,1147),(25468025,'Vernon','Cardenas','1973-09-07','M','4242132466',6,774),(21197410,'Baxter','Aguirre','1972-04-09','M','4242849903',7,1218);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (12035119,'Lars','Curry','1973-10-31','M','4246072869',1,1162),(16443308,'Baker','Allison','1985-05-13','M','4248902386',7,1322),(11997017,'Stuart','Soto','1994-02-01','M','4247817393',7,478),(23649003,'Jasper','Macias','1967-02-21','M','4245219341',5,1372),(18575440,'Carl','Glass','1986-10-14','M','4248288861',4,764);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (17274300,'Dorian','Scott','1967-10-09','M','4242278643',6,360),(18461790,'Norman','Robbins','1986-05-10','M','4249249749',4,1433),(20243157,'Oren','Chandler','1961-07-02','M','4247364331',2,1175),(24696038,'Gregory','Wong','1971-11-02','M','4243833684',4,520),(13061159,'Price','Delacruz','1969-01-10','M','4244846326',3,1398);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21839011,'Tyrone','Mcgowan','1989-11-05','M','4242251424',5,1223),(20438671,'Drake','Vinson','1990-07-28','M','4245346453',5,1462),(18689327,'Carlos','Lewis','1967-01-17','M','4243399096',1,670),(18280596,'Samuel','Joyner','1990-03-20','M','4249742088',5,1268),(21605265,'Stuart','Herrera','1964-09-05','M','4246152050',3,934);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (23603171,'Graham','Robles','1990-12-30','M','4244332833',4,1400),(22285267,'Hashim','Phelps','1971-09-12','M','4245528736',5,1146),(12593643,'Kermit','Pena','1997-12-23','M','4241568138',1,666),(25673501,'Wing','Yang','1961-06-04','M','4248776260',2,1486),(17896357,'Fletcher','Gates','1966-08-29','M','4248051935',1,1261);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (21875608,'Brenden','Long','1963-07-02','M','4242577594',4,578),(13953243,'Thomas','Short','1994-04-22','M','4246659690',3,1018),(19510695,'Chester','Bass','1975-01-18','M','4241332019',5,1339),(21410705,'Wing','Douglas','1980-03-20','M','4242721755',6,1360),(18796042,'Moses','Jacobson','1997-03-17','M','4245724913',6,831);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (15285673,'Logan','Richmond','1990-01-06','M','4242184383',7,1105),(14735579,'Nehru','Gardner','1963-10-18','M','4248354005',6,840),(16837751,'Timothy','English','1963-01-17','M','4243391350',6,1221),(23161977,'Brody','Sloan','1971-07-14','M','4244371280',2,690),(19387958,'Hop','Kirkland','1985-08-19','M','4248675092',3,729);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16746782,'Bernard','Ruiz','1967-12-13','M','4248676289',2,968),(19975938,'Brent','Higgins','1991-12-07','M','4243101348',7,998),(25455131,'Jin','Underwood','1986-11-26','M','4241532386',2,1271),(23392661,'Blake','Gomez','1986-09-01','M','4249387999',7,1383),(17162379,'Owen','Hurst','1974-07-10','M','4248842533',5,1378);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16275352,'Jonas','Morse','1961-02-13','M','4244234938',5,1442),(17860483,'Yoshio','Leon','1972-08-03','M','4242205002',3,1457),(19425911,'Nathaniel','Patel','1967-11-22','M','4244022599',5,1118),(19506998,'Armand','Burt','1985-10-25','M','4247597117',7,1210),(15366545,'Russell','Kline','1977-01-15','M','4247489949',7,1122);
 
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (15960535,'Felicia','Good','1993-02-26','F','4245956313',5,1178),(23146825,'Lunea','Greer','1968-02-19','F','4245796560',6,1487),(12032776,'Cara','Tyler','1989-10-16','F','4241994836',7,458),(17810852,'Helen','Mckinney','1965-09-28','F','4245540295',5,1487),(13080002,'Camilla','Campbell','1998-03-20','F','4243107293',1,1438);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (22047891,'Sade','Dotson','1978-06-15','F','4249573079',4,995),(17093589,'Hayley','Wise','1988-03-07','F','4247063815',4,1488),(10078066,'Wynne','Johnson','1994-11-29','F','4244031193',3,1434),(17435884,'Mona','Head','1965-11-14','F','4242123946',5,985),(24420525,'Aimee','Durham','1974-08-31','F','4244731827',6,367);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (20794758,'Ocean','Kirby','1961-01-24','F','4249953302',3,882),(16799406,'Angelica','Hunt','1962-03-09','F','4242584277',5,475),(10786177,'Jaden','Craft','1967-11-04','F','4243613337',1,889),(15183590,'Jacqueline','Strong','1965-09-29','F','4249279830',4,1136),(13186885,'Margaret','Rivera','1993-05-26','F','4245082059',3,1483);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (23412833,'Judith','Guthrie','1981-03-29','F','4246659137',4,1368),(24862175,'Eleanor','Yang','1983-01-16','F','4241807396',3,1162),(23719180,'Cassady','Dickerson','1968-05-17','F','4243572898',2,1303),(13802602,'Brittany','Acevedo','1974-02-09','F','4246906938',3,1095),(13764233,'Jeanette','Norman','1992-10-09','F','4241580566',4,1464);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16733454,'Sade','Kirk','1963-10-12','F','4244475433',3,685),(25777118,'Kyra','Sexton','1977-12-19','F','4244041488',1,1370),(16482212,'Quyn','Barlow','1974-01-08','F','4247956263',6,1377),(16582794,'Hollee','Mcconnell','1974-09-15','F','4247520153',4,752),(24685452,'Desirae','Colon','1993-04-01','F','4244899653',5,874);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (10831047,'Pearl','Cannon','1983-06-13','F','4248956581',3,923),(13005587,'Martena','Francis','1987-07-24','F','4249567302',7,1467),(11556643,'Shea','Floyd','1990-10-14','F','4242422676',2,851),(12514646,'Hayley','Miranda','1964-11-27','F','4243693034',4,833),(23824144,'Renee','Huff','1967-01-28','F','4246900740',5,592);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (22975803,'Briar','Oneil','1992-02-09','F','4244418803',7,559),(22239181,'Karina','Hamilton','1970-02-14','F','4246162436',2,857),(20091987,'Lavinia','Walters','1960-05-03','F','4242080356',5,1414),(13776619,'Deborah','Witt','1969-04-13','F','4242087353',6,626),(23532138,'Lunea','Sweeney','1965-12-30','F','4242999902',4,1287);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (14496528,'Alisa','Lawson','1996-12-25','F','4243132267',6,823),(22861340,'Bell','Whitaker','1991-08-10','F','4247865704',4,1219),(10892783,'Adria','Brady','1972-05-24','F','4243669795',3,948),(11207166,'Blaine','Andrews','1979-10-23','F','4246364954',1,1287),(11707616,'Bo','Gonzalez','1964-10-17','F','4243224487',3,1127);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (17059084,'Rama','Blackburn','1968-12-24','F','4249701590',2,1369),(18692144,'Roary','Gentry','1996-11-22','F','4243550806',3,903),(15245423,'Venus','Buchanan','1964-06-07','F','4249748038',6,1168),(17000880,'Wilma','Macdonald','1969-06-15','F','4246864890',3,771),(21160062,'Lael','Wilder','1975-07-25','F','4243348402',2,1377);
-INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (19412410,'Ocean','Ewing','1966-06-26','F','4244295057',2,954),(18519657,'Zoe','Cummings','1971-03-10','F','4247344944',4,471),(12116356,'Jana','Campbell','1979-02-06','F','4242931393',1,753),(23277607,'Eve','Holmes','1960-09-28','F','4242358722',5,623),(19651219,'Camille','Graves','1985-11-15','F','4247934060',5,950);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (15960535,'Felicia','Good','1993-02-26','F','4245956313',5,1178),(23146825,'Lunea','Greer','1968-02-19','F','4245796560',6,1487),(12032776,'Cara','Tyler','1989-10-16','F','4241994836',7,458),(17810852,'Helen','Mckinney','1965-09-28','F','4245540295',5,1487),(13080002,'Camilla','Campbell','1998-03-20','F','4243107293',1,1438);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (22047891,'Sade','Dotson','1978-06-15','F','4249573079',4,995),(17093589,'Hayley','Wise','1988-03-07','F','4247063815',4,1488),(10078066,'Wynne','Johnson','1994-11-29','F','4244031193',3,1434),(17435884,'Mona','Head','1965-11-14','F','4242123946',5,985),(24420525,'Aimee','Durham','1974-08-31','F','4244731827',6,367);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (20794758,'Ocean','Kirby','1961-01-24','F','4249953302',3,882),(16799406,'Angelica','Hunt','1962-03-09','F','4242584277',5,475),(10786177,'Jaden','Craft','1967-11-04','F','4243613337',1,889),(15183590,'Jacqueline','Strong','1965-09-29','F','4249279830',4,1136),(13186885,'Margaret','Rivera','1993-05-26','F','4245082059',3,1483);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (23412833,'Judith','Guthrie','1981-03-29','F','4246659137',4,1368),(24862175,'Eleanor','Yang','1983-01-16','F','4241807396',3,1162),(23719180,'Cassady','Dickerson','1968-05-17','F','4243572898',2,1303),(13802602,'Brittany','Acevedo','1974-02-09','F','4246906938',3,1095),(13764233,'Jeanette','Norman','1992-10-09','F','4241580566',4,1464);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (16733454,'Sade','Kirk','1963-10-12','F','4244475433',3,685),(25777118,'Kyra','Sexton','1977-12-19','F','4244041488',1,1370),(16482212,'Quyn','Barlow','1974-01-08','F','4247956263',6,1377),(16582794,'Hollee','Mcconnell','1974-09-15','F','4247520153',4,752),(24685452,'Desirae','Colon','1993-04-01','F','4244899653',5,874);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (10831047,'Pearl','Cannon','1983-06-13','F','4248956581',3,923),(13005587,'Martena','Francis','1987-07-24','F','4249567302',7,1467),(11556643,'Shea','Floyd','1990-10-14','F','4242422676',2,851),(12514646,'Hayley','Miranda','1964-11-27','F','4243693034',4,833),(23824144,'Renee','Huff','1967-01-28','F','4246900740',5,592);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (22975803,'Briar','Oneil','1992-02-09','F','4244418803',7,559),(22239181,'Karina','Hamilton','1970-02-14','F','4246162436',2,857),(20091987,'Lavinia','Walters','1960-05-03','F','4242080356',5,1414),(13776619,'Deborah','Witt','1969-04-13','F','4242087353',6,626),(23532138,'Lunea','Sweeney','1965-12-30','F','4242999902',4,1287);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (14496528,'Alisa','Lawson','1996-12-25','F','4243132267',6,823),(22861340,'Bell','Whitaker','1991-08-10','F','4247865704',4,1219),(10892783,'Adria','Brady','1972-05-24','F','4243669795',3,948),(11207166,'Blaine','Andrews','1979-10-23','F','4246364954',1,1287),(11707616,'Bo','Gonzalez','1964-10-17','F','4243224487',3,1127);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (17059084,'Rama','Blackburn','1968-12-24','F','4249701590',2,1369),(18692144,'Roary','Gentry','1996-11-22','F','4243550806',3,903),(15245423,'Venus','Buchanan','1964-06-07','F','4249748038',6,1168),(17000880,'Wilma','Macdonald','1969-06-15','F','4246864890',3,771),(21160062,'Lael','Wilder','1975-07-25','F','4243348402',2,1377);
+	INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES (19412410,'Ocean','Ewing','1966-06-26','F','4244295057',2,954),(18519657,'Zoe','Cummings','1971-03-10','F','4247344944',4,471),(12116356,'Jana','Campbell','1979-02-06','F','4242931393',1,753),(23277607,'Eve','Holmes','1960-09-28','F','4242358722',5,623),(19651219,'Camille','Graves','1985-11-15','F','4247934060',5,950);
 
+
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_EMPLEADO,FK_USU_ROL)
+	VALUES ('mfraga','admin',1,1);
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_EMPLEADO,FK_USU_ROL)
+	VALUES ('aalberto','admin',2,1);
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_EMPLEADO,FK_USU_ROL)
+	VALUES ('zchang','admin',3,1);
+	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_EMPLEADO,FK_USU_ROL)
+	VALUES ('aloro','admin',4,1);
 
 	INSERT INTO presentacion(pre_codigo, pre_nombre)
 	VALUES 
@@ -2132,6 +2144,108 @@ INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp
 		-- ZULIA
 		('G-205684983', 'URRI METAL', 2656310483, 1450),
 		('G-203568985', 'EMULCA', 2617541587, 1435);
+
+		INSERT INTO explotacion(
+			EXP_CODIGO, EXP_FECHAINICIO, EXP_FECHAFIN,	EXP_COSTOTOTAL,
+			FK_EXP_ESTATUS,	FK_EXP_VENTA )
+			VALUES
+			(nextval('explotacion_exp_codigo_seq'), '2019-02-20', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-02-20', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-17', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-04-19', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-01-12', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-12-21', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-09-24', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-08-27', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-10', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-01', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-06-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-03-15', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-02-15', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-12-11', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-01-02', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-01-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-05-03', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-06-04', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-07', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-09-11', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-09-14', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-13', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-10-17', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-12-19', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-02-21', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-02-23', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-03-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-10', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-13', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-23', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-03', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-10', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-11', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-03', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-04-20', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-01-04', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-21', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-02', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-01', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-12', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-16', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-10-03', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-05-04', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-04', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-14', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-04', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-24', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-07-04', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-07-01', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-04-01', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-09-11', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-04-01', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2016-10-01', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2017-05-25', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-03-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-07', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-01-15', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-02-08', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-03-17', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-04-25', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2019-05-05', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-01-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-05', null, 100000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-06-09', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-06-08', null, 65000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 80000, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), '2018-06-01', null, 65000, 1, null);
 
 
 		INSERT INTO yacimiento(

@@ -334,7 +334,7 @@ app.get("/Yacimientos-Eliminar",function(req,res){
 app.post('/login',function(req,res){
   var userCheck = req.body.user;
   var userPassword = req.body.password;
-  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password FROM empleado AS E, usuario AS U , cargo AS Carg WHERE U.fk_usu_empleado_ci = E.emp_cedula AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1',[userCheck],(err,result)=>{
+  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password FROM empleado AS E, usuario AS U , cargo AS Carg WHERE U.fk_usu_empleado = E.emp_codigo AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1',[userCheck],(err,result)=>{
       if(result.rows[0] != null && result.rows[1] == null){
         if (result.rows[0].usu_password == userPassword){
           userJSON.nombre = result.rows[0].emp_nombre;
@@ -672,7 +672,7 @@ app.post("/Metalicos-Agregar",function(req,res){
 
   if(userJSON.usuario != "none"){
 
-  client.query('INSERT INTO min_metalico (met_nombre,met_escalamaleabilidad, met_escaladureza,fk_met_estatus) VALUES ($1,$2,$3,1)',[metalicoNombre, metalicoMaleabilidad, metalicoDureza],(err,result)=>{
+  client.query('INSERT INTO min_metalico (met_nombre,met_escalamaleabilidad, met_escaladureza) VALUES ($1,$2,$3)',[metalicoNombre, metalicoMaleabilidad, metalicoDureza],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -726,13 +726,26 @@ app.post("/Metalicos-AgregarPre",function(req,res){
 
 
 app.post("/Metalicos-Eliminar",function(req,res){ 
-  var codigoMetalicoEliminar = req.body.codigoMetalicoEliminar;
-  client.query('DELETE FROM min_metalico WHERE met_codigo = $1',[codigoMetalicoEliminar],(err,result)=>{
+  var nombreMetalico = req.body.nombreMetalico;
+  client.query('DELETE FROM min_pre WHERE fk_mp_metalico = (SELECT met_codigo FROM min_metalico WHERE met_nombre = $1)',[nombreMetalico],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
+    }else if (nombreMetalico != null){
+
+      client.query('DELETE FROM min_metalico WHERE met_nombre = $1',[nombreMetalico],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');
+          
+
+        }else{
+          res.send('great');
+        }
+      });
+
     }else{
-      res.send('great');
+      res.send('failed');
     }
   });
 });
@@ -748,7 +761,7 @@ app.post("/NoMetalicos-Agregar",function(req,res){
 
   if(userJSON.usuario != "none"){
 
-  client.query('INSERT INTO min_no_metalico (nom_nombre,nom_utilidad, fk_nom_estatus) VALUES ($1,$2,1)',[noMetalicoNombre, noMetalicoUtilidad],(err,result)=>{
+  client.query('INSERT INTO min_no_metalico (nom_nombre,nom_utilidad) VALUES ($1,$2)',[noMetalicoNombre, noMetalicoUtilidad],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -773,14 +786,30 @@ app.post("/NoMetalicos-Agregar",function(req,res){
     }
 });   
 
+
+
+
 app.post("/NoMetalicos-Eliminar",function(req,res){ 
-  var codigoNoMetalicoEliminar = req.body.codigoNoMetalicoEliminar;
-  client.query('DELETE FROM min_no_metalico WHERE nom_codigo = $1',[codigoNoMetalicoEliminar],(err,result)=>{
+  var nombreNoMetalico = req.body.nombreNoMetalico;
+  client.query('DELETE FROM min_pre WHERE fk_mp_nometalico = (SELECT nom_codigo FROM min_no_metalico WHERE nom_nombre = $1)',[nombreNoMetalico],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
+    }else if (nombreNoMetalico != null){
+
+      client.query('DELETE FROM min_no_metalico WHERE nom_nombre = $1',[nombreNoMetalico],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');
+          
+
+        }else{
+          res.send('great');
+        }
+      });
+
     }else{
-      res.send('great');
+      res.send('failed');
     }
   });
 });
@@ -794,26 +823,41 @@ app.get("/Metalicos-Modificar",function(req,res){
 });
 
 app.post("/Metalicos-Verificar",function(req,res){ 
-  var codigoM = req.body.codigoMetV;
-  client.query('SELECT M.met_codigo, M.met_escalamaleabilidad, M.met_nombre, M.met_escaladureza, M.fk_met_estatus  FROM min_metalico AS M WHERE M.met_codigo = $1',[codigoM],(err,result)=>{
+  var nombreM = req.body.nombreMetV;
+  client.query('SELECT M.met_codigo, M.met_escalamaleabilidad, M.met_nombre, M.met_escaladureza  FROM min_metalico AS M WHERE M.met_nombre = $1',[nombreM],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
     }else if(result.rows[0] != null){
+      
       var dataV = result.rows;
-      var estatusDisponible = 'Disponible';
-      var estatusEliminado = 'Eliminado';
-      client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
-                if (err) {
-                  console.log(err.stack);
-                  res.send('failed'); 
-                }else if(estatuses.rows[0] != null){
-                  var estatuses = estatuses.rows;                  
-                  res.send({dataV: dataV, estatuses: estatuses});
-                }else{
-                  res.send('failed');
-                }
-              });
+      // var estatusDisponible = 'Disponible';
+      // var estatusEliminado = 'Eliminado';
+      // client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
+      //           if (err) {
+      //             console.log(err.stack);
+      //             res.send('failed'); 
+      //           }else if(estatuses.rows[0] != null){
+      //             var estatuses = estatuses.rows;                  
+      //             res.send({dataV: dataV, estatuses: estatuses});
+      //           }else{
+      //             res.send('failed');
+      //           }
+      //         });
+      client.query('SELECT MP.fk_mp_metalico, MP.mp_precio, P.pre_nombre, P.pre_codigo FROM min_pre AS MP,  presentacion AS P WHERE MP.fk_mp_presentacion = P.pre_codigo ',(err,resultPRE)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultPRE.rows[0] != null){
+                      console.log("vamos muy bien");
+                      var preMet = resultPRE.rows;
+                      res.send({dataV: dataV, preMet:preMet});
+                    }else{
+                      // res.send('failed');
+                      res.send({dataV: dataV});
+                    };
+                  });
+
     }else{
       console.log('Entra aqui');
       res.send('failed');
@@ -826,17 +870,78 @@ app.post("/Metalicos-Modificar",function(req,res){
   var metalicoNombre = req.body.nombreGC;
   var metalicoMaleabilidad = req.body.maleabilidadGC;
   var metalicoDureza = req.body.durezaGC;
-  var metalicoEstatus = req.body.estatusGC;
+  var modMet = req.body.modMet;
+  var ready = true;
 
-  client.query('UPDATE MIN_METALICO SET met_nombre=$1,met_escalamaleabilidad=$2,met_escaladureza=$3,fk_met_estatus= $4 WHERE met_codigo= $5',[metalicoNombre,metalicoMaleabilidad,metalicoDureza,metalicoEstatus,metalicoCodigo],(err,result)=>{
+  client.query('UPDATE MIN_METALICO SET met_nombre=$1,met_escalamaleabilidad=$2,met_escaladureza=$3 WHERE met_nombre= $4',[metalicoNombre,metalicoMaleabilidad,metalicoDureza,metalicoNombre],(err,result)=>{
     if (err) {
+      ready = false;
       console.log(err.stack);
       res.send('failed'); 
-    }else{
-      res.send('great'); 
-      console.log('Query procesado correctamente (modificar mineral)');
     }
+    // }else{
+    //   res.send('great'); 
+    //   console.log('Query procesado correctamente (modificar mineral)');
+    // }
   });
+
+  if(modMet.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modMet.d.length - 1; i >= 0; i--) {
+     
+
+        client.query('DELETE FROM MIN_PRE WHERE fk_mp_metalico = (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $1) AND fk_mp_metalico=$2',[metalicoNombre,modMet.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(modMet.u !== undefined){
+    for (var i = modMet.u.length - 1; i >= 0; i--) {
+      
+
+        client.query('UPDATE MIN_PRE SET fk_mp_presentacion = $1,fk_mp_nometalico = null,mp_precio = $2 WHERE fk_mp_metalico = (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3) AND fk_mp_presentacion=$4',[modMet.u[i].cod,modMet.u[i].p,metalicoNombre,modMet.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modMet.i !== undefined){
+    for (var i = modMet.i.length - 1; i >= 0; i--) {
+      
+        client.query('INSERT INTO MIN_PRE (fk_MP_METALICO,fk_mp_presentacion,mp_precio) VALUES ( (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $1) ,$2,$3)',[metalicoNombre,modMet.i[i].cod,modMet.i[i].p],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+
 });
 
 app.get("/NoMetalicos-Modificar",function(req,res){
@@ -848,28 +953,31 @@ app.get("/NoMetalicos-Modificar",function(req,res){
 });
 
 app.post("/NoMetalicos-Verificar",function(req,res){ 
-  var codigoM = req.body.codigoNoMetV;
-  client.query('SELECT M.nom_codigo, M.nom_utilidad, M.nom_nombre M.fk_nom_estatus  FROM min_no_metalico AS M WHERE M.nom_codigo = $1',[codigoM],(err,result)=>{
+  var nombreM = req.body.nombreNoMetV;
+  client.query('SELECT M.nom_codigo, M.nom_utilidad, M.nom_nombre FROM min_no_metalico AS M WHERE M.nom_nombre = $1',[nombreM],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
     }else if(result.rows[0] != null){
       var dataV = result.rows;
-      var estatusDisponible = 'Disponible';
-      var estatusEliminado = 'Eliminado';
-      client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatusesNM)=>{
-                if (err) {
-                  console.log(err.stack);
-                  res.send('failed'); 
-                }else if(estatusesNM.rows[0] != null){
-                  var estatusesNM = estatusesNM.rows;                  
-                  res.send({dataV: dataV, estatusesNM: estatusesNM});
-                }else{
-                  res.send('failed');
-                }
-              });
+      
+      client.query('SELECT MP.fk_mp_nometalico, MP.mp_precio, P.pre_nombre, P.pre_codigo FROM min_pre AS MP,  presentacion AS P WHERE MP.fk_mp_presentacion = P.pre_codigo ',(err,resultPRE)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultPRE.rows[0] != null){
+                      console.log("vamos muy bien");
+                      var preNoMet = resultPRE.rows;
+                      res.send({dataV: dataV, preNoMet:preNoMet});
+                    }else{
+                      // res.send('failed');
+                      res.send({dataV: dataV});
+                    };
+                  });
+
+
     }else{
-      console.log('Entra aqui');
+      console.log('Entraaaa aqui');
       res.send('failed');
     }
   });
@@ -878,19 +986,75 @@ app.post("/NoMetalicos-Verificar",function(req,res){
 app.post("/NoMetalicos-Modificar",function(req,res){ 
   var noMetalicoCodigo = req.body.codigoGC;
   var noMetalicoNombre = req.body.nombreGC;
-  var noMetalicoUtilidad = req.body.durezaGC;
-  var noMetalicoEstatus = req.body.estatusGC;
+  var noMetalicoUtilidad = req.body.utilidadGC;
+  var modNoMet = req.body.modNoMet;
+  var ready = true;
 
 
-  client.query('UPDATE MIN_NO_METALICO SET nom_nombre=$1,nom_utilidad=$2,fk_nom_estatus= $3 WHERE nom_codigo= $4',[noMetalicoNombre,noMetalicoUtilidad,noMetalicoEstatus,noMetalicoCodigo],(err,result)=>{
+  client.query('UPDATE MIN_NO_METALICO SET nom_nombre=$1,nom_utilidad=$2 WHERE nom_nombre= $3',[noMetalicoNombre,noMetalicoUtilidad,noMetalicoNombre],(err,result)=>{
     if (err) {
+      ready=false;
       console.log(err.stack);
       res.send('failed'); 
-    }else{
-      res.send('great'); 
-      console.log('Query procesado correctamente (modificar mineral)');
     }
   });
+
+  if(modNoMet.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modNoMet.d.length - 1; i >= 0; i--) {
+      
+
+        client.query('DELETE FROM MIN_PRE WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) AND fk_mp_nometalico=$2',[noMetalicoNombre,modNoMet.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(modNoMet.u !== undefined){
+    for (var i = modNoMet.u.length - 1; i >= 0; i--) {
+      
+
+        client.query('UPDATE MIN_PRE SET fk_mp_presentacion = $1,fk_mp_metalico = null,mp_precio = $2 WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $3) AND fk_mp_presentacion=$4',[modNoMet.u[i].cod,modNoMet.u[i].p,noMetalicoNombre,modNoMet.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modNoMet.i !== undefined){
+    for (var i = modNoMet.i.length - 1; i >= 0; i--) {
+      
+
+        client.query('INSERT INTO MIN_PRE (fk_MP_NOMETALICO,fk_mp_presentacion,mp_precio) VALUES ( (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) ,$2,$3)',[noMetalicoNombre,modNoMet.i[i].cod,modNoMet.i[i].p],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+
 });
 
 // SECCION Ventas
