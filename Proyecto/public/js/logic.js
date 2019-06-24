@@ -702,7 +702,7 @@ $('#verificarYacimiento').on('submit',function(e){
 				<div class="form-row animated fadeIn">\n\
 				<div class="col-md-6 mb-3">\n\
 				<label for="gcnombreYacimiento">Nombre yacimiento</label>\n\
-				<input type="text" class="form-control formsCRUD" id="gcnombreYacimiento" value="'+response.dataV[0].yac_nombre+'" required>\n\
+				<input type="text" class="form-control formsCRUD" id="gcnombreYacimiento" value="'+response.dataV[0].yac_nombre+'" disabled>\n\
 				</div>\n\
 				<div class="col-md-6 mb-3">\n\
 				<label for="gcextensionYacimiento">Extensión (kmts2)</label>\n\
@@ -840,7 +840,7 @@ $('#guardarCambioYacimiento').on('submit',function(e){
 	e.preventDefault();
 	var nombreYacimiento = $('#gcnombreYacimiento');
 	var extensionYacimiento = $('#gcextensionYacimiento');
-	var parroquiaYacimiento = $('#gcparroquiaSelect');
+	var parroquiaYacimiento = $('#parroquiaSelect');
 	var estatusYacimiento = $('#gcestatusYacimiento');
 
 	var start = 1;

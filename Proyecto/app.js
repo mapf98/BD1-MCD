@@ -549,11 +549,22 @@ app.post("/Yacimientos-Modificar",function(req,res){
   var modYac = req.body.modYac;
   var ready = true;
 
-  if(modYac.i){
-    for (var i = modYac.i.length - 1; i >= 0; i--) {
-      if(modYac.i[i].t =='MIN_METALICO'){
+  console.log(eYac);
 
-        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minmetalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultM)=>{
+  client.query('UPDATE YACIMIENTO SET yac_extension = $1, fk_yac_lugar = $2,fk_yac_estatus= $3 WHERE yac_nombre =$4',[eYac,pYac,estYac,nYac],(err,result)=>{
+    if (err) {
+      ready = false;
+      console.log(err.stack);
+      res.send('failed'); 
+    }
+  });
+
+  if(modYac.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modYac.d.length - 1; i >= 0; i--) {
+      if(modYac.d[i].t =='MIN_METALICO'){
+
+        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minmetalico=$2',[nYac,modYac.d[i].cod],(err,resultM)=>{
           if (err) {
             ready = false;
             console.log(err.stack);
@@ -563,7 +574,7 @@ app.post("/Yacimientos-Modificar",function(req,res){
 
       }else{
 
-        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minnometalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultN)=>{
+        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minnometalico=$2',[nYac,modYac.d[i].cod],(err,resultN)=>{
           if (err) {
             ready = false;
             console.log(err.stack);
@@ -573,10 +584,10 @@ app.post("/Yacimientos-Modificar",function(req,res){
 
       }
     }
-    console.log('HIZO TODOS LOS INSERTS LJJP');
+    console.log('HIZO TODOS LOS DELETES LJJP');
   }
 
-  if(modYac.u){
+  if(modYac.u !== undefined){
     for (var i = modYac.u.length - 1; i >= 0; i--) {
       if(modYac.u[i].t =='MIN_METALICO'){
 
@@ -603,12 +614,11 @@ app.post("/Yacimientos-Modificar",function(req,res){
     console.log('HIZO TODOS LOS UPDATES LJJP');
   }
 
-  if(modYac.d){
-    console.log('Entro en los deletes');
-    for (var i = modYac.d.length - 1; i >= 0; i--) {
-      if(modYac.d[i].t =='MIN_METALICO'){
+  if(modYac.i !== undefined){
+    for (var i = modYac.i.length - 1; i >= 0; i--) {
+      if(modYac.i[i].t =='MIN_METALICO'){
 
-        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minmetalico=$2',[nYac,modYac.d[i].cod],(err,resultM)=>{
+        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minmetalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultM)=>{
           if (err) {
             ready = false;
             console.log(err.stack);
@@ -618,7 +628,7 @@ app.post("/Yacimientos-Modificar",function(req,res){
 
       }else{
 
-        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minnometalico=$2',[nYac,modYac.d[i].cod],(err,resultN)=>{
+        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minnometalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultN)=>{
           if (err) {
             ready = false;
             console.log(err.stack);
@@ -628,7 +638,7 @@ app.post("/Yacimientos-Modificar",function(req,res){
 
       }
     }
-    console.log('HIZO TODOS LOS DELETES LJJP');
+    console.log('HIZO TODOS LOS INSERTS LJJP');
   }
 
   if(ready){
