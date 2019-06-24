@@ -311,7 +311,7 @@ app.post("/Yacimientos-AgregarMin",function(req,res){
 
 app.get("/Yacimientos-Modificar",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('empleadosModificar',{user: userJSON});
+    res.render('yacimientosModificar',{user: userJSON});
   }else{
     res.redirect('login');
   }
@@ -459,12 +459,11 @@ app.post("/Empleados-Eliminar",function(req,res){
   });
 });
 
-// ARREGLAR
 //URL para verificar empleado en modificacion
 app.post("/Empleados-Verificar",function(req,res){ 
   var cedulaV = req.body.cedulaEmpV;
   client.query('SELECT E.emp_cedula,E.emp_nombre,E.emp_apellido,E.emp_fechanacimiento,E.emp_genero,E.emp_telefono,Carg.car_nombre,Carg.car_codigo, Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod, U.usu_usuario,U.usu_password,R.rol_codigo,R.rol_nombre FROM empleado AS E, cargo AS Carg, lugar AS Par, lugar AS Mun, lugar AS Est, usuario AS U, rol AS R WHERE E.emp_cedula = $1 AND E.fk_emp_cargo = Carg.car_codigo AND Par.lug_codigo = E.fk_emp_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo AND U.fk_usu_empleado_ci = E.emp_cedula AND U.fk_usu_rol = R.rol_codigo',[cedulaV],(err,result)=>{
-    if (err) {
+    if (err) {  
       console.log(err.stack);
       res.send('failed'); 
     }else if(result.rows[0] != null){
@@ -508,7 +507,6 @@ app.post("/Empleados-Verificar",function(req,res){
   });
 });         
 
-//ARREGLAR
 app.post("/Empleados-Modificar",function(req,res){ 
   var empleadoPrimerNombre = req.body.nombreGC;
   var empleadoPrimerApellido = req.body.apellidoGC;
@@ -542,6 +540,163 @@ app.post("/Empleados-Modificar",function(req,res){
     }
   });
 });
+
+app.post("/Yacimientos-Modificar",function(req,res){ 
+  var nYac = req.body.nYac;
+  var eYac = req.body.eYac;
+  var pYac = req.body.pYac;
+  var estYac = req.body.estYac;
+  var modYac = req.body.modYac;
+  var ready = true;
+
+  if(modYac.i){
+    for (var i = modYac.i.length - 1; i >= 0; i--) {
+      if(modYac.i[i].t =='MIN_METALICO'){
+
+        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minmetalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }else{
+
+        client.query('INSERT INTO YAC_MIN (fk_ym_yacimiento,fk_ym_minnometalico,ym_cantidad) VALUES ( (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) ,$2,$3)',[nYac,modYac.i[i].cod,modYac.i[i].c],(err,resultN)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(modYac.u){
+    for (var i = modYac.u.length - 1; i >= 0; i--) {
+      if(modYac.u[i].t =='MIN_METALICO'){
+
+        client.query('UPDATE YAC_MIN SET fk_ym_minmetalico = $1,fk_ym_minnometalico = null,ym_cantidad = $2 WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $3) AND fk_ym_minmetalico=$4',[modYac.u[i].cod,modYac.u[i].c,nYac,modYac.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }else{
+
+        client.query('UPDATE YAC_MIN SET fk_ym_minmetalico = null,fk_ym_minnometalico = $1,ym_cantidad = $2 WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $3) AND fk_ym_minnometalico=$4',[modYac.u[i].cod,modYac.u[i].c,nYac,modYac.u[i].o],(err,resultN)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modYac.d){
+    console.log('Entro en los deletes');
+    for (var i = modYac.d.length - 1; i >= 0; i--) {
+      if(modYac.d[i].t =='MIN_METALICO'){
+
+        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minmetalico=$2',[nYac,modYac.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }else{
+
+        client.query('DELETE FROM YAC_MIN WHERE fk_ym_yacimiento = (SELECT yac_codigo FROM YACIMIENTO WHERE yac_nombre = $1) AND fk_ym_minnometalico=$2',[nYac,modYac.d[i].cod],(err,resultN)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+
+});
+
+
+app.post("/Yacimientos-Verificar",function(req,res){ 
+  var yacimientoV = req.body.yacimientoV;
+
+  //PEDIR TODOS LOS DAOTOS
+  client.query('SELECT Y.yac_codigo,Y.yac_nombre,Y.yac_extension,E.est_nombre,E.est_codigo, Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod FROM estatus AS E, yacimiento AS Y, lugar AS Par, lugar AS Mun, lugar AS Est WHERE Y.yac_nombre = $1 AND Par.lug_codigo = Y.fk_yac_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo AND Y.fk_yac_estatus = E.est_codigo',[yacimientoV],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var estado = 'ESTADO';
+      var dataV = result.rows;
+      client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR WHERE lug_tipo = $1 ',[estado],(err,estados)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }else if(estados.rows[0] != null){
+          var estados = estados.rows;
+          client.query('SELECT est_codigo,est_nombre FROM ESTATUS',(err,estatus)=>{
+            if (err) {
+              console.log(err.stack);
+              res.send('failed'); 
+            }else if(estatus.rows[0] != null){
+              var estatus = estatus.rows;
+              client.query('SELECT YM.fk_ym_yacimiento, MM.met_nombre,MM.met_codigo,YM.ym_cantidad FROM yac_min AS YM, min_metalico AS MM WHERE YM.fk_ym_minmetalico = MM.met_codigo ',(err,resultMET)=>{
+                if (err) {
+                  console.log(err.stack);
+                  res.send('failed'); 
+                }else if(resultMET.rows[0] != null){
+                  var metYac = resultMET.rows;
+                 client.query('SELECT YM.fk_ym_yacimiento, YM.ym_cantidad, NOM.nom_nombre,NOM.nom_codigo FROM yac_min AS YM, min_no_metalico AS NOM WHERE YM.fk_ym_minnometalico = NOM.nom_codigo ',(err,resultNOM)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultNOM.rows[0] != null){
+                      var nomYac = resultNOM.rows;
+                      res.send({dataV: dataV,estados: estados,estatus: estatus,metYac:metYac,nomYac:nomYac});
+                    }else{
+                      res.send('failed');
+                    };
+                  });
+                }else{
+                  res.send('failed');
+                };
+              });
+            }else{
+              res.send('failed');
+            }
+          });
+        }else{
+          res.send('failed');
+        }
+      });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});         
+
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);

@@ -1,5 +1,31 @@
 var globalIDMineralYacimiento = 1;
 
+var modYac = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+/*modYac.d.push({"n":"vitrita","cod":220});
+modYac.d.push({"n":"vitritdsda","cod":2223});
+modYac.u.push({"n":"vitritax","cod":221,"c":1100});
+modYac.i.push({"n":"vitritaz","cod":222,"c":10000});
+
+console.log(modYac.d[0].n);
+console.log(modYac.u[0].n);
+console.log(modYac.i[0].n);
+
+clearArray(modYac.d);*/
+
+function clearArray(array){
+	var start = 0;
+	var k = array.length;
+	while(k >= start){
+		array.splice(k-start, 1);
+		start++;
+	}
+}
+
 
 //PETICIONES AJAX
 
@@ -76,7 +102,7 @@ $('#verificarEmpleado').on('submit',function(e){
 		url: '/Empleados-Verificar',
 		method: 'POST',
 		data: {
-			cedulaEmpV: cedulaEmpleadoV.val(),
+			cedulaEmpV: cedulaEmpleadoV.val()
 		},
 		success: function(response){
 			if(response.dataV != null){
@@ -98,7 +124,7 @@ $('#verificarEmpleado').on('submit',function(e){
 				boxModEmp.html('');
 				boxModEmp.append(' \n\
 					<div class="animated" id="boxGC">\n\
-	                    <div class="form-row animated fadeIn animated fadeIn">\n\
+	                    <div class="form-row animated fadeIn">\n\
 	                      <div class="col-md-6 mb-3">\n\
 	                        <label for="gcnombreEmpleado">Primer Nombre</label>\n\
 	                        <input type="text" class="form-control formsCRUD" id="gcnombreEmpleado" value="'+response.dataV[0].emp_nombre+'" required>\n\
@@ -286,65 +312,68 @@ $('#formLogin').on('submit',function(e){
 	});
 });
 
+addMin($('#addMin'),$('#listMin'));
 
-//Yacimiento
-$('#addMin').on('click',function(e){
-	e.preventDefault();
-	listMin = $('#listMin');
-
-	var nextID = globalIDMineralYacimiento;
-				listMin.append(' \n\
-					<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
-					<div class="form-row blockMin">\n\
-					\n\
-					<div class="col-md-4 mb-3">\n\
-					  <label for="t'+nextID+'" class="boxMinText">Mineral</label>\n\
-					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
-					  	<option value="MIN_METALICO">Metalico</option>\n\
-	                    <option value="MIN_NO_METALICO">No metalico</option>\n\
-					  </select>\n\
-					</div>\n\
-					<div class="col-md-3 mb-3">\n\
-					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
-					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
-					</div>\n\
-					<div class="col-md-3 mb-3">\n\
-					    <label for="c'+nextID+'" class="boxMinText">Cantidad</label>\n\
-					    <div class="input-group mb-2 mr-sm-2">\n\
-					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
-					    <div class="input-group-append">\n\
-					    	<div class="input-group-text">Ton</div>\n\
-					  	</div>\n\
-					    </div>\n\
-					</div>\n\
-					\n\
-					<div class="col-md-2 mb-3">\n\
-					  <label for="removeMin" class="hackerText">Hacker</label>\n\
-					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
-					</div>\n\
-					</div>\n\
-					</div>\n\
-				');
-
-
-	mineralTipo($('#t'+nextID+''),$('#'+nextID+''));
-
-	$('#remove'+nextID+'').on('click',function(e){
+function addMin(button,list){
+		button.on('click',function(e){
 		e.preventDefault();
-		$('#'+nextID+'').attr('id',(nextID)*(-1));
-		$('#c'+nextID+'').attr('value',$('#c'+nextID+'').val()*0);
-		boxButtonDelete = $(this).parent();
-		boxMinDelete = $(boxButtonDelete).parent();
-		boxDelete = $(boxMinDelete).parent();
-		$(boxDelete).removeClass('fadeIn');
-		$(boxDelete).addClass('fadeOut');
-		setTimeout(function(){
-			boxMinDelete.remove();
-		},300);
-	});
+		listMin = list;
 
-	globalIDMineralYacimiento++;
-});
+		var nextID = globalIDMineralYacimiento;
+					listMin.append(' \n\
+						<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
+						<div class="form-row blockMin">\n\
+						\n\
+						<div class="col-md-4 mb-3">\n\
+						  <label for="t'+nextID+'" class="boxMinText">Mineral</label>\n\
+						  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+						  	<option value="MIN_METALICO">Metalico</option>\n\
+		                    <option value="MIN_NO_METALICO">No metalico</option>\n\
+						  </select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+						  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						    <label for="c'+nextID+'" class="boxMinText">Cantidad</label>\n\
+						    <div class="input-group mb-2 mr-sm-2">\n\
+						    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
+						    <div class="input-group-append">\n\
+						    	<div class="input-group-text">Ton</div>\n\
+						  	</div>\n\
+						    </div>\n\
+						</div>\n\
+						\n\
+						<div class="col-md-2 mb-3">\n\
+						  <label for="removeMin" class="hackerText">Hacker</label>\n\
+						  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+						</div>\n\
+						</div>\n\
+						</div>\n\
+					');
+
+
+		mineralTipo($('#t'+nextID+''),$('#'+nextID+''));
+
+		$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modYac.d.push({"cod":$('#'+nextID+'').val(),"c":$('#c'+nextID+'').val(),"t":$('#t'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#c'+nextID+'').attr('value',$('#c'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+		globalIDMineralYacimiento++;
+		});
+}
 
 function verifyElementVal(){
 	var start=1;
@@ -649,6 +678,236 @@ $('#eliminarYacimiento').on('submit',function(e){
 				alert('El yacimiento fue ELIMINADO satisfactoriamente');
 			}else{
 				alert('El yacimiento NO SE PUDO ELIMINAR, revisa los campos por informacion duplicada');
+			}			
+		}
+	});
+});
+
+$('#verificarYacimiento').on('submit',function(e){
+	e.preventDefault();
+	let nombreYacimientoV = $('#nombreYacimientoVerificar');
+
+	$.ajax({
+		url: '/Yacimientos-Verificar',
+		method: 'POST',
+		data: {
+			yacimientoV: nombreYacimientoV.val()
+		},
+		success: function(response){
+			if(response.dataV != null){
+				var boxModYac = $('#guardarCambioYacimiento');
+
+				boxModYac.html('');
+				boxModYac.append('<div class="animated fadeIn" id="boxGC">\n\
+				<div class="form-row animated fadeIn">\n\
+				<div class="col-md-6 mb-3">\n\
+				<label for="gcnombreYacimiento">Nombre yacimiento</label>\n\
+				<input type="text" class="form-control formsCRUD" id="gcnombreYacimiento" value="'+response.dataV[0].yac_nombre+'" required>\n\
+				</div>\n\
+				<div class="col-md-6 mb-3">\n\
+				<label for="gcextensionYacimiento">Extensión (kmts2)</label>\n\
+				<input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="gcextensionYacimiento" value="'+response.dataV[0].yac_extension+'" required>\n\
+				</div>\n\
+				</div>\n\
+				<hr>\n\
+				<div class="form-row animated fadeIn">\n\
+				<div class="col-md-3 mb-3">\n\
+				<label for="gcestatusYacimiento">Estatus</label>\n\
+				<select class="form-control formsCRUD" id="gcestatusYacimiento" required>\n\
+				</select>\n\
+				</div>\n\
+				<div class="col-md-3 mb-3">\n\
+				<label for="estadoSelect">Estado</label>\n\
+				<select class="form-control formsCRUD" id="estadoSelect" required>\n\
+				</select>\n\
+				</div>\n\
+				<div class="col-md-3 mb-3">\n\
+				<label for="municipioSelect">Municipio</label>\n\
+				<select class="form-control formsCRUD" id="municipioSelect" required>\n\
+				</select>\n\
+				</div>\n\
+				<div class="col-md-3 mb-3">\n\
+				<label for="parroquiaSelect">Parroquia</label>\n\
+				<select class="form-control formsCRUD" id="parroquiaSelect" required>\n\
+				</select>\n\
+				</div>\n\
+				</div>\n\
+				<hr>\n\
+				<div class="row">\n\
+				<div class="col-4"></div>\n\
+				<div class="col-4">\n\
+				<button class="btn btn-success btn-block" id="addMin">Asignar mineral</button>\n\
+				</div>\n\
+				<div class="col-4"></div>\n\
+				</div>\n\
+				<div class="listMin" id="listMin">\n\
+				</div>\n\
+				<button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	            </div>');
+
+				selectEstatus = $('#gcestatusYacimiento');
+				selectEstatus.html('');
+				for (var i = response.estatus.length - 1; i >= 0; i--) {
+					selectEstatus.append('<option value="'+response.estatus[i].est_codigo+'">'+response.estatus[i].est_nombre+'</option>');
+				}
+				$("#gcestatusYacimiento option[value="+ response.dataV[0].est_codigo +"]").attr("selected",true);
+
+				selectEstado = $('#estadoSelect');
+				selectEstado.html('');
+				for (var i = response.estados.length - 1; i >= 0; i--) {
+					selectEstado.append('<option value="'+response.estados[i].lug_codigo+'">'+response.estados[i].lug_nombre+'</option>');
+				}
+				$("#estadoSelect option[value="+ response.dataV[0].estcod +"]").attr("selected",true);
+				estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
+				$('#estadoSelect').trigger('click');
+				setTimeout(function(){
+					$("#municipioSelect option[value="+ response.dataV[0].muncod +"]").attr("selected",true);
+					$('#municipioSelect').trigger('click');
+				}, 100);
+				setTimeout(function(){
+					$("#parroquiaSelect option[value="+ response.dataV[0].parcod +"]").attr("selected",true);
+				},150);
+
+				addMin($('#addMin'),$('#listMin'));
+
+				function setMin(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
+				}
+
+				var met=0;
+				while(response.metYac.length>met){
+					if(response.metYac[met].fk_ym_yacimiento == response.dataV[0].yac_codigo){
+						$('#addMin').trigger('click');
+						$('#t'+(globalIDMineralYacimiento-1)+'').trigger('click');
+						setMin(globalIDMineralYacimiento-1,response.metYac[met].met_codigo);
+						$('#c'+(globalIDMineralYacimiento-1)+'').attr("value",response.metYac[met].ym_cantidad);
+						modYac.u.push({"cod":response.metYac[met].met_codigo,"c":response.metYac[met].ym_cantidad,"t":"MIN_METALICO","id":globalIDMineralYacimiento-1,"o":response.metYac[met].met_codigo});
+					}
+					met++;
+				}
+
+				var nom=0;
+				while(response.nomYac.length>nom){
+					if(response.nomYac[nom].fk_ym_yacimiento == response.dataV[0].yac_codigo){
+						$('#addMin').trigger('click');
+						$('#t'+(globalIDMineralYacimiento-1)+' option[value="MIN_NO_METALICO"]').attr('selected',true);
+						$('#t'+(globalIDMineralYacimiento-1)+'').trigger('click');		
+						setMin(globalIDMineralYacimiento-1,response.nomYac[nom].nom_codigo);		
+						$('#c'+(globalIDMineralYacimiento-1)+'').attr("value",response.nomYac[nom].ym_cantidad);
+						modYac.u.push({"cod":response.nomYac[nom].nom_codigo,"c":response.nomYac[nom].ym_cantidad,"t":"MIN_NO_METALICO","id":globalIDMineralYacimiento-1,"o":response.nomYac[nom].nom_codigo});
+					}
+					nom++;
+				}
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a yacimiento para modificar');				
+			}			
+		}
+	});
+});
+
+function verifyAndOrder(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].c = b[flag].c;
+				a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
+}
+
+function checkInserts(a,b){
+
+}
+
+$('#guardarCambioYacimiento').on('submit',function(e){
+	e.preventDefault();
+	var nombreYacimiento = $('#gcnombreYacimiento');
+	var extensionYacimiento = $('#gcextensionYacimiento');
+	var parroquiaYacimiento = $('#gcparroquiaSelect');
+	var estatusYacimiento = $('#gcestatusYacimiento');
+
+	var start = 1;
+	clearArray(modYac.i);
+	while(globalIDMineralYacimiento>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var c = $('#c'+start+'').val();
+			var t = $('#t'+start+'').val();
+			modYac.i.push({"cod": cod ,"c": c , "t": t,"id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrder(modYac.u,modYac.i);
+	verifyAndOrder(modYac.d,modYac.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modYac.u.length>test){
+		console.log(modYac.u[test].t + "/"+ modYac.u[test].c + "/"+modYac.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modYac.i.length>test){
+		console.log(modYac.i[test].t + "="+modYac.i[test].c+ "/"+modYac.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modYac.d.length>test){
+		console.log(modYac.d[test].t + "="+modYac.d[test].c+ "/"+modYac.d[test].cod);
+		test++;
+	}
+
+	$.ajax({
+		url: '/Yacimientos-Modificar',
+		method: 'POST',
+		data: {
+			nYac: nombreYacimiento.val(),
+			eYac: extensionYacimiento.val(),
+			pYac: parroquiaYacimiento.val(),
+			estYac: estatusYacimiento.val(),
+			modYac: modYac
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El yacimiento fue MODIFICADO satisfactoriamente');
+				var boxGCEmp = $('#boxGC');
+				boxGCEmp.addClass('fadeOut');
+				boxGCEmp.html('');
+				var boxModEmp = $('#guardarCambioYacimiento');
+				boxModEmp.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un yacimiento para modificar su registro</h4>\n\
+                      <p class="text-center"><i class="fas fa-toolbox iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+				globalIDMineralYacimiento =1;
+				clearArray(modYac.i);
+				clearArray(modYac.d);
+				clearArray(modYac.u);
+			}else{
+				alert('El yacimiento NO SE PUDO MOFICAR, revisa los campos por informacion duplicada');
 			}			
 		}
 	});

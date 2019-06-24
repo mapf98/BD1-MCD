@@ -118,6 +118,7 @@ CREATE TABLE EMPLEADO(
 	CONSTRAINT FK_LUGAR_EMPLEADO FOREIGN KEY(FK_EMP_LUGAR) REFERENCES LUGAR (LUG_CODIGO)
 );
 
+
 CREATE TABLE USUARIO(
 	USU_USUARIO_ID SERIAL,
 	USU_USUARIO VARCHAR(50) NOT NULL UNIQUE,
@@ -2551,3 +2552,5 @@ INSERT INTO yac_min(
 		(nextval('yac_min_ym_codigo_seq'), 118, null, 1, 200000),
 		(nextval('yac_min_ym_codigo_seq'), 119, null, 1, 700500),
 		(nextval('yac_min_ym_codigo_seq'), 120, null, 1, 1000);
+
+
