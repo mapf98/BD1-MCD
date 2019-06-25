@@ -382,7 +382,7 @@ app.post("/Empleados-Agregar",function(req,res){
     empleadoGenero = 'O';
   }
 
-  client.query('INSERT INTO empleado (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar,fk_emp_estatus) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,1)',[empleadoCedula,empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,cargoEmpleado,parroquiaEmpleado],(err,result)=>{
+  client.query('INSERT INTO empleado (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',[empleadoCedula,empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,cargoEmpleado,parroquiaEmpleado],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -873,6 +873,8 @@ app.post("/Metalicos-Modificar",function(req,res){
   var modMet = req.body.modMet;
   var ready = true;
 
+  console.log(modMet);
+
   client.query('UPDATE MIN_METALICO SET met_nombre=$1,met_escalamaleabilidad=$2,met_escaladureza=$3 WHERE met_nombre= $4',[metalicoNombre,metalicoMaleabilidad,metalicoDureza,metalicoNombre],(err,result)=>{
     if (err) {
       ready = false;
@@ -990,6 +992,8 @@ app.post("/NoMetalicos-Modificar",function(req,res){
   var modNoMet = req.body.modNoMet;
   var ready = true;
 
+  console.log(modNoMet);
+
 
   client.query('UPDATE MIN_NO_METALICO SET nom_nombre=$1,nom_utilidad=$2 WHERE nom_nombre= $3',[noMetalicoNombre,noMetalicoUtilidad,noMetalicoNombre],(err,result)=>{
     if (err) {
@@ -1004,7 +1008,7 @@ app.post("/NoMetalicos-Modificar",function(req,res){
     for (var i = modNoMet.d.length - 1; i >= 0; i--) {
       
 
-        client.query('DELETE FROM MIN_PRE WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) AND fk_mp_nometalico=$2',[noMetalicoNombre,modNoMet.d[i].cod],(err,resultM)=>{
+        client.query('DELETE FROM MIN_PRE WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) AND fk_mp_presentacion=$2',[noMetalicoNombre,modNoMet.d[i].cod],(err,resultM)=>{
           if (err) {
             ready = false;
             console.log(err.stack);

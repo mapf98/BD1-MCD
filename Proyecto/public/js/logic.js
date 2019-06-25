@@ -732,11 +732,11 @@ function addPre(button,list){
 					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
 					</div>\n\
 					<div class="col-md-3 mb-3">\n\
-					    <label for="c'+nextID+'" class="boxMinText">Precio</label>\n\
+					    <label for="p'+nextID+'" class="boxMinText">Precio</label>\n\
 					    <div class="input-group mb-2 mr-sm-2">\n\
-					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="p'+nextID+'" required>\n\
 					    <div class="input-group-append">\n\
-					    	<div class="input-group-text">BsS</div>\n\
+					    	<div class="input-group-text">$USD</div>\n\
 					  	</div>\n\
 					    </div>\n\
 					</div>\n\
@@ -875,7 +875,7 @@ $('#verificarMetalico').on('submit',function(e){
 						$('#addPre').trigger('click');
 						$('#t'+(globalIDPresentacionMineral-1)+'').trigger('click');
 						setPre(globalIDPresentacionMineral-1,response.preMet[pre].pre_codigo);
-						$('#c'+(globalIDPresentacionMineral-1)+'').attr("value",response.preMet[pre].mp_precio);
+						$('#p'+(globalIDPresentacionMineral-1)+'').attr("value",response.preMet[pre].mp_precio);
 						modMet.u.push({"cod":response.preMet[pre].pre_codigo,"p":response.preMet[pre].mp_precio,"id":globalIDPresentacionMineral-1,"o":response.preMet[pre].pre_codigo});
 					}
 					pre++;
@@ -901,15 +901,15 @@ $('#guardarCambioMetalico').on('submit',function(e){
 	while(globalIDPresentacionMineral>=start){
 		if($('#'+start+'').val() > 0){
 			var cod =$('#'+start+'').val();
-			var p = $('#c'+start+'').val();
+			var p = $('#p'+start+'').val();
 			
 			modMet.i.push({"cod": cod ,"p": p, "id":start});
 		}
 		start++;		
 	}
 
-	verifyAndOrder(modMet.u,modMet.i);
-	verifyAndOrder(modMet.d,modMet.u);
+	verifyAndOrderMet(modMet.u,modMet.i);
+	verifyAndOrderMet(modMet.d,modMet.u);
 
 	console.log('Por modificar');
 	var test =0;
@@ -981,7 +981,7 @@ $('#agregarNoMetalico').on('submit',function(e){
 
 		preTipo.push( $('#'+start+'').val() );
 		prePresentacion.push( $('#'+start+'').val() );
-		prePrecio.push($('#c'+start+'').val());
+		prePrecio.push($('#p'+start+'').val());
 		start++;
 	}
 
@@ -1132,7 +1132,7 @@ $('#guardarCambioNoMetalico').on('submit',function(e){
 	while(globalIDPresentacionMineral>=start){
 		if($('#'+start+'').val() > 0){
 			var cod =$('#'+start+'').val();
-			var p = $('#c'+start+'').val();
+			var p = $('#p'+start+'').val();
 			modNoMet.i.push({"cod": cod ,"p": p ,"id":start});
 		}
 		start++;		
@@ -1259,7 +1259,7 @@ function verifyElementValPre(){
 	while(globalIDPresentacionMineral>=start){
 		var flag =1;
 		while(globalIDPresentacionMineral>=flag){
-			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined) && ($('#t'+start+'').children(":selected").val() == $('#t'+flag+'').children(":selected").val()) ){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined)  ){
 				return false;
 				start = globalIDPresentacionMineral+1;
 			}else{
@@ -1292,6 +1292,31 @@ function presentacionSelect(tipo,presentaciones){
 			}
 		});	
 	});
+}
+
+
+function verifyAndOrderMet(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].p = b[flag].p;
+				// a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
 }
 
 function verifyAndOrder(a,b){
