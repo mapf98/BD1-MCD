@@ -2796,6 +2796,28 @@ INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Arcilla', 'Fabricación de cemento'),	
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Baritina', 'Pigmento');
 
+		insert into min_no_metalico (nom_nombre) values ('Silice');
+
+
+
+		INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1nometalico, fk_mm_2nometalico) VALUES (0.2,6,1),(0.3,7,1),(0.1,8,1),(0.3,9,1);
+
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.3,8,7),(0.1,2,8),(0.2,6,1),(0.5,1,13),(0.1,1,4);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.3,8,9),(0.1,6,2),(0.5,12,5),(0.4,9,8);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.4,4,7),(0.3,11,5),(0.5,9,11),(0.2,9,7),(0.2,11,9);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.1,11,2),(0.3,12,8),(0.4,5,8),(0.3,8,10),(0.5,1,3);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.2,3,8),(0.4,6,13),(0.1,11,7),(0.1,9,5),(0.2,7,11);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.4,7,6),(0.1,11,4),(0.5,7,11),(0.5,11,6),(0.3,13,11);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1metalico,fk_mm_2metalico) VALUES (0.1,8,13),(0.3,2,12),(0.5,6,4),(0.4,13,5),(0.1,8,2);
+
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1nometalico,fk_mm_2nometalico) VALUES (0.1,1,8),(0.3,12,13),(0.4,3,10),(0.5,8,10),(0.4,14,3);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1nometalico,fk_mm_2nometalico) VALUES (0.1,9,7),(0.1,13,3),(0.1,8,10),(0.3,10,5),(0.2,13,18);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1nometalico,fk_mm_2nometalico) VALUES (0.5,2,10),(0.2,9,17),(0.4,14,11),(0.5,20,3),(0.3,15,14);
+		INSERT INTO MIN_MIN (mm_proporcionm1m2,fk_mm_1nometalico,fk_mm_2nometalico) VALUES (0.4,3,11),(0.2,11,9),(0.5,15,9),(0.5,7,3),(0.3,16,11);
+
+		INSERT INTO ali_mm (fk_amm_aliado,fk_amm_mm) VALUES ('G-200047062',1),('G-201109229',2),('G-205556895',6),('G-205965779',3),('G-205965789',1),('G-222265335',3),('G-202055844',1),('G-245944489',2);
+
+
 		INSERT INTO yac_min(
 	ym_codigo, fk_ym_yacimiento, fk_ym_minmetalico, fk_ym_minnometalico, ym_cantidad)
 		VALUES 
