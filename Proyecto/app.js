@@ -218,9 +218,10 @@ app.post("/Yacimientos-Agregar",function(req,res){
   var minTipo = req.body.minTipo;
   var minMin = req.body.minMin;
   var minCantidad = req.body.minCantidad;
+  var estatusY = 'SCF';
 
   if(userJSON.usuario != "none"){
-    client.query('INSERT INTO YACIMIENTO (yac_extension,yac_fecharegistro,yac_nombre,fk_yac_estatus,fk_yac_lugar) VALUES($1,(SELECT NOW()),$2,1,$3)',[extensionYac,nombreYac,parroquiaYac],(err,result)=>{
+    client.query('INSERT INTO YACIMIENTO (yac_extension,yac_fecharegistro,yac_nombre,fk_yac_estatus,fk_yac_lugar) VALUES($1,(SELECT NOW()),$2,(SELECT est_codigo FROM ESTATUS WHERE est_nombre = $3),$4)',[extensionYac,nombreYac,estatusY,parroquiaYac],(err,result)=>{
       if (err) {
         console.log('Entro en el error esperado');
         console.log(err.stack);
@@ -408,12 +409,12 @@ app.post("/Empleados-Agregar",function(req,res){
     empleadoGenero = 'O';
   }
 
-  client.query('INSERT INTO empleado (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar,fk_emp_estatus) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,1)',[empleadoCedula,empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,cargoEmpleado,parroquiaEmpleado],(err,result)=>{
+  client.query('INSERT INTO empleado (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp_genero,emp_telefono,fk_emp_cargo,fk_emp_lugar) VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',[empleadoCedula,empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,cargoEmpleado,parroquiaEmpleado],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
     }else if(empleadoUsuario != "" && passwordUsuario != ""){
-      client.query('INSERT INTO usuario (usu_usuario,usu_password,fk_usu_estatus,fk_usu_empleado_ci,fk_usu_rol) VALUES($1,$2,1,$3,$4)',[empleadoUsuario,passwordUsuario,empleadoCedula,rolUsuarioEmpleado],(err,result)=>{
+      client.query('INSERT INTO usuario (usu_usuario,usu_password,fk_usu_empleado_ci,fk_usu_rol) VALUES($1,$2,$3,$4)',[empleadoUsuario,passwordUsuario,empleadoCedula,rolUsuarioEmpleado],(err,result)=>{
         if (err) {
           console.log(err.stack);
           res.send('failed'); 
@@ -726,8 +727,9 @@ app.post("/Yacimientos-Verificar",function(req,res){
 /////////////////////////////////EXPLOTACIONES//////////////////////////////////
 
 app.get("/Explotaciones-Configuracion-Agregar",function(req,res){
+  var filtro = 'SCF';
   if(userJSON.usuario != "none"){
-    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO',(err,result)=>{
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
       if (err) {
         console.log(err.stack);
         res.send('failed'); 
@@ -782,13 +784,22 @@ app.post("/getYacExp",function(req,res){
 app.post("/AExp",function(req,res){
   var exp = req.body.AExp; 
   console.log(exp);
-  client.query('INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO) VALUES (1,$1) RETURNING EXP_CODIGO',[exp],(err,result)=>{
+  var estatusExp = 'Disponible';
+  var estatusYac = 'CF';
+  client.query('INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO) VALUES ((SELEC est_codigo FROM ESTATUS WHERE est_nombre = $1),$2) RETURNING EXP_CODIGO',[estatusExp,exp],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
     }else if(result.rows[0].exp_codigo != null){
       var expCod = result.rows[0];
-      res.send({cod: expCod}); 
+      client.query('UPDATE YACIMIENTO SET FK_YAC_ESTATUS= (SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $1) WHERE YAC_CODIGO = $2',[estatusYac,exp],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }else{
+          res.send({cod: expCod}); 
+        }
+      });
     }else{
       res.send('failed');
     }
@@ -798,8 +809,9 @@ app.post("/AExp",function(req,res){
 app.post("/AEta",function(req,res){
   var eta = req.body.AEta; 
   var exp = req.body.AExp;
+  var estatusEta = 'Disponible';
   console.log(eta);
-  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,1) RETURNING ETA_CODIGO',[eta,exp],(err,result)=>{
+  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING ETA_CODIGO',[eta,exp,estatusEta],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -815,8 +827,9 @@ app.post("/AEta",function(req,res){
 app.post("/AFas",function(req,res){
   var eta = req.body.AEta; 
   var fas = req.body.AFas;
+  var estatusFas = 'Disponible';
   console.log(fas);
-  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,1) RETURNING FAS_CODIGO',[fas,eta],(err,result)=>{
+  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING FAS_CODIGO',[fas,eta,estatusFas],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -861,49 +874,3 @@ app.post("/AMaq",function(req,res){
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
-
-
-
-      // for (var i = 0; i < dC.e.length; i++) {
-      //   console.log('VALOR DE LA I = ',i);
-      //   client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,1) RETURNING ETA_CODIGO',[dC.e[i].nE,result.rows[0].exp_codigo],(err,result)=>{
-      //     if (err) {
-      //       console.log(err.stack);
-      //       res.send('failed'); 
-      //     }else if(result.rows[0].eta_codigo != null){
-      //       console.log('VALOR DE LA I = ',i);
-      //       for (var j = 0; j < dC.e[i].f.length ; j++) {
-      //         client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,1) RETURNING FAS_CODIGO',[dC.e[i].f[j].nF,result.rows[0].eta_codig],(err,result)=>{
-      //           if (err) {
-      //             console.log(err.stack);
-      //             res.send('failed'); 
-      //           }else if(result.rows[0].fas_codigo != null){
-
-      //             for (var k = 0; k < dC.e[i].f[j].c[k].length; k++) {
-      //               client.query('INSERT INTO CAR_FAS (CF_CANTIDAD,FK_CF_CARGO,FK_CF_FASE) VALUES ($1,$2,$3)',[dC.e[i].f[j].c[k].cq,dC.e[i].f[j].c[k].c,result.rows[0].fas_codigo],(err,result)=>{
-      //                 if (err) {
-      //                   console.log(err.stack);
-      //                   res.send('failed'); 
-      //                 }else{
-                        
-      //                 }
-      //               });
-      //             }
-
-      //             for (var g = 0; g < dC.e[i].f[j].m[g].length; g++) {
-      //               client.query('INSERT INTO TM_FAS (TMF_CANTIDAD,FK_TMF_TM,FK_TMF_FASE) VALUES ($1,$2,$3)',[dC.e[i].f[j].c[g].mq,dC.e[i].f[j].c[g].m,result.rows[0].fas_codigo],(err,result)=>{
-      //                 if (err) {
-      //                   console.log(err.stack);
-      //                   res.send('failed'); 
-      //                 }else{
-                        
-      //                 }
-      //               });
-      //             }
-
-      //           }
-      //         }); 
-      //       }
-      //     }
-      //   });
-      // }
