@@ -9,7 +9,7 @@ DROP TABLE ALI_MM;
 DROP TABLE MIN_MIN;
 DROP TABLE YAC_MIN;
 DROP TABLE MAQ_FAS;
-
+DROP TABLE TM_FAS;
 DROP TABLE SOLICITUD_COMPRA;
 DROP TABLE INVENTARIO;
 DROP TABLE MIN_PRE;
@@ -306,7 +306,7 @@ CREATE TABLE INVENTARIO (
 	CONSTRAINT FK_VENTA_INVENTARIO FOREIGN KEY (FK_INV_VENTA) REFERENCES VENTA (VEN_CODIGO),
 	CONSTRAINT FK_MINPRE_INVENTARIO FOREIGN KEY (FK_INV_MINPRE) REFERENCES MIN_PRE (MP_CODIGO),
 	CONSTRAINT PK_CODIGO_INVENTARIO PRIMARY KEY (INV_CODIGO),
-	CONSTRAINT CHECK_CANTIDADMOVIMIENTO_INV CHECK (INV_CANTIDADMOVIMIENTO>0)
+	CONSTRAINT CHECK_CANTIDADMOVIMIENTO_INV CHECK (INV_CANTIDADMOVIMIENTO>=0)
 );
 
 CREATE TABLE SOLICITUD_COMPRA(
@@ -1981,12 +1981,31 @@ INSERT INTO lugar(
 	(nextval('lugar_lug_codigo_seq'), 'PARROQUIA', 359, '23 de enero');
 
 	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Jefe');
-	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ingeniero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Subjefe');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Supervisor de campo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Geólogo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Portamira');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ayudante de campaña');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Muestrero');
 	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Chofer');
 	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Cocinero');
-	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Barrendero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Técnico supervisor');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Perforista');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Auxiliar de campo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ingeniero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Economista');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Consultor');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Psicólogo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Obrero');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Dibujante');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Secretario');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Topógrafo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Geólogo especialista');
 	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Contador');
-	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Psicologo');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Ejecutor de trinchera');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Analista de laboratorio');
+	INSERT INTO CARGO (CAR_NOMBRE) VALUES ('Fotografo');
+
 
 	INSERT INTO rol(
 	rol_codigo, rol_nombre)
@@ -2354,6 +2373,7 @@ INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp
 	VALUES ('zchang','admin',3,1);
 	INSERT INTO USUARIO (USU_USUARIO,USU_PASSWORD,FK_USU_EMPLEADO,FK_USU_ROL)
 	VALUES ('aloro','admin',4,1);
+	INSERT INTO usuario ( usu_usuario, usu_password, fk_usu_empleado, fk_usu_rol) VALUES ('Bretth', 'clave', 5, 2);
 
 	INSERT INTO presentacion(pre_codigo, pre_nombre)
 	VALUES 
@@ -2464,281 +2484,280 @@ INSERT INTO EMPLEADO (emp_cedula,emp_nombre,emp_apellido,emp_fechanacimiento,emp
 			EXP_CODIGO, EXP_FECHAINICIO, EXP_FECHAFIN,	EXP_COSTOTOTAL,
 			FK_EXP_ESTATUS,	FK_EXP_VENTA )
 			VALUES
-			(nextval('explotacion_exp_codigo_seq'), '2019-02-20', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-02-20', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-17', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-04-19', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-01-12', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-12-21', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-09-24', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-08-27', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-10', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-01', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-06-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-03-15', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-02-15', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-12-11', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-01-02', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-01-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-05-03', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-06-04', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-07', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-09-11', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-09-14', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-13', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-10-17', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-12-19', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-02-21', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-02-23', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-03-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-10', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-13', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-23', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-03', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-10', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-11', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-03', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-04-20', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-01-04', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-21', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-02', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-01', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-12', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-16', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-10-03', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-11-03', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-03', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-11-15', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-05-04', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-04', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-14', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-04', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-24', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-07-04', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-07-01', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-04-01', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-09-11', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-04-01', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2016-10-01', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-04-15', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2017-05-25', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-03-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-07', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-01-15', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-02-08', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-03-17', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-04-25', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2019-05-05', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 50000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-01-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-05', null, 100000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-06-09', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-06-08', null, 65000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-05-15', null, 80000, 1, null),
-			(nextval('explotacion_exp_codigo_seq'), '2018-06-01', null, 65000, 1, null);
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null),
+			(nextval('explotacion_exp_codigo_seq'), null, null, null, 1, null);
 
 
-		INSERT INTO yacimiento(
+	INSERT INTO yacimiento(
 	yac_codigo, yac_extension, yac_fecharegistro, yac_nombre, fk_yac_estatus, fk_yac_lugar, fk_yac_explotacion)
 	VALUES 
 
 	--AMAZONAS 
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2008-06-14', 'Cuenca del Orinoco', 1 , 363, null),
-	(nextval('yacimiento_yac_codigo_seq'), 20000, '2001-02-03', 'Yapacana', 1 , 366, null),
-	(nextval('yacimiento_yac_codigo_seq'), 15000, '2005-04-01', 'Munduapo', 1 , 375, null),
-	(nextval('yacimiento_yac_codigo_seq'), 1000, '2006-02-25', 'Cocuy', 1 , 383, null),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2008-06-14', 'Cuenca del Orinoco', 1 , 363, 1),
+	(nextval('yacimiento_yac_codigo_seq'), 20000, '2001-02-03', 'Yapacana', 1 , 366, 2),
+	(nextval('yacimiento_yac_codigo_seq'), 15000, '2005-04-01', 'Munduapo', 1 , 375, 3),
+	(nextval('yacimiento_yac_codigo_seq'), 1000, '2006-02-25', 'Cocuy', 1 , 383, 4),
 	(nextval('yacimiento_yac_codigo_seq'), 3000, '2002-02-25', 'Platanillal', 1 , 372, null),
 
 	-- ANZOATEGUI
-	(nextval('yacimiento_yac_codigo_seq'), 6000 , '2017-06-14', 'Peñas Blancas', 1 , 389, null),
-	(nextval('yacimiento_yac_codigo_seq'), 14000, '2014-06-12', 'Del Piar', 1 , 407, null),
-	(nextval('yacimiento_yac_codigo_seq'), 3500 , '2011-06-14', 'Mallorquín', 1 , 439, null),
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2004-08-16', 'Capiricual', 1 , 439, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '2017-06-14', 'Peñas Blancas', 1 , 389, 5),
+	(nextval('yacimiento_yac_codigo_seq'), 14000, '2014-06-12', 'Del Piar', 1 , 407, 6),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '2011-06-14', 'Mallorquín', 1 , 439, 7),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2004-08-16', 'Capiricual', 1 , 439, 8),
 	(nextval('yacimiento_yac_codigo_seq'), 6000, '2006-05-01', 'Fila Maestra', 1 , 391, null),
 
 	--APURE
-	(nextval('yacimiento_yac_codigo_seq'), 4300, '2014-06-12', 'Galera de Cinaruco', 1 , 460, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2010-02-25', 'Mantecal', 1 , 451, null),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2008-02-25', 'Biruaca', 1 , 449, null),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2006-02-25', 'El Yagual', 1 , 445, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '2014-06-12', 'Galera de Cinaruco', 1 , 460, 9),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2010-02-25', 'Mantecal', 1 , 451, 10),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2008-02-25', 'Biruaca', 1 , 449, 11),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2006-02-25', 'El Yagual', 1 , 445, 12),
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2002-05-25', 'El Peñal', 1 , 467, null),
 
 
 	--ARAGUA
-	(nextval('yacimiento_yac_codigo_seq'), 3600 , '2016-06-13', 'Villa del Cura', 1 , 516, null),
-	(nextval('yacimiento_yac_codigo_seq'), 21000 , '2001-12-05', 'Santa Isabel', 1 , 480, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6400 , '2008-07-29', 'Taguay', 1 , 510, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '2016-03-15', 'Loma de Hierro', 1 , 506, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3600 , '2016-06-13', 'Villa del Cura', 1 , 516, 13),
+	(nextval('yacimiento_yac_codigo_seq'), 21000 , '2001-12-05', 'Santa Isabel', 1 , 480, 14),
+	(nextval('yacimiento_yac_codigo_seq'), 6400 , '2008-07-29', 'Taguay', 1 , 510, 15),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '2016-03-15', 'Loma de Hierro', 1 , 506, 16),
 	(nextval('yacimiento_yac_codigo_seq'), 6000 , '2011-05-16', 'Las Lajitas', 1 , 505, null),
 
 	--BARINAS
-	(nextval('yacimiento_yac_codigo_seq'), 5000 , '2012-12-06', 'Ciudad Bolivia', 1 , 559, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2002-02-25', 'Santa Rosa', 1 , 565, null),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2015-05-13', 'Ticoporo', 1 , 524, null),
-	(nextval('yacimiento_yac_codigo_seq'), 18000 , '2006-04-05', 'Barinitas', 1 , 545, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '2012-12-06', 'Ciudad Bolivia', 1 , 559, 17),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2002-02-25', 'Santa Rosa', 1 , 565, 18),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2015-05-13', 'Ticoporo', 1 , 524, 19),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '2006-04-05', 'Barinitas', 1 , 545, 20),
 	(nextval('yacimiento_yac_codigo_seq'), 1000, '2002-02-05', 'Guadarrama', 1 , 528, null),
 
 	--BOLIVAR
-	(nextval('yacimiento_yac_codigo_seq'), 15 , '2005-04-01', 'Punta de Cerro', 1 , 601, null),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2006-09-06', 'Pico Cerro Paja', 1 , 602, null),
-	(nextval('yacimiento_yac_codigo_seq'), 8600 , '1998-05-02', 'El Pao', 1 , 600, null),
-	(nextval('yacimiento_yac_codigo_seq'), 12000, '1999-09-03', 'Del Callao', 1 , 588, null),
+	(nextval('yacimiento_yac_codigo_seq'), 15 , '2005-04-01', 'Punta de Cerro', 1 , 601, 21),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2006-09-06', 'Pico Cerro Paja', 1 , 602, 22),
+	(nextval('yacimiento_yac_codigo_seq'), 8600 , '1998-05-02', 'El Pao', 1 , 600, 23),
+	(nextval('yacimiento_yac_codigo_seq'), 12000, '1999-09-03', 'Del Callao', 1 , 588, 24),
 	(nextval('yacimiento_yac_codigo_seq'), 30000 , '2009-05-07', 'El Dorado', 1 , 610, null),
 
 	--CARABOBO
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2014-06-05', 'Santa Rosa BB', 1 , 654, null),
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2012-11-06', 'Gañango', 1 , 639, null),
-	(nextval('yacimiento_yac_codigo_seq'), 1000 , '2017-07-08', 'Guacara', 1 , 627, null),
-	(nextval('yacimiento_yac_codigo_seq'), 25000 , '2002-02-25', 'Yagua', 1 , 628, null),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2014-06-05', 'Santa Rosa BB', 1 , 654, 25),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2012-11-06', 'Gañango', 1 , 639, 26),
+	(nextval('yacimiento_yac_codigo_seq'), 1000 , '2017-07-08', 'Guacara', 1 , 627, 27),
+	(nextval('yacimiento_yac_codigo_seq'), 25000 , '2002-02-25', 'Yagua', 1 , 628, 28),
 	(nextval('yacimiento_yac_codigo_seq'), 6700 , '2012-08-13', 'Los Guayos', 1 , 633, null),
 
 	--COJEDES 
-	(nextval('yacimiento_yac_codigo_seq'), 9200, '2017-07-21', 'Tinaquillo', 1 , 658, null),
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2015-11-22', 'San Carlos', 1 , 658, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2002-02-25', 'Macapo', 1 , 662, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6000 , '2017-07-17', 'La Aguadita', 1 , 661, null),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '2017-07-21', 'Tinaquillo', 1 , 658, 29),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2015-11-22', 'San Carlos', 1 , 658, 30),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '2002-02-25', 'Macapo', 1 , 662, 31),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '2017-07-17', 'La Aguadita', 1 , 661, 32),
 	(nextval('yacimiento_yac_codigo_seq'), 8000, '2002-02-25', 'Amparo', 1 , 664, null),
 
 	--DELTA AMACURO
-	(nextval('yacimiento_yac_codigo_seq'), 5000, '2003-06-28', 'Imataca', 1 , 677, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4000 , '2018-11-04', 'Piacoa', 1 , 679, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2017-12-04', 'Los Castillos', 1 , 681, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4500 , '2008-11-04', 'La Represalia', 1 , 676, null),
+	(nextval('yacimiento_yac_codigo_seq'), 5000, '2003-06-28', 'Imataca', 1 , 677, 33),
+	(nextval('yacimiento_yac_codigo_seq'), 4000 , '2018-11-04', 'Piacoa', 1 , 679, 34),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2017-12-04', 'Los Castillos', 1 , 681, 35),
+	(nextval('yacimiento_yac_codigo_seq'), 4500 , '2008-11-04', 'La Represalia', 1 , 676, 36),
 	(nextval('yacimiento_yac_codigo_seq'), 9200, '2006-06-19', 'Sacupana', 1 , 679, null),
 
 
 	--FALCON
-	(nextval('yacimiento_yac_codigo_seq'), 11000, '2003-11-18', 'El Trueno', 1 , 740, null),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2005-06-12', 'Mauroa', 1 , 743, null),
-	(nextval('yacimiento_yac_codigo_seq'), 11200, '2014-06-13', 'Septentrional', 1 , 692, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6300 , '2016-02-22', 'El Saladillo', 1 , 699, null),
+	(nextval('yacimiento_yac_codigo_seq'), 11000, '2003-11-18', 'El Trueno', 1 , 740, 37),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2005-06-12', 'Mauroa', 1 , 743, 38),
+	(nextval('yacimiento_yac_codigo_seq'), 11200, '2014-06-13', 'Septentrional', 1 , 692, 39),
+	(nextval('yacimiento_yac_codigo_seq'), 6300 , '2016-02-22', 'El Saladillo', 1 , 699, 40),
 	(nextval('yacimiento_yac_codigo_seq'), 14500 , '2012-11-25', 'El Cantil', 1 , 747, null),
 
 
 	--GUARICO 
-	(nextval('yacimiento_yac_codigo_seq'), 19000, '2007-10-15', 'Sabana Grande', 1 , 783, null),
-	(nextval('yacimiento_yac_codigo_seq'), 5200 , '2013-04-06', 'Jabilillal', 1 , 781, null),
-	(nextval('yacimiento_yac_codigo_seq'), 5600 , '2015-07-13', 'El Corozo', 1 , 798, null),
-	(nextval('yacimiento_yac_codigo_seq'), 17000 , '2018-11-04', 'Serrania del Interior', 1 , 801, null),
+	(nextval('yacimiento_yac_codigo_seq'), 19000, '2007-10-15', 'Sabana Grande', 1 , 783, 41),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '2013-04-06', 'Jabilillal', 1 , 781, 42),
+	(nextval('yacimiento_yac_codigo_seq'), 5600 , '2015-07-13', 'El Corozo', 1 , 798, 43),
+	(nextval('yacimiento_yac_codigo_seq'), 17000 , '2018-11-04', 'Serrania del Interior', 1 , 801, 44),
 	(nextval('yacimiento_yac_codigo_seq'), 2050, '2012-02-25', 'El chino', 1 , 805, null),
 
 
 	--LARA 
-	(nextval('yacimiento_yac_codigo_seq'), 4500, '2006-09-01', 'El Tocuyo', 1 , 846, null),
-	(nextval('yacimiento_yac_codigo_seq'), 8560 , '2003-11-07', 'San Jacinto', 1 , 823, null),
-	(nextval('yacimiento_yac_codigo_seq'), 16000, '2006-09-15', 'Los Caballos', 1 , 861, null),
-	(nextval('yacimiento_yac_codigo_seq'), 13000 , '2012-01-25', 'Carorita', 1 , 827, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '2006-09-01', 'El Tocuyo', 1 , 846, 45),
+	(nextval('yacimiento_yac_codigo_seq'), 8560 , '2003-11-07', 'San Jacinto', 1 , 823, 46),
+	(nextval('yacimiento_yac_codigo_seq'), 16000, '2006-09-15', 'Los Caballos', 1 , 861, 47),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '2012-01-25', 'Carorita', 1 , 827, 48),
 	(nextval('yacimiento_yac_codigo_seq'), 1400 , '2002-02-01', 'Quibor', 1 , 832, null),
 
 	--MERIDA
-	(nextval('yacimiento_yac_codigo_seq'), 6500 , '2002-02-02', 'Las Tapias', 1 , 919, null),
-	(nextval('yacimiento_yac_codigo_seq'), 9600 , '2009-01-25', 'El Tigre', 1 , 958, null),
-	(nextval('yacimiento_yac_codigo_seq'), 15000 , '2012-12-05', 'Zea', 1 , 959, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6200, '2016-11-04', 'Guaraque', 1 , 905, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6500 , '2002-02-02', 'Las Tapias', 1 , 919, 49),
+	(nextval('yacimiento_yac_codigo_seq'), 9600 , '2009-01-25', 'El Tigre', 1 , 958, 50),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '2012-12-05', 'Zea', 1 , 959, 51),
+	(nextval('yacimiento_yac_codigo_seq'), 6200, '2016-11-04', 'Guaraque', 1 , 905, 52),
 	(nextval('yacimiento_yac_codigo_seq'), 9000 , '2012-02-25', 'Rio Negro', 1 , 907, null),
 
 	--MIRANDA
-	(nextval('yacimiento_yac_codigo_seq'), 4562, '2006-02-06', 'El Carrizo', 1 , 977, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7540 , '2010-10-23', 'Capaya', 1 , 962, null),
-	(nextval('yacimiento_yac_codigo_seq'), 12400, '2018-11-04', 'Colonia Ocumare', 1 , 992, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4510, '2018-11-04', 'Colonia Mendoza', 1 , 992, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4562, '2006-02-06', 'El Carrizo', 1 , 977, 53),
+	(nextval('yacimiento_yac_codigo_seq'), 7540 , '2010-10-23', 'Capaya', 1 , 962, 54),
+	(nextval('yacimiento_yac_codigo_seq'), 12400, '2018-11-04', 'Colonia Ocumare', 1 , 992, 55),
+	(nextval('yacimiento_yac_codigo_seq'), 4510, '2018-11-04', 'Colonia Mendoza', 1 , 992, 56),
 	(nextval('yacimiento_yac_codigo_seq'), 4620, '2002-02-25', 'Tacata', 1 , 987, null),
 
 	--MONAGAS
-	(nextval('yacimiento_yac_codigo_seq'), 4800, '2014-02-15', 'Cerro Azul', 1 , 1052, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '2006-05-12', 'El Guacharo', 1 , 1019, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6500, '2002-02-25', 'Teresen', 1 , 1023, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4500, '2002-02-25', 'La Guanota', 1 , 1020, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4800, '2014-02-15', 'Cerro Azul', 1 , 1052, 57),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '2006-05-12', 'El Guacharo', 1 , 1019, 58),
+	(nextval('yacimiento_yac_codigo_seq'), 6500, '2002-02-25', 'Teresen', 1 , 1023, 59),
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '2002-02-25', 'La Guanota', 1 , 1020, 60),
 	(nextval('yacimiento_yac_codigo_seq'), 1200, '2002-02-25', 'Cachipo', 1 , 1052, null),
 
 	--NUEVA ESPARTA
-	(nextval('yacimiento_yac_codigo_seq'), 4530, '2024-02-25', 'Salinas de Pampatar', 1 , 1068, null),
-	(nextval('yacimiento_yac_codigo_seq'), 3000 , '2018-06-13', 'Tubores', 1 , 1075, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4600, '2002-06-25', 'Yaguaraparo', 1 , 1071, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7000, '2014-06-18', 'Zabala', 1 , 1080, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4530, '2024-02-25', 'Salinas de Pampatar', 1 , 1068, 61),
+	(nextval('yacimiento_yac_codigo_seq'), 3000 , '2018-06-13', 'Tubores', 1 , 1075, 62),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '2002-06-25', 'Yaguaraparo', 1 , 1071, 63),
+	(nextval('yacimiento_yac_codigo_seq'), 7000, '2014-06-18', 'Zabala', 1 , 1080, 64),
 	(nextval('yacimiento_yac_codigo_seq'), 9200, '2002-02-05', 'Los Baleales', 1 , 1076, null),
 
 	--PORTUGUESA
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2000-06-15', 'Agua Blanca', 1 , 245, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6100 , '2002-02-25', 'Turen', 1 , 1117, null),
-	(nextval('yacimiento_yac_codigo_seq'), 9100, '2002-02-25', 'Santa Cruz', 1 , 1119, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4000, '2002-02-25', 'Guanarito', 1 , 1090, null),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2000-06-15', 'Agua Blanca', 1 , 245, 65),
+	(nextval('yacimiento_yac_codigo_seq'), 6100 , '2002-02-25', 'Turen', 1 , 1117, 66),
+	(nextval('yacimiento_yac_codigo_seq'), 9100, '2002-02-25', 'Santa Cruz', 1 , 1119, 67),
+	(nextval('yacimiento_yac_codigo_seq'), 4000, '2002-02-25', 'Guanarito', 1 , 1090, 68),
 	(nextval('yacimiento_yac_codigo_seq'), 5000, '2002-02-25', 'La estación', 1 , 1097, null),
 
 	--SUCRE
-	(nextval('yacimiento_yac_codigo_seq'), 100 , '2006-02-15', 'El Pilar', 1 , 1130, null),
-	(nextval('yacimiento_yac_codigo_seq'), 1300 , '2003-01-25', 'Paria', 1 , 1173, null),
-	(nextval('yacimiento_yac_codigo_seq'), 5000 , '2001-10-04', 'Araya', 1 , 1144, null),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2013-09-24', 'Ayacucho', 1 , 1169, null),
+	(nextval('yacimiento_yac_codigo_seq'), 100 , '2006-02-15', 'El Pilar', 1 , 1130, 69),
+	(nextval('yacimiento_yac_codigo_seq'), 1300 , '2003-01-25', 'Paria', 1 , 1173, 70),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '2001-10-04', 'Araya', 1 , 1144, 71),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2013-09-24', 'Ayacucho', 1 , 1169, 72),
 	(nextval('yacimiento_yac_codigo_seq'), 6100, '2004-12-02', 'Sucre A', 1 , 1358, null),
 
 	--TACHIRA
-	(nextval('yacimiento_yac_codigo_seq'), 4200 , '2011-03-25', 'Lobatera', 1 , 1216, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4300, '2006-09-06', 'Seboruco', 1 , 1233, null),
-	(nextval('yacimiento_yac_codigo_seq'), 13000 , '2008-06-02', 'Delicias', 1 , 1223, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4600, '2011-06-14', 'San Felix', 1 , 1179, null),
+	(nextval('yacimiento_yac_codigo_seq'), 4200 , '2011-03-25', 'Lobatera', 1 , 1216, 73),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '2006-09-06', 'Seboruco', 1 , 1233, 74),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '2008-06-02', 'Delicias', 1 , 1223, 75),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '2011-06-14', 'San Felix', 1 , 1179, 76),
 	(nextval('yacimiento_yac_codigo_seq'), 7200, '2011-06-14', 'Rubio', 1 , 1205, null),
 
 
 	--TRUJILLO
-	(nextval('yacimiento_yac_codigo_seq'), 7200 , '2001-01-24', 'San Miguel', 1 , 1258, null),
-	(nextval('yacimiento_yac_codigo_seq'), 4600 , '2015-03-15', 'Mocoy', 1 , 1324 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 7500 , '2015-03-15', 'El progreso', 1 , 1285 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2007-06-19', 'La ceiba', 1 , 1286 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 7200 , '2001-01-24', 'San Miguel', 1 , 1258, 77),
+	(nextval('yacimiento_yac_codigo_seq'), 4600 , '2015-03-15', 'Mocoy', 1 , 1324 , 78),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '2015-03-15', 'El progreso', 1 , 1285 , 79),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '2007-06-19', 'La ceiba', 1 , 1286 , 80),
 	(nextval('yacimiento_yac_codigo_seq'), 3500 , '2015-06-30', 'Motatán', 1 , 1296 , null),
 
 	--VARGAS
-	(nextval('yacimiento_yac_codigo_seq'), 9400 , '2010-03-15', 'Urimare', 1 , 1324 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2015-03-15', 'Naiguata', 1 , 1346 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 15000 , '2014-09-03', 'El junko', 1 , 1342 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 6920 , '2010-02-15', 'Caruao', 1 , 1340 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 9400 , '2010-03-15', 'Urimare', 1 , 1324 , 81),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '2015-03-15', 'Naiguata', 1 , 1346 , 82),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '2014-09-03', 'El junko', 1 , 1342 , 83),
+	(nextval('yacimiento_yac_codigo_seq'), 6920 , '2010-02-15', 'Caruao', 1 , 1340 , 84),
 	(nextval('yacimiento_yac_codigo_seq'), 4560 , '2011-03-15', 'Carayaca', 1 , 1338 , null),
 
 	--YARACUY
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2000-03-23', 'Sierra de Aroa', 1 , 1349, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2002-02-25', 'Cambimba', 1 , 1358, null),
-	(nextval('yacimiento_yac_codigo_seq'), 5200 , '2002-10-25', 'La Trinidad', 1 , 1355, null),
-	(nextval('yacimiento_yac_codigo_seq'), 18000 , '2011-11-11', 'Monge', 1 , 1356, null),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2000-03-23', 'Sierra de Aroa', 1 , 1349, 85),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2002-02-25', 'Cambimba', 1 , 1358, 86),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '2002-10-25', 'La Trinidad', 1 , 1355, 87),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '2011-11-11', 'Monge', 1 , 1356, 88),
 	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2008-03-25', 'Sucre', 1 , 1365, null),
 
 	--ZULIA
-	(nextval('yacimiento_yac_codigo_seq'), 45000 , '2012-09-01', 'Guasare', 1 , 1425, null),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2010-06-25', 'Cachirí', 1 , 1425, null),
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2013-06-14', 'El carrasquero', 1 , 1426, null),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2002-01-07', 'Socuy', 1 , 1423, null),
+	(nextval('yacimiento_yac_codigo_seq'), 45000 , '2012-09-01', 'Guasare', 1 , 1425, 89),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2010-06-25', 'Cachirí', 1 , 1425, 90),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '2013-06-14', 'El carrasquero', 1 , 1426, 91),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '2002-01-07', 'Socuy', 1 , 1423, 92),
 	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2015-04-25', 'Inciarte', 1 , 1427, null),
 
 	--DISTRITO CAPITAL
 
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2014-09-16', 'Altagracia', 1 , 1476 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2015-03-15', 'San Pedro', 1 , 1493 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 7500 , '2015-03-15', 'Macarao', 1 , 1488 , null),
-	(nextval('yacimiento_yac_codigo_seq'), 8000, '2011-06-01', 'San Juan', 1 , 1492 , null),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '2014-09-16', 'Altagracia', 1 , 1476 , 93),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '2015-03-15', 'San Pedro', 1 , 1493 , 94),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '2015-03-15', 'Macarao', 1 , 1488 , 95),
+	(nextval('yacimiento_yac_codigo_seq'), 8000, '2011-06-01', 'San Juan', 1 , 1492 , 96),
 	(nextval('yacimiento_yac_codigo_seq'), 9200 , '2015-03-15', 'San Jose', 1 , 1491 , null);
 
 	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (25218800,'Evan','Kent', 4241539278,1155);
@@ -3029,490 +3048,840 @@ INSERT INTO MAQUINARIA (maq_nombre,fk_maq_tipo) VALUES ('E0J 9G3',6),('R6Y 8Q4',
 
 
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_metalico) VALUES (168,4,3),(196,5,6),(190,8,13),(82,7,7),(199,1,9),(78,9,11),(63,8,8),(95,2,1),(101,8,9),(58,3,3);
-INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_metalico) VALUES (166,9,3),(104,9,5),(159,8,5),(52,5,10),(90,6,4),(57,4,13),(65,5,10),(162,7,13),(185,2,6),(150,7,4)
+INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_metalico) VALUES (166,9,3),(104,9,5),(159,8,5),(52,5,10),(90,6,4),(57,4,13),(65,5,10),(162,7,13),(185,2,6),(150,7,4);
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_nometalico) VALUES (75,2,5),(176,3,7),(167,2,20),(72,4,8),(79,7,18),(110,4,16),(74,1,10),(81,9,1),(126,3,20),(54,2,3);
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_nometalico) VALUES (98,9,7),(88,5,3),(198,6,14),(55,4,7),(105,6,6),(141,1,7),(124,4,20),(144,1,6),(184,8,20),(108,4,19);
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_nometalico) VALUES (71,5,16),(59,7,16),(97,1,19),(116,9,17),(148,6,20),(101,9,18),(60,9,15),(110,9,14),(176,4,10),(77,8,2);
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_nometalico) VALUES (105,2,10),(176,1,4),(56,9,15),(78,2,5),(51,8,4),(188,4,5),(119,9,1),(119,4,19),(151,4,14),(130,7,14);
 INSERT INTO MIN_PRE (mp_precio,fk_mp_presentacion,fk_mp_nometalico) VALUES (135,2,9),(150,7,11),(55,5,12),(110,3,13),(200,2,13);
 
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 1),10000,1,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',40000,1,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 2),20000,2,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',60000,2,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 3),(select e.exp_costototal from explotacion e where e.exp_codigo = 3)*0.4,3,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 3)*0.6,3,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 4),(select e.exp_costototal from explotacion e where e.exp_codigo = 4)*0.4,4,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 4)*0.6,4,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 5),(select e.exp_costototal from explotacion e where e.exp_codigo = 5)*0.4,5,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 5)*0.6,5,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 6),(select e.exp_costototal from explotacion e where e.exp_codigo = 6)*0.4,6,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 6)*0.6,6,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 7),(select e.exp_costototal from explotacion e where e.exp_codigo = 7)*0.4,7,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 7)*0.6,7,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 8),(select e.exp_costototal from explotacion e where e.exp_codigo = 8)*0.4,8,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 8)*0.6,8,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 9),(select e.exp_costototal from explotacion e where e.exp_codigo = 9)*0.4,9,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 9)*0.6,9,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 10),(select e.exp_costototal from explotacion e where e.exp_codigo = 10)*0.4,10,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 10)*0.6,10,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 11),(select e.exp_costototal from explotacion e where e.exp_codigo = 11)*0.4,11,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 11)*0.6,11,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 12),(select e.exp_costototal from explotacion e where e.exp_codigo = 12)*0.4,12,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 12)*0.6,12,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 13),(select e.exp_costototal from explotacion e where e.exp_codigo = 13)*0.4,13,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 13)*0.6,13,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 14),(select e.exp_costototal from explotacion e where e.exp_codigo = 14)*0.4,14,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 14)*0.6,14,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 15),(select e.exp_costototal from explotacion e where e.exp_codigo = 15)*0.4,15,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 15)*0.6,15,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 16),(select e.exp_costototal from explotacion e where e.exp_codigo = 16)*0.4,16,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 16)*0.6,16,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 17),(select e.exp_costototal from explotacion e where e.exp_codigo = 17)*0.4,17,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 17)*0.6,17,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 18),(select e.exp_costototal from explotacion e where e.exp_codigo = 18)*0.4,18,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 18)*0.6,18,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 19),(select e.exp_costototal from explotacion e where e.exp_codigo = 19)*0.4,19,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 19)*0.6,19,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 20),(select e.exp_costototal from explotacion e where e.exp_codigo = 20)*0.4,20,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 20)*0.6,20,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 21),(select e.exp_costototal from explotacion e where e.exp_codigo = 21)*0.4,21,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 21)*0.6,21,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 22),(select e.exp_costototal from explotacion e where e.exp_codigo = 22)*0.4,22,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 22)*0.6,22,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 23),(select e.exp_costototal from explotacion e where e.exp_codigo = 23)*0.4,23,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 23)*0.6,23,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 24),(select e.exp_costototal from explotacion e where e.exp_codigo = 24)*0.4,24,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 24)*0.6,24,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 25),(select e.exp_costototal from explotacion e where e.exp_codigo = 25)*0.4,25,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 25)*0.6,25,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 26),(select e.exp_costototal from explotacion e where e.exp_codigo = 26)*0.4,26,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 26)*0.6,26,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 27),(select e.exp_costototal from explotacion e where e.exp_codigo = 27)*0.4,27,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 27)*0.6,27,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 28),(select e.exp_costototal from explotacion e where e.exp_codigo = 28)*0.4,28,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 28)*0.6,28,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 29),(select e.exp_costototal from explotacion e where e.exp_codigo = 29)*0.4,29,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 29)*0.6,29,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 30),(select e.exp_costototal from explotacion e where e.exp_codigo = 30)*0.4,30,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 30)*0.6,30,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 31),(select e.exp_costototal from explotacion e where e.exp_codigo = 31)*0.4,31,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 31)*0.6,31,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 32),(select e.exp_costototal from explotacion e where e.exp_codigo = 32)*0.4,32,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 32)*0.6,32,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 33),(select e.exp_costototal from explotacion e where e.exp_codigo = 33)*0.4,33,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 33)*0.6,33,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 34),(select e.exp_costototal from explotacion e where e.exp_codigo = 34)*0.4,34,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 34)*0.6,34,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 35),(select e.exp_costototal from explotacion e where e.exp_codigo = 35)*0.4,35,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 35)*0.6,35,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 36),(select e.exp_costototal from explotacion e where e.exp_codigo = 36)*0.4,36,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 36)*0.6,36,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 37),(select e.exp_costototal from explotacion e where e.exp_codigo = 37)*0.4,37,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 37)*0.6,37,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 38),(select e.exp_costototal from explotacion e where e.exp_codigo = 38)*0.4,38,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 38)*0.6,38,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 39),(select e.exp_costototal from explotacion e where e.exp_codigo = 39)*0.4,39,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 39)*0.6,39,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 40),(select e.exp_costototal from explotacion e where e.exp_codigo = 40)*0.4,40,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 40)*0.6,40,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 41),(select e.exp_costototal from explotacion e where e.exp_codigo = 41)*0.4,41,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 41)*0.6,41,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 42),(select e.exp_costototal from explotacion e where e.exp_codigo = 42)*0.4,42,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 42)*0.6,42,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 43),(select e.exp_costototal from explotacion e where e.exp_codigo = 43)*0.4,43,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 43)*0.6,43,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 44),(select e.exp_costototal from explotacion e where e.exp_codigo = 44)*0.4,44,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 44)*0.6,44,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 45),(select e.exp_costototal from explotacion e where e.exp_codigo = 45)*0.4,45,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 45)*0.6,45,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 46),(select e.exp_costototal from explotacion e where e.exp_codigo = 46)*0.4,46,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 46)*0.6,46,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 47),(select e.exp_costototal from explotacion e where e.exp_codigo = 47)*0.4,47,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 47)*0.6,47,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 48),(select e.exp_costototal from explotacion e where e.exp_codigo = 48)*0.4,48,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 48)*0.6,48,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 49),(select e.exp_costototal from explotacion e where e.exp_codigo = 49)*0.4,49,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 49)*0.6,49,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 50),(select e.exp_costototal from explotacion e where e.exp_codigo = 50)*0.4,50,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 50)*0.6,50,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 51),(select e.exp_costototal from explotacion e where e.exp_codigo = 51)*0.4,51,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 51)*0.6,51,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 52),(select e.exp_costototal from explotacion e where e.exp_codigo = 52)*0.4,52,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 52)*0.6,52,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 53),(select e.exp_costototal from explotacion e where e.exp_codigo = 53)*0.4,53,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 53)*0.6,53,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 54),(select e.exp_costototal from explotacion e where e.exp_codigo = 54)*0.4,54,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 54)*0.6,54,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 55),(select e.exp_costototal from explotacion e where e.exp_codigo = 55)*0.4,55,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 55)*0.6,55,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 56),(select e.exp_costototal from explotacion e where e.exp_codigo = 56)*0.4,56,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 56)*0.6,56,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 57),(select e.exp_costototal from explotacion e where e.exp_codigo = 57)*0.4,57,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 57)*0.6,57,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 58),(select e.exp_costototal from explotacion e where e.exp_codigo = 58)*0.4,58,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 58)*0.6,58,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 59),(select e.exp_costototal from explotacion e where e.exp_codigo = 59)*0.4,59,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 59)*0.6,59,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 60),(select e.exp_costototal from explotacion e where e.exp_codigo = 60)*0.4,60,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 60)*0.6,60,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 61),(select e.exp_costototal from explotacion e where e.exp_codigo = 61)*0.4,61,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 61)*0.6,61,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 62),(select e.exp_costototal from explotacion e where e.exp_codigo = 62)*0.4,62,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 62)*0.6,62,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 63),(select e.exp_costototal from explotacion e where e.exp_codigo = 63)*0.4,63,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 63)*0.6,63,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 64),(select e.exp_costototal from explotacion e where e.exp_codigo = 64)*0.4,64,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 64)*0.6,64,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 64),(select e.exp_costototal from explotacion e where e.exp_codigo = 64)*0.4,64,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 64)*0.6,64,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 66),(select e.exp_costototal from explotacion e where e.exp_codigo = 66)*0.4,66,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 66)*0.6,66,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 67),(select e.exp_costototal from explotacion e where e.exp_codigo = 67)*0.4,67,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 67)*0.6,67,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 68),(select e.exp_costototal from explotacion e where e.exp_codigo = 68)*0.4,68,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 68)*0.6,68,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 69),(select e.exp_costototal from explotacion e where e.exp_codigo = 69)*0.4,69,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 69)*0.6,69,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 70),(select e.exp_costototal from explotacion e where e.exp_codigo = 70)*0.4,70,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 70)*0.6,70,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 71),(select e.exp_costototal from explotacion e where e.exp_codigo = 71)*0.4,71,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 71)*0.6,71,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 72),(select e.exp_costototal from explotacion e where e.exp_codigo = 72)*0.4,72,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 72)*0.6,72,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 73),(select e.exp_costototal from explotacion e where e.exp_codigo = 73)*0.4,73,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 73)*0.6,73,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 74),(select e.exp_costototal from explotacion e where e.exp_codigo = 74)*0.4,74,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 74)*0.6,74,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 75),(select e.exp_costototal from explotacion e where e.exp_codigo = 75)*0.4,75,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 75)*0.6,75,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 76),(select e.exp_costototal from explotacion e where e.exp_codigo = 76)*0.4,76,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 76)*0.6,76,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 77),(select e.exp_costototal from explotacion e where e.exp_codigo = 77)*0.4,77,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 77)*0.6,77,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 78),(select e.exp_costototal from explotacion e where e.exp_codigo = 78)*0.4,78,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 78)*0.6,78,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 79),(select e.exp_costototal from explotacion e where e.exp_codigo = 79)*0.4,79,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 79)*0.6,79,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 80),(select e.exp_costototal from explotacion e where e.exp_codigo = 80)*0.4,80,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 80)*0.6,80,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 81),(select e.exp_costototal from explotacion e where e.exp_codigo = 81)*0.4,81,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 81)*0.6,81,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 82),(select e.exp_costototal from explotacion e where e.exp_codigo = 82)*0.4,82,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 82)*0.6,82,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 83),(select e.exp_costototal from explotacion e where e.exp_codigo = 83)*0.4,83,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 83)*0.6,83,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 84),(select e.exp_costototal from explotacion e where e.exp_codigo = 84)*0.4,84,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 84)*0.6,84,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 85),(select e.exp_costototal from explotacion e where e.exp_codigo = 85)*0.4,85,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 85)*0.6,85,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 86),(select e.exp_costototal from explotacion e where e.exp_codigo = 86)*0.4,86,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 86)*0.6,86,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 87),(select e.exp_costototal from explotacion e where e.exp_codigo = 87)*0.4,87,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 87)*0.6,87,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 88),(select e.exp_costototal from explotacion e where e.exp_codigo = 88)*0.4,88,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 88)*0.6,88,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 89),(select e.exp_costototal from explotacion e where e.exp_codigo = 89)*0.4,89,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 89)*0.6,89,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 90),(select e.exp_costototal from explotacion e where e.exp_codigo = 90)*0.4,90,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 90)*0.6,90,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 91),(select e.exp_costototal from explotacion e where e.exp_codigo = 91)*0.4,91,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 91)*0.6,91,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 92),(select e.exp_costototal from explotacion e where e.exp_codigo = 92)*0.4,92,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 92)*0.6,92,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 93),(select e.exp_costototal from explotacion e where e.exp_codigo = 93)*0.4,93,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 93)*0.6,93,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 94),(select e.exp_costototal from explotacion e where e.exp_codigo = 94)*0.4,94,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 94)*0.6,94,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 95),(select e.exp_costototal from explotacion e where e.exp_codigo = 95)*0.4,95,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 95)*0.6,95,1);
-
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa I', (select e.exp_fechainicio from explotacion E where e.exp_codigo = 96),(select e.exp_costototal from explotacion e where e.exp_codigo = 96)*0.4,96,1);
-insert into etapa (eta_nombre,eta_fechainicio,eta_costototal, fk_eta_explotacion,fk_eta_estatus) values 
-('Etapa II', '2020-04-25',(select e.exp_costototal from explotacion e where e.exp_codigo = 96)*0.6,96,1);
+
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2020-05-11',558908,4,3),('2020-06-23',353618,1,12),('2020-05-10',457100,1,8),('2019-01-17',299264,2,12),('2019-11-17',367563,3,7);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2020-02-14',691914,3,12),('2020-06-06',150159,2,9),('2019-01-27',264242,1,4),('2018-07-25',819587,5,1),('2018-11-19',103706,1,1);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2020-01-27',948876,4,10),('2020-03-10',232037,3,8),('2020-02-14',953262,4,8),('2019-11-19',396384,3,1),('2018-11-28',562886,5,5);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2020-04-13',170616,5,3),('2019-11-03',640056,3,11),('2019-11-04',531525,4,4),('2019-11-22',337060,4,9),('2019-02-15',451445,3,6);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2019-11-08',139493,5,8),('2019-11-30',192297,3,11),('2019-10-19',571788,2,5),('2020-05-22',414977,1,10),('2019-12-30',938325,2,3);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2018-07-25',533092,4,6),('2018-08-29',107282,5,4),('2019-04-13',520775,4,3),('2018-08-19',896302,3,4),('2018-07-13',527252,3,2);
+INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_usuario,fk_ven_cliente) VALUES ('2020-03-07',530447,2,1),('2018-12-25',674346,1,4),('2019-12-30',370553,4,2),('2018-12-19',411262,1,7),('2020-04-29',770473,3,1);
+
+
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('I: Inventario de informacion',1,'1'),('I: Inventario de informacion',2,'1'),('I: Inventario de informacion',3,'1'),('I: Inventario de informacion',4,'1'),('I: Inventario de informacion',5,'1'),('I: Inventario de informacion',6,'1'),('I: Inventario de informacion',7,'1'),('I: Inventario de informacion',8,'1'),('I: Inventario de informacion',9,'1'),('I: Inventario de informacion',10,'1'),('I: Inventario de informacion',11,'1'),('I: Inventario de informacion',12,'1'),('I: Inventario de informacion',13,'1'),('I: Inventario de informacion',14,'1'),('I: Inventario de informacion',15,'1'),('I: Inventario de informacion',16,'1'),('I: Inventario de informacion',17,'1'),('I: Inventario de informacion',18,'1'),('I: Inventario de informacion',19,'1'),('I: Inventario de informacion',20,'1'),('I: Inventario de informacion',21,'1'),('I: Inventario de informacion',22,'1'),('I: Inventario de informacion',23,'1'),('I: Inventario de informacion',24,'1'),('I: Inventario de informacion',25,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('I: Inventario de informacion',26,'1'),('I: Inventario de informacion',27,'1'),('I: Inventario de informacion',28,'1'),('I: Inventario de informacion',29,'1'),('I: Inventario de informacion',30,'1'),('I: Inventario de informacion',31,'1'),('I: Inventario de informacion',32,'1'),('I: Inventario de informacion',33,'1'),('I: Inventario de informacion',34,'1'),('I: Inventario de informacion',35,'1'),('I: Inventario de informacion',36,'1'),('I: Inventario de informacion',37,'1'),('I: Inventario de informacion',38,'1'),('I: Inventario de informacion',39,'1'),('I: Inventario de informacion',40,'1'),('I: Inventario de informacion',41,'1'),('I: Inventario de informacion',42,'1'),('I: Inventario de informacion',43,'1'),('I: Inventario de informacion',44,'1'),('I: Inventario de informacion',45,'1'),('I: Inventario de informacion',46,'1'),('I: Inventario de informacion',47,'1'),('I: Inventario de informacion',48,'1'),('I: Inventario de informacion',49,'1'),('I: Inventario de informacion',50,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('I: Inventario de informacion',51,'1'),('I: Inventario de informacion',52,'1'),('I: Inventario de informacion',53,'1'),('I: Inventario de informacion',54,'1'),('I: Inventario de informacion',55,'1'),('I: Inventario de informacion',56,'1'),('I: Inventario de informacion',57,'1'),('I: Inventario de informacion',58,'1'),('I: Inventario de informacion',59,'1'),('I: Inventario de informacion',60,'1'),('I: Inventario de informacion',61,'1'),('I: Inventario de informacion',62,'1'),('I: Inventario de informacion',63,'1'),('I: Inventario de informacion',64,'1'),('I: Inventario de informacion',65,'1'),('I: Inventario de informacion',66,'1'),('I: Inventario de informacion',67,'1'),('I: Inventario de informacion',68,'1'),('I: Inventario de informacion',69,'1'),('I: Inventario de informacion',70,'1'),('I: Inventario de informacion',71,'1'),('I: Inventario de informacion',72,'1'),('I: Inventario de informacion',73,'1'),('I: Inventario de informacion',74,'1'),('I: Inventario de informacion',75,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('I: Inventario de informacion',76,'1'),('I: Inventario de informacion',77,'1'),('I: Inventario de informacion',78,'1'),('I: Inventario de informacion',79,'1'),('I: Inventario de informacion',80,'1'),('I: Inventario de informacion',81,'1'),('I: Inventario de informacion',82,'1'),('I: Inventario de informacion',83,'1'),('I: Inventario de informacion',84,'1'),('I: Inventario de informacion',85,'1'),('I: Inventario de informacion',86,'1'),('I: Inventario de informacion',87,'1'),('I: Inventario de informacion',88,'1'),('I: Inventario de informacion',89,'1'),('I: Inventario de informacion',90,'1'),('I: Inventario de informacion',91,'1'),('I: Inventario de informacion',92,'1'),('I: Inventario de informacion',93,'1'),('I: Inventario de informacion',94,'1'),('I: Inventario de informacion',95,'1'),('I: Inventario de informacion',96,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('II: Geologia de superficie',1,'1'),('II: Geologia de superficie',2,'1'),('II: Geologia de superficie',3,'1'),('II: Geologia de superficie',4,'1'),('II: Geologia de superficie',5,'1'),('II: Geologia de superficie',6,'1'),('II: Geologia de superficie',7,'1'),('II: Geologia de superficie',8,'1'),('II: Geologia de superficie',9,'1'),('II: Geologia de superficie',10,'1'),('II: Geologia de superficie',11,'1'),('II: Geologia de superficie',12,'1'),('II: Geologia de superficie',13,'1'),('II: Geologia de superficie',14,'1'),('II: Geologia de superficie',15,'1'),('II: Geologia de superficie',16,'1'),('II: Geologia de superficie',17,'1'),('II: Geologia de superficie',18,'1'),('II: Geologia de superficie',19,'1'),('II: Geologia de superficie',20,'1'),('II: Geologia de superficie',21,'1'),('II: Geologia de superficie',22,'1'),('II: Geologia de superficie',23,'1'),('II: Geologia de superficie',24,'1'),('II: Geologia de superficie',25,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('II: Geologia de superficie',26,'1'),('II: Geologia de superficie',27,'1'),('II: Geologia de superficie',28,'1'),('II: Geologia de superficie',29,'1'),('II: Geologia de superficie',30,'1'),('II: Geologia de superficie',31,'1'),('II: Geologia de superficie',32,'1'),('II: Geologia de superficie',33,'1'),('II: Geologia de superficie',34,'1'),('II: Geologia de superficie',35,'1'),('II: Geologia de superficie',36,'1'),('II: Geologia de superficie',37,'1'),('II: Geologia de superficie',38,'1'),('II: Geologia de superficie',39,'1'),('II: Geologia de superficie',40,'1'),('II: Geologia de superficie',41,'1'),('II: Geologia de superficie',42,'1'),('II: Geologia de superficie',43,'1'),('II: Geologia de superficie',44,'1'),('II: Geologia de superficie',45,'1'),('II: Geologia de superficie',46,'1'),('II: Geologia de superficie',47,'1'),('II: Geologia de superficie',48,'1'),('II: Geologia de superficie',49,'1'),('II: Geologia de superficie',50,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('II: Geologia de superficie',51,'1'),('II: Geologia de superficie',52,'1'),('II: Geologia de superficie',53,'1'),('II: Geologia de superficie',54,'1'),('II: Geologia de superficie',55,'1'),('II: Geologia de superficie',56,'1'),('II: Geologia de superficie',57,'1'),('II: Geologia de superficie',58,'1'),('II: Geologia de superficie',59,'1'),('II: Geologia de superficie',60,'1'),('II: Geologia de superficie',61,'1'),('II: Geologia de superficie',62,'1'),('II: Geologia de superficie',63,'1'),('II: Geologia de superficie',64,'1'),('II: Geologia de superficie',65,'1'),('II: Geologia de superficie',66,'1'),('II: Geologia de superficie',67,'1'),('II: Geologia de superficie',68,'1'),('II: Geologia de superficie',69,'1'),('II: Geologia de superficie',70,'1'),('II: Geologia de superficie',71,'1'),('II: Geologia de superficie',72,'1'),('II: Geologia de superficie',73,'1'),('II: Geologia de superficie',74,'1'),('II: Geologia de superficie',75,'1');
+INSERT INTO ETAPA (eta_nombre,fk_eta_explotacion,fk_eta_estatus) VALUES ('II: Geologia de superficie',76,'1'),('II: Geologia de superficie',77,'1'),('II: Geologia de superficie',78,'1'),('II: Geologia de superficie',79,'1'),('II: Geologia de superficie',80,'1'),('II: Geologia de superficie',81,'1'),('II: Geologia de superficie',82,'1'),('II: Geologia de superficie',83,'1'),('II: Geologia de superficie',84,'1'),('II: Geologia de superficie',85,'1'),('II: Geologia de superficie',86,'1'),('II: Geologia de superficie',87,'1'),('II: Geologia de superficie',88,'1'),('II: Geologia de superficie',89,'1'),('II: Geologia de superficie',90,'1'),('II: Geologia de superficie',91,'1'),('II: Geologia de superficie',92,'1'),('II: Geologia de superficie',93,'1'),('II: Geologia de superficie',94,'1'),('II: Geologia de superficie',95,'1'),('II: Geologia de superficie',96,'1');
+
+-- DE ETAPA I
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.I: Analisis de informacion','2017-01-10','2017-04-22',1,'1'),('I.I: Analisis de informacion','2017-01-27','2017-04-27',2,'1'),('I.I: Analisis de informacion','2017-01-19','2017-05-07',3,'1'),('I.I: Analisis de informacion','2017-02-10','2017-05-13',4,'1'),('I.I: Analisis de informacion','2017-02-23','2017-05-07',5,'1'),('I.I: Analisis de informacion','2017-01-19','2017-05-05',6,'1'),('I.I: Analisis de informacion','2017-02-14','2017-05-11',7,'1'),('I.I: Analisis de informacion','2017-01-03','2017-05-08',8,'1'),('I.I: Analisis de informacion','2017-02-13','2017-05-07',9,'1'),('I.I: Analisis de informacion','2017-01-21','2017-05-01',10,'1'),('I.I: Analisis de informacion','2017-01-11','2017-05-07',11,'1'),('I.I: Analisis de informacion','2017-02-01','2017-05-12',12,'1'),('I.I: Analisis de informacion','2017-01-12','2017-05-06',13,'1'),('I.I: Analisis de informacion','2017-01-22','2017-04-29',14,'1'),('I.I: Analisis de informacion','2017-01-09','2017-05-07',15,'1'),('I.I: Analisis de informacion','2017-02-10','2017-04-24',16,'1'),('I.I: Analisis de informacion','2017-02-19','2017-05-04',17,'1'),('I.I: Analisis de informacion','2017-02-18','2017-05-05',18,'1'),('I.I: Analisis de informacion','2017-01-23','2017-05-01',19,'1'),('I.I: Analisis de informacion','2017-01-21','2017-05-06',20,'1'),('I.I: Analisis de informacion','2017-02-19','2017-04-30',21,'1'),('I.I: Analisis de informacion','2017-01-14','2017-05-14',22,'1'),('I.I: Analisis de informacion','2017-02-13','2017-05-06',23,'1'),('I.I: Analisis de informacion','2017-01-21','2017-05-05',24,'1'),('I.I: Analisis de informacion','2017-02-08','2017-05-15',25,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.I: Analisis de informacion','2017-01-06','2017-05-13',26,'1'),('I.I: Analisis de informacion','2017-02-17','2017-05-14',27,'1'),('I.I: Analisis de informacion','2017-01-24','2017-04-20',28,'1'),('I.I: Analisis de informacion','2017-01-18','2017-04-30',29,'1'),('I.I: Analisis de informacion','2017-02-11','2017-04-26',30,'1'),('I.I: Analisis de informacion','2017-02-17','2017-04-24',31,'1'),('I.I: Analisis de informacion','2017-02-20','2017-05-02',32,'1'),('I.I: Analisis de informacion','2017-02-04','2017-04-21',33,'1'),('I.I: Analisis de informacion','2017-02-25','2017-05-01',34,'1'),('I.I: Analisis de informacion','2017-02-10','2017-05-09',35,'1'),('I.I: Analisis de informacion','2017-01-10','2017-05-02',36,'1'),('I.I: Analisis de informacion','2017-02-23','2017-04-22',37,'1'),('I.I: Analisis de informacion','2017-02-04','2017-05-02',38,'1'),('I.I: Analisis de informacion','2017-02-07','2017-05-09',39,'1'),('I.I: Analisis de informacion','2017-02-22','2017-04-28',40,'1'),('I.I: Analisis de informacion','2017-01-15','2017-05-12',41,'1'),('I.I: Analisis de informacion','2017-01-08','2017-04-30',42,'1'),('I.I: Analisis de informacion','2017-01-08','2017-04-28',43,'1'),('I.I: Analisis de informacion','2017-01-02','2017-04-28',44,'1'),('I.I: Analisis de informacion','2017-01-12','2017-04-27',45,'1'),('I.I: Analisis de informacion','2017-01-23','2017-04-25',46,'1'),('I.I: Analisis de informacion','2017-02-22','2017-04-26',47,'1'),('I.I: Analisis de informacion','2017-01-05','2017-05-11',48,'1'),('I.I: Analisis de informacion','2017-01-29','2017-05-04',49,'1'),('I.I: Analisis de informacion','2017-01-07','2017-04-24',50,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.I: Analisis de informacion','2017-02-12','2017-05-04',51,'1'),('I.I: Analisis de informacion','2017-02-16','2017-05-08',52,'1'),('I.I: Analisis de informacion','2017-01-28','2017-05-11',53,'1'),('I.I: Analisis de informacion','2017-02-19','2017-05-06',54,'1'),('I.I: Analisis de informacion','2017-01-14','2017-05-09',55,'1'),('I.I: Analisis de informacion','2017-01-28','2017-05-01',56,'1'),('I.I: Analisis de informacion','2017-01-19','2017-05-10',57,'1'),('I.I: Analisis de informacion','2017-01-04','2017-04-29',58,'1'),('I.I: Analisis de informacion','2017-02-10','2017-05-14',59,'1'),('I.I: Analisis de informacion','2017-01-30','2017-05-10',60,'1'),('I.I: Analisis de informacion','2017-01-06','2017-04-25',61,'1'),('I.I: Analisis de informacion','2017-01-28','2017-05-15',62,'1'),('I.I: Analisis de informacion','2017-02-13','2017-04-26',63,'1'),('I.I: Analisis de informacion','2017-02-22','2017-04-27',64,'1'),('I.I: Analisis de informacion','2017-02-17','2017-04-24',65,'1'),('I.I: Analisis de informacion','2017-01-25','2017-04-27',66,'1'),('I.I: Analisis de informacion','2017-01-28','2017-05-08',67,'1'),('I.I: Analisis de informacion','2017-01-05','2017-05-15',68,'1'),('I.I: Analisis de informacion','2017-01-15','2017-05-14',69,'1'),('I.I: Analisis de informacion','2017-02-25','2017-04-26',70,'1'),('I.I: Analisis de informacion','2017-02-14','2017-04-21',71,'1'),('I.I: Analisis de informacion','2017-01-29','2017-05-05',72,'1'),('I.I: Analisis de informacion','2017-01-08','2017-04-29',73,'1'),('I.I: Analisis de informacion','2017-01-27','2017-04-22',74,'1'),('I.I: Analisis de informacion','2017-02-12','2017-05-12',75,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.I: Analisis de informacion','2017-01-07','2017-05-11',76,'1'),('I.I: Analisis de informacion','2017-01-19','2017-05-15',77,'1'),('I.I: Analisis de informacion','2017-01-14','2017-05-07',78,'1'),('I.I: Analisis de informacion','2017-02-08','2017-05-13',79,'1'),('I.I: Analisis de informacion','2017-02-21','2017-05-10',80,'1'),('I.I: Analisis de informacion','2017-01-27','2017-04-26',81,'1'),('I.I: Analisis de informacion','2017-02-11','2017-05-05',82,'1'),('I.I: Analisis de informacion','2017-02-15','2017-05-01',83,'1'),('I.I: Analisis de informacion','2017-01-24','2017-04-21',84,'1'),('I.I: Analisis de informacion','2017-01-01','2017-04-22',85,'1'),('I.I: Analisis de informacion','2017-02-15','2017-05-14',86,'1'),('I.I: Analisis de informacion','2017-02-24','2017-05-10',87,'1'),('I.I: Analisis de informacion','2017-01-16','2017-04-26',88,'1'),('I.I: Analisis de informacion','2017-02-14','2017-05-14',89,'1'),('I.I: Analisis de informacion','2017-02-24','2017-05-06',90,'1'),('I.I: Analisis de informacion','2017-01-31','2017-05-10',91,'1'),('I.I: Analisis de informacion','2017-01-24','2017-04-20',92,'1'),('I.I: Analisis de informacion','2017-01-16','2017-04-25',93,'1'),('I.I: Analisis de informacion','2017-01-07','2017-05-05',94,'1'),('I.I: Analisis de informacion','2017-02-12','2017-05-12',95,'1'),('I.I: Analisis de informacion','2017-01-26','2017-04-26',96,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.II: Reconocimiento preliminar','2017-05-25','2017-07-29',1,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-25',2,'1'),('I.II: Reconocimiento preliminar','2017-06-06','2017-08-01',3,'1'),('I.II: Reconocimiento preliminar','2017-05-20','2017-07-30',4,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-26',5,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-30',6,'1'),('I.II: Reconocimiento preliminar','2017-05-24','2017-07-30',7,'1'),('I.II: Reconocimiento preliminar','2017-06-06','2017-07-25',8,'1'),('I.II: Reconocimiento preliminar','2017-06-06','2017-07-31',9,'1'),('I.II: Reconocimiento preliminar','2017-05-26','2017-07-29',10,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-24',11,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-31',12,'1'),('I.II: Reconocimiento preliminar','2017-05-18','2017-08-02',13,'1'),('I.II: Reconocimiento preliminar','2017-05-20','2017-07-24',14,'1'),('I.II: Reconocimiento preliminar','2017-05-30','2017-07-27',15,'1'),('I.II: Reconocimiento preliminar','2017-05-22','2017-07-27',16,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-08-03',17,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-08-01',18,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-26',19,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-26',20,'1'),('I.II: Reconocimiento preliminar','2017-05-22','2017-08-01',21,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-08-03',22,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-24',23,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-31',24,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-28',25,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.II: Reconocimiento preliminar','2017-06-03','2017-07-23',26,'1'),('I.II: Reconocimiento preliminar','2017-05-20','2017-07-30',27,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-24',28,'1'),('I.II: Reconocimiento preliminar','2017-05-24','2017-07-28',29,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-07-23',30,'1'),('I.II: Reconocimiento preliminar','2017-05-20','2017-07-23',31,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-27',32,'1'),('I.II: Reconocimiento preliminar','2017-06-01','2017-07-25',33,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-07-23',34,'1'),('I.II: Reconocimiento preliminar','2017-06-05','2017-07-23',35,'1'),('I.II: Reconocimiento preliminar','2017-05-21','2017-08-01',36,'1'),('I.II: Reconocimiento preliminar','2017-05-31','2017-07-31',37,'1'),('I.II: Reconocimiento preliminar','2017-05-27','2017-07-30',38,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-25',39,'1'),('I.II: Reconocimiento preliminar','2017-06-06','2017-08-02',40,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-08-02',41,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-23',42,'1'),('I.II: Reconocimiento preliminar','2017-05-25','2017-08-01',43,'1'),('I.II: Reconocimiento preliminar','2017-05-26','2017-07-26',44,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-27',45,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-28',46,'1'),('I.II: Reconocimiento preliminar','2017-06-05','2017-07-31',47,'1'),('I.II: Reconocimiento preliminar','2017-05-16','2017-07-26',48,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-26',49,'1'),('I.II: Reconocimiento preliminar','2017-05-31','2017-07-31',50,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.II: Reconocimiento preliminar','2017-05-30','2017-07-29',51,'1'),('I.II: Reconocimiento preliminar','2017-05-16','2017-07-31',52,'1'),('I.II: Reconocimiento preliminar','2017-06-02','2017-07-30',53,'1'),('I.II: Reconocimiento preliminar','2017-05-24','2017-07-24',54,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-25',55,'1'),('I.II: Reconocimiento preliminar','2017-05-21','2017-07-24',56,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-24',57,'1'),('I.II: Reconocimiento preliminar','2017-06-01','2017-07-25',58,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-07-26',59,'1'),('I.II: Reconocimiento preliminar','2017-05-26','2017-07-23',60,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-23',61,'1'),('I.II: Reconocimiento preliminar','2017-05-18','2017-08-01',62,'1'),('I.II: Reconocimiento preliminar','2017-05-26','2017-07-26',63,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-07-30',64,'1'),('I.II: Reconocimiento preliminar','2017-05-31','2017-07-31',65,'1'),('I.II: Reconocimiento preliminar','2017-05-16','2017-07-25',66,'1'),('I.II: Reconocimiento preliminar','2017-05-18','2017-07-29',67,'1'),('I.II: Reconocimiento preliminar','2017-05-27','2017-07-26',68,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-23',69,'1'),('I.II: Reconocimiento preliminar','2017-05-31','2017-08-03',70,'1'),('I.II: Reconocimiento preliminar','2017-05-25','2017-07-27',71,'1'),('I.II: Reconocimiento preliminar','2017-06-01','2017-07-31',72,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-08-02',73,'1'),('I.II: Reconocimiento preliminar','2017-06-05','2017-08-03',74,'1'),('I.II: Reconocimiento preliminar','2017-06-05','2017-07-23',75,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('I.II: Reconocimiento preliminar','2017-06-05','2017-07-31',76,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-08-02',77,'1'),('I.II: Reconocimiento preliminar','2017-05-23','2017-08-02',78,'1'),('I.II: Reconocimiento preliminar','2017-05-23','2017-08-03',79,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-24',80,'1'),('I.II: Reconocimiento preliminar','2017-06-01','2017-08-02',81,'1'),('I.II: Reconocimiento preliminar','2017-05-27','2017-07-30',82,'1'),('I.II: Reconocimiento preliminar','2017-05-24','2017-07-31',83,'1'),('I.II: Reconocimiento preliminar','2017-05-21','2017-07-28',84,'1'),('I.II: Reconocimiento preliminar','2017-06-04','2017-08-02',85,'1'),('I.II: Reconocimiento preliminar','2017-05-30','2017-07-24',86,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-08-02',87,'1'),('I.II: Reconocimiento preliminar','2017-05-28','2017-07-28',88,'1'),('I.II: Reconocimiento preliminar','2017-06-03','2017-07-24',89,'1'),('I.II: Reconocimiento preliminar','2017-05-29','2017-08-02',90,'1'),('I.II: Reconocimiento preliminar','2017-05-21','2017-07-30',91,'1'),('I.II: Reconocimiento preliminar','2017-05-25','2017-07-24',92,'1'),('I.II: Reconocimiento preliminar','2017-05-24','2017-07-23',93,'1'),('I.II: Reconocimiento preliminar','2017-05-17','2017-07-26',94,'1'),('I.II: Reconocimiento preliminar','2017-05-20','2017-07-29',95,'1'),('I.II: Reconocimiento preliminar','2017-05-19','2017-07-28',96,'1');
+
+-- DE ETAPA II
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.I: Restitucion topografica','2017-08-02','2017-10-24',97,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-18',98,'1'),('II.I: Restitucion topografica','2017-07-13','2017-10-23',99,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-22',100,'1'),('II.I: Restitucion topografica','2017-07-16','2017-10-25',101,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-21',102,'1'),('II.I: Restitucion topografica','2017-08-03','2017-10-21',103,'1'),('II.I: Restitucion topografica','2017-07-24','2017-10-20',104,'1'),('II.I: Restitucion topografica','2017-07-23','2017-10-17',105,'1'),('II.I: Restitucion topografica','2017-07-28','2017-10-22',106,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-11',107,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-21',108,'1'),('II.I: Restitucion topografica','2017-07-14','2017-10-13',109,'1'),('II.I: Restitucion topografica','2017-07-22','2017-10-13',110,'1'),('II.I: Restitucion topografica','2017-07-12','2017-10-16',111,'1'),('II.I: Restitucion topografica','2017-08-07','2017-10-19',112,'1'),('II.I: Restitucion topografica','2017-07-28','2017-10-19',113,'1'),('II.I: Restitucion topografica','2017-07-15','2017-10-22',114,'1'),('II.I: Restitucion topografica','2017-07-24','2017-10-11',115,'1'),('II.I: Restitucion topografica','2017-08-02','2017-10-15',116,'1'),('II.I: Restitucion topografica','2017-08-05','2017-10-14',117,'1'),('II.I: Restitucion topografica','2017-08-01','2017-10-15',118,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-12',119,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-25',120,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.I: Restitucion topografica','2017-08-10','2017-10-13',121,'1'),('II.I: Restitucion topografica','2017-07-31','2017-10-13',122,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-16',123,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-16',124,'1'),('II.I: Restitucion topografica','2017-08-04','2017-10-14',125,'1'),('II.I: Restitucion topografica','2017-08-07','2017-10-25',126,'1'),('II.I: Restitucion topografica','2017-07-16','2017-10-12',127,'1'),('II.I: Restitucion topografica','2017-07-11','2017-10-10',128,'1'),('II.I: Restitucion topografica','2017-07-26','2017-10-13',129,'1'),('II.I: Restitucion topografica','2017-08-09','2017-10-23',130,'1'),('II.I: Restitucion topografica','2017-07-13','2017-10-18',131,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-17',132,'1'),('II.I: Restitucion topografica','2017-08-08','2017-10-24',133,'1'),('II.I: Restitucion topografica','2017-08-08','2017-10-23',134,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-15',135,'1'),('II.I: Restitucion topografica','2017-08-09','2017-10-23',136,'1'),('II.I: Restitucion topografica','2017-07-30','2017-10-21',137,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-16',138,'1'),('II.I: Restitucion topografica','2017-07-18','2017-10-11',139,'1'),('II.I: Restitucion topografica','2017-07-22','2017-10-10',140,'1'),('II.I: Restitucion topografica','2017-08-03','2017-10-16',141,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-22',142,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-14',143,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-17',144,'1'),('II.I: Restitucion topografica','2017-07-12','2017-10-20',145,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.I: Restitucion topografica','2017-07-14','2017-10-10',146,'1'),('II.I: Restitucion topografica','2017-08-06','2017-10-10',147,'1'),('II.I: Restitucion topografica','2017-08-08','2017-10-22',148,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-13',149,'1'),('II.I: Restitucion topografica','2017-07-28','2017-10-15',150,'1'),('II.I: Restitucion topografica','2017-07-23','2017-10-20',151,'1'),('II.I: Restitucion topografica','2017-07-17','2017-10-25',152,'1'),('II.I: Restitucion topografica','2017-07-17','2017-10-23',153,'1'),('II.I: Restitucion topografica','2017-07-31','2017-10-22',154,'1'),('II.I: Restitucion topografica','2017-07-18','2017-10-25',155,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-22',156,'1'),('II.I: Restitucion topografica','2017-07-21','2017-10-24',157,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-20',158,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-10',159,'1'),('II.I: Restitucion topografica','2017-07-24','2017-10-22',160,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-22',161,'1'),('II.I: Restitucion topografica','2017-07-11','2017-10-18',162,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-19',163,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-13',164,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-12',165,'1'),('II.I: Restitucion topografica','2017-07-14','2017-10-21',166,'1'),('II.I: Restitucion topografica','2017-07-14','2017-10-10',167,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-11',168,'1'),('II.I: Restitucion topografica','2017-07-17','2017-10-23',169,'1'),('II.I: Restitucion topografica','2017-07-14','2017-10-25',170,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.I: Restitucion topografica','2017-07-30','2017-10-21',171,'1'),('II.I: Restitucion topografica','2017-07-31','2017-10-13',172,'1'),('II.I: Restitucion topografica','2017-08-01','2017-10-13',173,'1'),('II.I: Restitucion topografica','2017-07-24','2017-10-20',174,'1'),('II.I: Restitucion topografica','2017-07-14','2017-10-18',175,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-10',176,'1'),('II.I: Restitucion topografica','2017-08-03','2017-10-15',177,'1'),('II.I: Restitucion topografica','2017-07-12','2017-10-20',178,'1'),('II.I: Restitucion topografica','2017-07-18','2017-10-10',179,'1'),('II.I: Restitucion topografica','2017-07-25','2017-10-25',180,'1'),('II.I: Restitucion topografica','2017-07-10','2017-10-23',181,'1'),('II.I: Restitucion topografica','2017-08-02','2017-10-22',182,'1'),('II.I: Restitucion topografica','2017-07-31','2017-10-23',183,'1'),('II.I: Restitucion topografica','2017-07-20','2017-10-13',184,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-17',185,'1'),('II.I: Restitucion topografica','2017-07-31','2017-10-22',186,'1'),('II.I: Restitucion topografica','2017-07-23','2017-10-11',187,'1'),('II.I: Restitucion topografica','2017-07-29','2017-10-20',188,'1'),('II.I: Restitucion topografica','2017-07-19','2017-10-12',189,'1'),('II.I: Restitucion topografica','2017-08-09','2017-10-25',190,'1'),('II.I: Restitucion topografica','2017-08-02','2017-10-18',191,'1'),('II.I: Restitucion topografica','2017-08-07','2017-10-24',192,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.II: Fotointerpretacion','2017-11-02','2017-12-09',97,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-13',98,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-14',99,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-03',100,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-03',101,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-13',102,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-04',103,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-14',104,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-09',105,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-04',106,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-12',107,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-06',108,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-07',109,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-09',110,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-14',111,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-11',112,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-07',113,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-04',114,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-14',115,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-14',116,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-05',117,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-04',118,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-06',119,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-06',120,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.II: Fotointerpretacion','2017-10-31','2017-12-12',121,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-13',122,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-07',123,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-12',124,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-04',125,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-12',126,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-10',127,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-10',128,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-11',129,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-12',130,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-07',131,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-13',132,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-07',133,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-04',134,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-03',135,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-14',136,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-04',137,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-03',138,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-14',139,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-06',140,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-03',141,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-11',142,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-12',143,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-05',144,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-03',145,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.II: Fotointerpretacion','2017-10-31','2017-12-11',146,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-13',147,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-12',148,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-11',149,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-08',150,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-04',151,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-08',152,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-13',153,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-10',154,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-12',155,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-12',156,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-05',157,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-03',158,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-12',159,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-10',160,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-14',161,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-05',162,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-07',163,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-03',164,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-10',165,'1'),('II.II: Fotointerpretacion','2017-11-03','2017-12-09',166,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-12',167,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-08',168,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-09',169,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-11',170,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.II: Fotointerpretacion','2017-10-27','2017-12-08',171,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-03',172,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-08',173,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-12',174,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-10',175,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-07',176,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-08',177,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-11',178,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-11',179,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-03',180,'1'),('II.II: Fotointerpretacion','2017-10-30','2017-12-08',181,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-07',182,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-06',183,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-03',184,'1'),('II.II: Fotointerpretacion','2017-10-31','2017-12-14',185,'1'),('II.II: Fotointerpretacion','2017-11-02','2017-12-10',186,'1'),('II.II: Fotointerpretacion','2017-10-28','2017-12-10',187,'1'),('II.II: Fotointerpretacion','2017-11-01','2017-12-05',188,'1'),('II.II: Fotointerpretacion','2017-11-04','2017-12-08',189,'1'),('II.II: Fotointerpretacion','2017-10-29','2017-12-10',190,'1'),('II.II: Fotointerpretacion','2017-10-27','2017-12-05',191,'1'),('II.II: Fotointerpretacion','2017-10-26','2017-12-05',192,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.III: Cartografia geologica','2017-11-14','2018-03-20',97,'1'),('II.III: Cartografia geologica','2017-11-21','2018-03-28',98,'1'),('II.III: Cartografia geologica','2017-11-13','2018-03-28',99,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-22',100,'1'),('II.III: Cartografia geologica','2017-11-11','2018-03-23',101,'1'),('II.III: Cartografia geologica','2017-11-26','2018-03-30',102,'1'),('II.III: Cartografia geologica','2017-11-27','2018-03-27',103,'1'),('II.III: Cartografia geologica','2017-11-06','2018-03-24',104,'1'),('II.III: Cartografia geologica','2017-11-17','2018-03-30',105,'1'),('II.III: Cartografia geologica','2017-11-05','2018-03-22',106,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-19',107,'1'),('II.III: Cartografia geologica','2017-11-15','2018-03-20',108,'1'),('II.III: Cartografia geologica','2017-11-22','2018-03-30',109,'1'),('II.III: Cartografia geologica','2017-11-03','2018-03-24',110,'1'),('II.III: Cartografia geologica','2017-11-10','2018-03-21',111,'1'),('II.III: Cartografia geologica','2017-11-24','2018-03-30',112,'1'),('II.III: Cartografia geologica','2017-11-21','2018-03-17',113,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-24',114,'1'),('II.III: Cartografia geologica','2017-11-18','2018-03-16',115,'1'),('II.III: Cartografia geologica','2017-11-30','2018-03-26',116,'1'),('II.III: Cartografia geologica','2017-11-12','2018-03-18',117,'1'),('II.III: Cartografia geologica','2017-11-23','2018-03-17',118,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-18',119,'1'),('II.III: Cartografia geologica','2017-11-23','2018-03-25',120,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.III: Cartografia geologica','2017-11-11','2018-03-22',121,'1'),('II.III: Cartografia geologica','2017-11-27','2018-03-15',122,'1'),('II.III: Cartografia geologica','2017-11-09','2018-03-21',123,'1'),('II.III: Cartografia geologica','2017-11-11','2018-03-30',124,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-17',125,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-29',126,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-26',127,'1'),('II.III: Cartografia geologica','2017-11-03','2018-03-19',128,'1'),('II.III: Cartografia geologica','2017-11-20','2018-03-30',129,'1'),('II.III: Cartografia geologica','2017-11-12','2018-03-27',130,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-16',131,'1'),('II.III: Cartografia geologica','2017-11-17','2018-03-28',132,'1'),('II.III: Cartografia geologica','2017-11-05','2018-03-24',133,'1'),('II.III: Cartografia geologica','2017-11-24','2018-03-16',134,'1'),('II.III: Cartografia geologica','2017-11-27','2018-03-22',135,'1'),('II.III: Cartografia geologica','2017-11-06','2018-03-21',136,'1'),('II.III: Cartografia geologica','2017-11-29','2018-03-18',137,'1'),('II.III: Cartografia geologica','2017-11-02','2018-03-21',138,'1'),('II.III: Cartografia geologica','2017-11-29','2018-03-30',139,'1'),('II.III: Cartografia geologica','2017-11-21','2018-03-29',140,'1'),('II.III: Cartografia geologica','2017-11-15','2018-03-29',141,'1'),('II.III: Cartografia geologica','2017-11-14','2018-03-26',142,'1'),('II.III: Cartografia geologica','2017-11-21','2018-03-23',143,'1'),('II.III: Cartografia geologica','2017-11-14','2018-03-21',144,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-27',145,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.III: Cartografia geologica','2017-11-04','2018-03-18',146,'1'),('II.III: Cartografia geologica','2017-11-24','2018-03-19',147,'1'),('II.III: Cartografia geologica','2017-11-29','2018-03-20',148,'1'),('II.III: Cartografia geologica','2017-11-12','2018-03-17',149,'1'),('II.III: Cartografia geologica','2017-11-03','2018-03-26',150,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-28',151,'1'),('II.III: Cartografia geologica','2017-11-15','2018-03-18',152,'1'),('II.III: Cartografia geologica','2017-11-27','2018-03-15',153,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-18',154,'1'),('II.III: Cartografia geologica','2017-11-03','2018-03-27',155,'1'),('II.III: Cartografia geologica','2017-11-02','2018-03-24',156,'1'),('II.III: Cartografia geologica','2017-11-16','2018-03-18',157,'1'),('II.III: Cartografia geologica','2017-11-13','2018-03-20',158,'1'),('II.III: Cartografia geologica','2017-11-06','2018-03-22',159,'1'),('II.III: Cartografia geologica','2017-11-12','2018-03-16',160,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-17',161,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-27',162,'1'),('II.III: Cartografia geologica','2017-11-08','2018-03-22',163,'1'),('II.III: Cartografia geologica','2017-11-29','2018-03-19',164,'1'),('II.III: Cartografia geologica','2017-11-26','2018-03-17',165,'1'),('II.III: Cartografia geologica','2017-11-26','2018-03-15',166,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-30',167,'1'),('II.III: Cartografia geologica','2017-11-13','2018-03-25',168,'1'),('II.III: Cartografia geologica','2017-11-06','2018-03-16',169,'1'),('II.III: Cartografia geologica','2017-11-25','2018-03-26',170,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.III: Cartografia geologica','2017-11-11','2018-03-23',171,'1'),('II.III: Cartografia geologica','2017-11-04','2018-03-24',172,'1'),('II.III: Cartografia geologica','2017-11-23','2018-03-27',173,'1'),('II.III: Cartografia geologica','2017-11-21','2018-03-26',174,'1'),('II.III: Cartografia geologica','2017-11-11','2018-03-25',175,'1'),('II.III: Cartografia geologica','2017-11-26','2018-03-16',176,'1'),('II.III: Cartografia geologica','2017-11-25','2018-03-27',177,'1'),('II.III: Cartografia geologica','2017-11-26','2018-03-21',178,'1'),('II.III: Cartografia geologica','2017-11-28','2018-03-15',179,'1'),('II.III: Cartografia geologica','2017-11-24','2018-03-16',180,'1'),('II.III: Cartografia geologica','2017-11-17','2018-03-29',181,'1'),('II.III: Cartografia geologica','2017-11-19','2018-03-25',182,'1'),('II.III: Cartografia geologica','2017-11-15','2018-03-25',183,'1'),('II.III: Cartografia geologica','2017-11-20','2018-03-16',184,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-27',185,'1'),('II.III: Cartografia geologica','2017-11-12','2018-03-21',186,'1'),('II.III: Cartografia geologica','2017-11-14','2018-03-22',187,'1'),('II.III: Cartografia geologica','2017-11-07','2018-03-24',188,'1'),('II.III: Cartografia geologica','2017-11-28','2018-03-20',189,'1'),('II.III: Cartografia geologica','2017-11-23','2018-03-26',190,'1'),('II.III: Cartografia geologica','2017-11-27','2018-03-23',191,'1'),('II.III: Cartografia geologica','2017-11-09','2018-03-15',192,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-24',97,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-01','2018-02-24',98,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-08',99,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-14',100,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-21',101,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-15','2018-02-21',102,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-16','2018-02-24',103,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-02','2018-02-07',104,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-27','2018-02-22',105,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-06','2018-02-16',106,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-02','2018-02-22',107,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-27',108,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-27','2018-02-25',109,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-09','2018-02-18',110,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-09','2018-02-26',111,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-21','2018-02-11',112,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-02','2018-02-13',113,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-11',114,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-26','2018-02-28',115,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-16',116,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-08',117,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-07',118,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-23','2018-02-16',119,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-22','2018-02-10',120,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.IV: Ejec. trincheras y tuneles','2017-11-17','2018-02-24',121,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-16','2018-02-09',122,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-14',123,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-09','2018-02-20',124,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-23',125,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-01','2018-02-14',126,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-17','2018-02-14',127,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-07',128,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-12',129,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-27',130,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-15',131,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-21',132,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-01','2018-02-17',133,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-25','2018-02-17',134,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-15','2018-02-25',135,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-08','2018-02-14',136,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-20',137,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-25','2018-02-28',138,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-09',139,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-20','2018-02-19',140,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-09','2018-02-16',141,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-20','2018-02-26',142,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-22',143,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-26',144,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-19','2018-02-18',145,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-28',146,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-25',147,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-05','2018-02-19',148,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-17','2018-02-21',149,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-01','2018-02-07',150,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-09',151,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-23','2018-02-14',152,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-25','2018-02-23',153,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-15',154,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-23','2018-02-26',155,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-27','2018-02-25',156,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-16','2018-02-09',157,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-21','2018-02-19',158,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-07',159,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-19',160,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-13',161,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-27',162,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-18','2018-02-13',163,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-01','2018-02-22',164,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-27',165,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-06','2018-02-14',166,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-12',167,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-17',168,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-28','2018-02-07',169,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-16','2018-02-12',170,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.IV: Ejec. trincheras y tuneles','2017-12-07','2018-02-27',171,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-26','2018-02-21',172,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-27','2018-02-07',173,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-02','2018-02-24',174,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-13',175,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-13',176,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-25',177,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-26','2018-02-13',178,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-27',179,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-24','2018-02-15',180,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-15','2018-02-14',181,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-22','2018-02-10',182,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-17','2018-02-28',183,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-20',184,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-28','2018-02-25',185,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-04','2018-02-27',186,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-27','2018-02-09',187,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-22','2018-02-12',188,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-06','2018-02-23',189,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-22','2018-02-24',190,'1'),('II.IV: Ejec. trincheras y tuneles','2017-11-30','2018-02-25',191,'1'),('II.IV: Ejec. trincheras y tuneles','2017-12-03','2018-02-22',192,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.V: Perforacion exploratoria','2018-01-02','2018-02-15',97,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-07',98,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-28',99,'1'),('II.V: Perforacion exploratoria','2017-12-31','2018-02-27',100,'1'),('II.V: Perforacion exploratoria','2018-01-07','2018-02-22',101,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-11',102,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-28',103,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-23',104,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-21',105,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-27',106,'1'),('II.V: Perforacion exploratoria','2018-01-09','2018-02-15',107,'1'),('II.V: Perforacion exploratoria','2018-01-09','2018-02-09',108,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-22',109,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-08',110,'1'),('II.V: Perforacion exploratoria','2018-01-04','2018-02-07',111,'1'),('II.V: Perforacion exploratoria','2018-01-07','2018-02-28',112,'1'),('II.V: Perforacion exploratoria','2017-12-24','2018-02-23',113,'1'),('II.V: Perforacion exploratoria','2017-12-29','2018-02-28',114,'1'),('II.V: Perforacion exploratoria','2017-12-30','2018-02-22',115,'1'),('II.V: Perforacion exploratoria','2017-12-20','2018-02-25',116,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-20',117,'1'),('II.V: Perforacion exploratoria','2017-12-31','2018-02-16',118,'1'),('II.V: Perforacion exploratoria','2018-01-09','2018-02-19',119,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-21',120,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.V: Perforacion exploratoria','2018-01-09','2018-02-15',121,'1'),('II.V: Perforacion exploratoria','2017-12-23','2018-02-08',122,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-24',123,'1'),('II.V: Perforacion exploratoria','2017-12-21','2018-02-08',124,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-23',125,'1'),('II.V: Perforacion exploratoria','2017-12-29','2018-02-07',126,'1'),('II.V: Perforacion exploratoria','2017-12-24','2018-02-21',127,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-24',128,'1'),('II.V: Perforacion exploratoria','2017-12-29','2018-02-18',129,'1'),('II.V: Perforacion exploratoria','2018-01-10','2018-02-07',130,'1'),('II.V: Perforacion exploratoria','2018-01-10','2018-02-21',131,'1'),('II.V: Perforacion exploratoria','2018-01-07','2018-02-15',132,'1'),('II.V: Perforacion exploratoria','2018-01-01','2018-02-19',133,'1'),('II.V: Perforacion exploratoria','2018-01-06','2018-02-23',134,'1'),('II.V: Perforacion exploratoria','2018-01-04','2018-02-17',135,'1'),('II.V: Perforacion exploratoria','2018-01-04','2018-02-11',136,'1'),('II.V: Perforacion exploratoria','2018-01-05','2018-02-23',137,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-08',138,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-17',139,'1'),('II.V: Perforacion exploratoria','2018-01-01','2018-02-27',140,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-08',141,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-07',142,'1'),('II.V: Perforacion exploratoria','2017-12-30','2018-02-27',143,'1'),('II.V: Perforacion exploratoria','2017-12-23','2018-02-09',144,'1'),('II.V: Perforacion exploratoria','2017-12-24','2018-02-17',145,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.V: Perforacion exploratoria','2017-12-31','2018-02-27',146,'1'),('II.V: Perforacion exploratoria','2018-01-07','2018-02-10',147,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-20',148,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-10',149,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-28',150,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-13',151,'1'),('II.V: Perforacion exploratoria','2017-12-20','2018-02-24',152,'1'),('II.V: Perforacion exploratoria','2018-01-06','2018-02-28',153,'1'),('II.V: Perforacion exploratoria','2017-12-21','2018-02-19',154,'1'),('II.V: Perforacion exploratoria','2018-01-05','2018-02-24',155,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-11',156,'1'),('II.V: Perforacion exploratoria','2017-12-31','2018-02-17',157,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-19',158,'1'),('II.V: Perforacion exploratoria','2017-12-24','2018-02-13',159,'1'),('II.V: Perforacion exploratoria','2018-01-05','2018-02-12',160,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-21',161,'1'),('II.V: Perforacion exploratoria','2018-01-01','2018-02-08',162,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-26',163,'1'),('II.V: Perforacion exploratoria','2018-01-05','2018-02-15',164,'1'),('II.V: Perforacion exploratoria','2018-01-01','2018-02-11',165,'1'),('II.V: Perforacion exploratoria','2017-12-21','2018-02-08',166,'1'),('II.V: Perforacion exploratoria','2017-12-27','2018-02-26',167,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-09',168,'1'),('II.V: Perforacion exploratoria','2017-12-24','2018-02-11',169,'1'),('II.V: Perforacion exploratoria','2017-12-23','2018-02-11',170,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.V: Perforacion exploratoria','2018-01-03','2018-02-14',171,'1'),('II.V: Perforacion exploratoria','2017-12-31','2018-02-08',172,'1'),('II.V: Perforacion exploratoria','2017-12-27','2018-02-27',173,'1'),('II.V: Perforacion exploratoria','2017-12-26','2018-02-24',174,'1'),('II.V: Perforacion exploratoria','2018-01-02','2018-02-09',175,'1'),('II.V: Perforacion exploratoria','2018-01-02','2018-02-13',176,'1'),('II.V: Perforacion exploratoria','2018-01-08','2018-02-20',177,'1'),('II.V: Perforacion exploratoria','2017-12-21','2018-02-24',178,'1'),('II.V: Perforacion exploratoria','2018-01-10','2018-02-13',179,'1'),('II.V: Perforacion exploratoria','2017-12-27','2018-02-21',180,'1'),('II.V: Perforacion exploratoria','2017-12-22','2018-02-11',181,'1'),('II.V: Perforacion exploratoria','2017-12-23','2018-02-27',182,'1'),('II.V: Perforacion exploratoria','2017-12-27','2018-02-23',183,'1'),('II.V: Perforacion exploratoria','2018-01-03','2018-02-17',184,'1'),('II.V: Perforacion exploratoria','2018-01-06','2018-02-20',185,'1'),('II.V: Perforacion exploratoria','2018-01-10','2018-02-20',186,'1'),('II.V: Perforacion exploratoria','2018-01-10','2018-02-25',187,'1'),('II.V: Perforacion exploratoria','2017-12-28','2018-02-24',188,'1'),('II.V: Perforacion exploratoria','2018-01-02','2018-02-13',189,'1'),('II.V: Perforacion exploratoria','2018-01-05','2018-02-18',190,'1'),('II.V: Perforacion exploratoria','2018-01-06','2018-02-16',191,'1'),('II.V: Perforacion exploratoria','2018-01-09','2018-02-17',192,'1');
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VI: Analisis de muestras','2017-12-21','2018-04-17',97,'1'),('II.VI: Analisis de muestras','2018-01-04','2018-04-03',98,'1'),('II.VI: Analisis de muestras','2018-01-06','2018-04-16',99,'1'),('II.VI: Analisis de muestras','2017-12-21','2018-04-09',100,'1'),('II.VI: Analisis de muestras','2017-12-20','2018-04-14',101,'1'),('II.VI: Analisis de muestras','2017-12-20','2018-04-10',102,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-03',103,'1'),('II.VI: Analisis de muestras','2017-12-25','2018-04-15',104,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-28',105,'1'),('II.VI: Analisis de muestras','2017-12-31','2018-05-03',106,'1'),('II.VI: Analisis de muestras','2017-12-23','2018-04-30',107,'1'),('II.VI: Analisis de muestras','2017-12-28','2018-04-28',108,'1'),('II.VI: Analisis de muestras','2017-12-31','2018-04-20',109,'1'),('II.VI: Analisis de muestras','2018-01-03','2018-04-22',110,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-21',111,'1'),('II.VI: Analisis de muestras','2018-01-01','2018-04-07',112,'1'),('II.VI: Analisis de muestras','2017-12-28','2018-04-16',113,'1'),('II.VI: Analisis de muestras','2018-01-07','2018-04-03',114,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-04-07',115,'1'),('II.VI: Analisis de muestras','2017-12-29','2018-04-26',116,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-19',117,'1'),('II.VI: Analisis de muestras','2018-01-06','2018-04-22',118,'1'),('II.VI: Analisis de muestras','2017-12-25','2018-04-20',119,'1'),('II.VI: Analisis de muestras','2018-01-03','2018-04-19',120,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-24',121,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VI: Analisis de muestras','2017-12-24','2018-05-02',122,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-25',123,'1'),('II.VI: Analisis de muestras','2017-12-26','2018-04-11',124,'1'),('II.VI: Analisis de muestras','2018-01-10','2018-04-10',125,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-06',126,'1'),('II.VI: Analisis de muestras','2018-01-01','2018-04-18',127,'1'),('II.VI: Analisis de muestras','2017-12-21','2018-04-24',128,'1'),('II.VI: Analisis de muestras','2017-12-24','2018-04-28',129,'1'),('II.VI: Analisis de muestras','2017-12-22','2018-04-18',130,'1'),('II.VI: Analisis de muestras','2017-12-22','2018-04-06',131,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-17',132,'1'),('II.VI: Analisis de muestras','2018-01-04','2018-04-30',133,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-30',134,'1'),('II.VI: Analisis de muestras','2017-12-24','2018-04-15',135,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-01',136,'1'),('II.VI: Analisis de muestras','2017-12-31','2018-04-16',137,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-11',138,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-04-08',139,'1'),('II.VI: Analisis de muestras','2017-12-30','2018-05-02',140,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-19',141,'1'),('II.VI: Analisis de muestras','2017-12-28','2018-04-08',142,'1'),('II.VI: Analisis de muestras','2017-12-27','2018-04-25',143,'1'),('II.VI: Analisis de muestras','2017-12-26','2018-05-02',144,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-17',145,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-05-03',146,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VI: Analisis de muestras','2018-01-04','2018-04-07',147,'1'),('II.VI: Analisis de muestras','2017-12-24','2018-04-05',148,'1'),('II.VI: Analisis de muestras','2017-12-21','2018-04-17',149,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-15',150,'1'),('II.VI: Analisis de muestras','2017-12-29','2018-05-03',151,'1'),('II.VI: Analisis de muestras','2017-12-29','2018-04-12',152,'1'),('II.VI: Analisis de muestras','2018-01-06','2018-04-06',153,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-22',154,'1'),('II.VI: Analisis de muestras','2018-01-04','2018-04-22',155,'1'),('II.VI: Analisis de muestras','2017-12-20','2018-04-01',156,'1'),('II.VI: Analisis de muestras','2018-01-10','2018-05-03',157,'1'),('II.VI: Analisis de muestras','2017-12-22','2018-04-29',158,'1'),('II.VI: Analisis de muestras','2017-12-21','2018-04-20',159,'1'),('II.VI: Analisis de muestras','2017-12-24','2018-04-26',160,'1'),('II.VI: Analisis de muestras','2017-12-21','2018-04-19',161,'1'),('II.VI: Analisis de muestras','2018-01-03','2018-04-17',162,'1'),('II.VI: Analisis de muestras','2017-12-28','2018-04-11',163,'1'),('II.VI: Analisis de muestras','2017-12-30','2018-04-21',164,'1'),('II.VI: Analisis de muestras','2017-12-22','2018-04-07',165,'1'),('II.VI: Analisis de muestras','2018-01-01','2018-04-25',166,'1'),('II.VI: Analisis de muestras','2017-12-29','2018-04-12',167,'1'),('II.VI: Analisis de muestras','2017-12-23','2018-04-08',168,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-05-02',169,'1'),('II.VI: Analisis de muestras','2017-12-28','2018-04-06',170,'1'),('II.VI: Analisis de muestras','2017-12-20','2018-04-10',171,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VI: Analisis de muestras','2018-01-02','2018-04-26',172,'1'),('II.VI: Analisis de muestras','2018-01-07','2018-04-08',173,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-04-13',174,'1'),('II.VI: Analisis de muestras','2017-12-29','2018-04-12',175,'1'),('II.VI: Analisis de muestras','2018-01-07','2018-04-12',176,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-04',177,'1'),('II.VI: Analisis de muestras','2017-12-25','2018-04-22',178,'1'),('II.VI: Analisis de muestras','2017-12-30','2018-04-14',179,'1'),('II.VI: Analisis de muestras','2018-01-10','2018-05-01',180,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-22',181,'1'),('II.VI: Analisis de muestras','2018-01-01','2018-04-13',182,'1'),('II.VI: Analisis de muestras','2017-12-27','2018-04-22',183,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-04-18',184,'1'),('II.VI: Analisis de muestras','2018-01-09','2018-05-01',185,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-23',186,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-04-06',187,'1'),('II.VI: Analisis de muestras','2017-12-25','2018-04-29',188,'1'),('II.VI: Analisis de muestras','2018-01-10','2018-04-22',189,'1'),('II.VI: Analisis de muestras','2018-01-02','2018-05-03',190,'1'),('II.VI: Analisis de muestras','2018-01-05','2018-04-04',191,'1'),('II.VI: Analisis de muestras','2018-01-08','2018-04-14',192,'1');
+
+
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VII: Elaboracion de informe','2018-05-31','2018-06-27',97,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-23',98,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-24',99,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-23',100,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-30',101,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-25',102,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-28',103,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-23',104,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-20',105,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-25',106,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-28',107,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-23',108,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-26',109,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-26',110,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-22',111,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-21',112,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-25',113,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-25',114,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-30',115,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-25',116,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-21',117,'1'),('II.VII: Elaboracion de informe','2018-05-26','2018-06-20',118,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-25',119,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-20',120,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-24',121,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VII: Elaboracion de informe','2018-05-29','2018-06-30',122,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-30',123,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-20',124,'1'),('II.VII: Elaboracion de informe','2018-05-20','2018-06-28',125,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-22',126,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-26',127,'1'),('II.VII: Elaboracion de informe','2018-05-26','2018-06-20',128,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-24',129,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-30',130,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-26',131,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-24',132,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-20',133,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-23',134,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-28',135,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-22',136,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-25',137,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-25',138,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-20',139,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-20',140,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-25',141,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-28',142,'1'),('II.VII: Elaboracion de informe','2018-05-20','2018-06-24',143,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-24',144,'1'),('II.VII: Elaboracion de informe','2018-05-20','2018-06-22',145,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-28',146,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VII: Elaboracion de informe','2018-05-27','2018-06-27',147,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-28',148,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-22',149,'1'),('II.VII: Elaboracion de informe','2018-05-31','2018-06-23',150,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-25',151,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-27',152,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-29',153,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-21',154,'1'),('II.VII: Elaboracion de informe','2018-05-30','2018-06-27',155,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-29',156,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-29',157,'1'),('II.VII: Elaboracion de informe','2018-05-26','2018-06-30',158,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-23',159,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-21',160,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-20',161,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-22',162,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-28',163,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-30',164,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-22',165,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-23',166,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-30',167,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-27',168,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-22',169,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-26',170,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-21',171,'1');
+INSERT INTO FASE (fas_nombre,fas_fechainicio,fas_fechafin,fk_fas_etapa,fk_fas_estatus) VALUES ('II.VII: Elaboracion de informe','2018-05-23','2018-06-28',172,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-24',173,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-29',174,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-27',175,'1'),('II.VII: Elaboracion de informe','2018-05-26','2018-06-30',176,'1'),('II.VII: Elaboracion de informe','2018-05-26','2018-06-22',177,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-25',178,'1'),('II.VII: Elaboracion de informe','2018-05-28','2018-06-26',179,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-21',180,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-28',181,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-25',182,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-23',183,'1'),('II.VII: Elaboracion de informe','2018-05-21','2018-06-28',184,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-28',185,'1'),('II.VII: Elaboracion de informe','2018-05-22','2018-06-21',186,'1'),('II.VII: Elaboracion de informe','2018-05-27','2018-06-26',187,'1'),('II.VII: Elaboracion de informe','2018-05-23','2018-06-21',188,'1'),('II.VII: Elaboracion de informe','2018-05-25','2018-06-26',189,'1'),('II.VII: Elaboracion de informe','2018-05-29','2018-06-20',190,'1'),('II.VII: Elaboracion de informe','2018-05-24','2018-06-25',191,'1'),('II.VII: Elaboracion de informe','2018-05-20','2018-06-22',192,'1');
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','1','4'),('3','1','20'),('3','1','25'),('3','2','4'),('3','2','20'),('3','2','25'),('3','3','4'),('3','3','20'),('3','3','25'),('3','4','4'),('3','4','20'),('3','4','25'),('3','5','4'),('3','5','20'),('3','5','25'),('3','6','4'),('3','6','20'),('3','6','25'),('3','7','4'),('3','7','20'),('3','7','25'),('3','8','4'),('3','8','20'),('3','8','25'),('3','9','4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','9','20'),('3','9','25'),('3','10','4'),('3','10','20'),('3','10','25'),('3','11','4'),('3','11','20'),('3','11','25'),('3','12','4'),('3','12','20'),('3','12','25'),('3','13','4'),('3','13','20'),('3','13','25'),('3','14','4'),('3','14','20'),('3','14','25'),('3','15','4'),('3','15','20'),('3','15','25'),('3','16','4'),('3','16','20'),('3','16','25'),('3','17','4'),('3','17','20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','17','25'),('3','18','4'),('3','18','20'),('3','18','25'),('3','19','4'),('3','19','20'),('3','19','25'),('3','20','4'),('3','20','20'),('3','20','25'),('3','21','4'),('3','21','20'),('3','21','25'),('3','22','4'),('3','22','20'),('3','22','25'),('3','23','4'),('3','23','20'),('3','23','25'),('3','24','4'),('3','24','20'),('3','24','25'),('3','25','4'),('3','25','20'),('3','25','25');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','26','4'),('3','26','20'),('3','26','25'),('3','27','4'),('3','27','20'),('3','27','25'),('3','28','4'),('3','28','20'),('3','28','25'),('3','29','4'),('3','29','20'),('3','29','25'),('3','30','4'),('3','30','20'),('3','30','25');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','31','4'),('3','31','20'),('3','31','25'),('3','32','4'),('3','32','20'),('3','32','25'),('3','33','4'),('3','33','20'),('3','33','25'),('3','34','4'),('3','34','20'),('3','34','25'),('3','35','4'),('3','35','20'),('3','35','25'),('3','36','4'),('3','36','20'),('3','36','25'),('3','37','4'),('3','37','20'),('3','37','25'),('3','38','4'),('3','38','20'),('3','38','25'),('3','39','4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','39','20'),('3','39','25'),('3','40','4'),('3','40','20'),('3','40','25'),('3','41','4'),('3','41','20'),('3','41','25'),('3','42','4'),('3','42','20'),('3','42','25'),('3','43','4'),('3','43','20'),('3','43','25'),('3','44','4'),('3','44','20'),('3','44','25'),('3','45','4'),('3','45','20'),('3','45','25'),('3','46','4'),('3','46','20'),('3','46','25'),('3','47','4'),('3','47','20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','47','25'),('3','48','4'),('3','48','20'),('3','48','25'),('3','49','4'),('3','49','20'),('3','49','25'),('3','50','4'),('3','50','20'),('3','50','25'),('3','51','4'),('3','51','20'),('3','51','25'),('3','52','4'),('3','52','20'),('3','52','25'),('3','53','4'),('3','53','20'),('3','53','25'),('3','54','4'),('3','54','20'),('3','54','25'),('3','55','4'),('3','55','20'),('3','55','25');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','56','4'),('3','56','20'),('3','56','25'),('3','57','4'),('3','57','20'),('3','57','25'),('3','58','4'),('3','58','20'),('3','58','25'),('3','59','4'),('3','59','20'),('3','59','25'),('3','60','4'),('3','60','20'),('3','60','25');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','61','4'),('3','61','20'),('3','61','25'),('3','62','4'),('3','62','20'),('3','62','25'),('3','63','4'),('3','63','20'),('3','63','25'),('3','64','4'),('3','64','20'),('3','64','25'),('3','65','4'),('3','65','20'),('3','65','25'),('3','66','4'),('3','66','20'),('3','66','25'),('3','67','4'),('3','67','20'),('3','67','25'),('3','68','4'),('3','68','20'),('3','68','25'),('3','69','4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','69','20'),('3','69','25'),('3','70','4'),('3','70','20'),('3','70','25'),('3','71','4'),('3','71','20'),('3','71','25'),('3','72','4'),('3','72','20'),('3','72','25'),('3','73','4'),('3','73','20'),('3','73','25'),('3','74','4'),('3','74','20'),('3','74','25'),('3','75','4'),('3','75','20'),('3','75','25'),('3','76','4'),('3','76','20'),('3','76','25'),('3','77','4'),('3','77','20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','77','25'),('3','78','4'),('3','78','20'),('3','78','25'),('3','79','4'),('3','79','20'),('3','79','25'),('3','80','4'),('3','80','20'),('3','80','25'),('3','81','4'),('3','81','20'),('3','81','25'),('3','82','4'),('3','82','20'),('3','82','25'),('3','83','4'),('3','83','20'),('3','83','25'),('3','84','4'),('3','84','20'),('3','84','25'),('3','85','4'),('3','85','20'),('3','85','25');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3','86','4'),('3','86','20'),('3','86','25'),('3','87','4'),('3','87','20'),('3','87','25'),('3','88','4'),('3','88','20'),('3','88','25'),('3','90','4'),('3','90','20'),('3','90','25'),('3','91','4'),('3','91','20'),('3','91','25'),('3','92','4'),('3','92','20'),('3','92','25'),('3','93','4'),('3','93','20'),('3','93','25'),('3','94','4'),('3','94','20'),('3','94','25'),('3','95','4'),('3','95','20'),('3','95','25'),('3','96','4'),('3','96','20'),('3','96','25');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',97,'4'),('3',98,'4'),('3',99,'4'),('3',100,'4'),('3',101,'4'),('3',102,'4'),('3',103,'4'),('3',104,'4'),('3',105,'4'),('3',106,'4'),('3',107,'4'),('3',108,'4'),('3',109,'4'),('3',110,'4'),('3',111,'4'),('3',112,'4'),('3',113,'4'),('3',114,'4'),('3',115,'4'),('3',116,'4'),('3',117,'4'),('3',118,'4'),('3',119,'4'),('3',120,'4'),('3',121,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',122,'4'),('3',123,'4'),('3',124,'4'),('3',125,'4'),('3',126,'4'),('3',127,'4'),('3',128,'4'),('3',129,'4'),('3',130,'4'),('3',131,'4'),('3',132,'4'),('3',133,'4'),('3',134,'4'),('3',135,'4'),('3',136,'4'),('3',137,'4'),('3',138,'4'),('3',139,'4'),('3',140,'4'),('3',141,'4'),('3',142,'4'),('3',143,'4'),('3',144,'4'),('3',145,'4'),('3',146,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',147,'4'),('3',148,'4'),('3',149,'4'),('3',150,'4'),('3',151,'4'),('3',152,'4'),('3',153,'4'),('3',154,'4'),('3',155,'4'),('3',156,'4'),('3',157,'4'),('3',158,'4'),('3',159,'4'),('3',160,'4'),('3',161,'4'),('3',162,'4'),('3',163,'4'),('3',164,'4'),('3',165,'4'),('3',166,'4'),('3',167,'4'),('3',168,'4'),('3',169,'4'),('3',170,'4'),('3',171,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',172,'4'),('3',173,'4'),('3',174,'4'),('3',175,'4'),('3',176,'4'),('3',177,'4'),('3',178,'4'),('3',179,'4'),('3',180,'4'),('3',181,'4'),('3',182,'4'),('3',183,'4'),('3',184,'4'),('3',185,'4'),('3',186,'4'),('3',187,'4'),('3',188,'4'),('3',189,'4'),('3',190,'4'),('3',191,'4'),('3',192,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',97,'6'),('3',98,'6'),('3',99,'6'),('3',100,'6'),('3',101,'6'),('3',102,'6'),('3',103,'6'),('3',104,'6'),('3',105,'6'),('3',106,'6'),('3',107,'6'),('3',108,'6'),('3',109,'6'),('3',110,'6'),('3',111,'6'),('3',112,'6'),('3',113,'6'),('3',114,'6'),('3',115,'6'),('3',116,'6'),('3',117,'6'),('3',118,'6'),('3',119,'6'),('3',120,'6'),('3',121,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',122,'6'),('3',123,'6'),('3',124,'6'),('3',125,'6'),('3',126,'6'),('3',127,'6'),('3',128,'6'),('3',129,'6'),('3',130,'6'),('3',131,'6'),('3',132,'6'),('3',133,'6'),('3',134,'6'),('3',135,'6'),('3',136,'6'),('3',137,'6'),('3',138,'6'),('3',139,'6'),('3',140,'6'),('3',141,'6'),('3',142,'6'),('3',143,'6'),('3',144,'6'),('3',145,'6'),('3',146,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',147,'6'),('3',148,'6'),('3',149,'6'),('3',150,'6'),('3',151,'6'),('3',152,'6'),('3',153,'6'),('3',154,'6'),('3',155,'6'),('3',156,'6'),('3',157,'6'),('3',158,'6'),('3',159,'6'),('3',160,'6'),('3',161,'6'),('3',162,'6'),('3',163,'6'),('3',164,'6'),('3',165,'6'),('3',166,'6'),('3',167,'6'),('3',168,'6'),('3',169,'6'),('3',170,'6'),('3',171,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',172,'6'),('3',173,'6'),('3',174,'6'),('3',175,'6'),('3',176,'6'),('3',177,'6'),('3',178,'6'),('3',179,'6'),('3',180,'6'),('3',181,'6'),('3',182,'6'),('3',183,'6'),('3',184,'6'),('3',185,'6'),('3',186,'6'),('3',187,'6'),('3',188,'6'),('3',189,'6'),('3',190,'6'),('3',191,'6'),('3',192,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',97,'8'),('3',98,'8'),('3',99,'8'),('3',100,'8'),('3',101,'8'),('3',102,'8'),('3',103,'8'),('3',104,'8'),('3',105,'8'),('3',106,'8'),('3',107,'8'),('3',108,'8'),('3',109,'8'),('3',110,'8'),('3',111,'8'),('3',112,'8'),('3',113,'8'),('3',114,'8'),('3',115,'8'),('3',116,'8'),('3',117,'8'),('3',118,'8'),('3',119,'8'),('3',120,'8'),('3',121,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',122,'8'),('3',123,'8'),('3',124,'8'),('3',125,'8'),('3',126,'8'),('3',127,'8'),('3',128,'8'),('3',129,'8'),('3',130,'8'),('3',131,'8'),('3',132,'8'),('3',133,'8'),('3',134,'8'),('3',135,'8'),('3',136,'8'),('3',137,'8'),('3',138,'8'),('3',139,'8'),('3',140,'8'),('3',141,'8'),('3',142,'8'),('3',143,'8'),('3',144,'8'),('3',145,'8'),('3',146,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',147,'8'),('3',148,'8'),('3',149,'8'),('3',150,'8'),('3',151,'8'),('3',152,'8'),('3',153,'8'),('3',154,'8'),('3',155,'8'),('3',156,'8'),('3',157,'8'),('3',158,'8'),('3',159,'8'),('3',160,'8'),('3',161,'8'),('3',162,'8'),('3',163,'8'),('3',164,'8'),('3',165,'8'),('3',166,'8'),('3',167,'8'),('3',168,'8'),('3',169,'8'),('3',170,'8'),('3',171,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',172,'8'),('3',173,'8'),('3',174,'8'),('3',175,'8'),('3',176,'8'),('3',177,'8'),('3',178,'8'),('3',179,'8'),('3',180,'8'),('3',181,'8'),('3',182,'8'),('3',183,'8'),('3',184,'8'),('3',185,'8'),('3',186,'8'),('3',187,'8'),('3',188,'8'),('3',189,'8'),('3',190,'8'),('3',191,'8'),('3',192,'8');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',193,'1'),('3',194,'1'),('3',195,'1'),('3',196,'1'),('3',197,'1'),('3',198,'1'),('3',199,'1'),('3',200,'1'),('3',201,'1'),('3',202,'1'),('3',203,'1'),('3',204,'1'),('3',205,'1'),('3',206,'1'),('3',207,'1'),('3',208,'1'),('3',209,'1'),('3',210,'1'),('3',211,'1'),('3',212,'1'),('3',213,'1'),('3',214,'1'),('3',215,'1'),('3',216,'1'),('3',217,'1');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',218,'1'),('3',219,'1'),('3',220,'1'),('3',221,'1'),('3',222,'1'),('3',223,'1'),('3',224,'1'),('3',225,'1'),('3',226,'1'),('3',227,'1'),('3',228,'1'),('3',229,'1'),('3',230,'1'),('3',231,'1'),('3',232,'1'),('3',233,'1'),('3',234,'1'),('3',235,'1'),('3',236,'1'),('3',237,'1'),('3',238,'1'),('3',239,'1'),('3',240,'1'),('3',241,'1'),('3',242,'1');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',243,'1'),('3',244,'1'),('3',245,'1'),('3',246,'1'),('3',247,'1'),('3',248,'1'),('3',249,'1'),('3',250,'1'),('3',251,'1'),('3',252,'1'),('3',253,'1'),('3',254,'1'),('3',255,'1'),('3',256,'1'),('3',257,'1'),('3',258,'1'),('3',259,'1'),('3',260,'1'),('3',261,'1'),('3',262,'1'),('3',263,'1'),('3',264,'1'),('3',265,'1'),('3',266,'1'),('3',267,'1');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',268,'1'),('3',269,'1'),('3',270,'1'),('3',271,'1'),('3',272,'1'),('3',273,'1'),('3',274,'1'),('3',275,'1'),('3',276,'1'),('3',277,'1'),('3',278,'1'),('3',279,'1'),('3',280,'1'),('3',281,'1'),('3',282,'1'),('3',283,'1'),('3',284,'1'),('3',285,'1'),('3',286,'1'),('3',287,'1'),('3',288,'1');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',193,'20'),('3',194,'20'),('3',195,'20'),('3',196,'20'),('3',197,'20'),('3',198,'20'),('3',199,'20'),('3',200,'20'),('3',201,'20'),('3',202,'20'),('3',203,'20'),('3',204,'20'),('3',205,'20'),('3',206,'20'),('3',207,'20'),('3',208,'20'),('3',209,'20'),('3',210,'20'),('3',211,'20'),('3',212,'20'),('3',213,'20'),('3',214,'20'),('3',215,'20'),('3',216,'20'),('3',217,'20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',218,'20'),('3',219,'20'),('3',220,'20'),('3',221,'20'),('3',222,'20'),('3',223,'20'),('3',224,'20'),('3',225,'20'),('3',226,'20'),('3',227,'20'),('3',228,'20'),('3',229,'20'),('3',230,'20'),('3',231,'20'),('3',232,'20'),('3',233,'20'),('3',234,'20'),('3',235,'20'),('3',236,'20'),('3',237,'20'),('3',238,'20'),('3',239,'20'),('3',240,'20'),('3',241,'20'),('3',242,'20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',243,'20'),('3',244,'20'),('3',245,'20'),('3',246,'20'),('3',247,'20'),('3',248,'20'),('3',249,'20'),('3',250,'20'),('3',251,'20'),('3',252,'20'),('3',253,'20'),('3',254,'20'),('3',255,'20'),('3',256,'20'),('3',257,'20'),('3',258,'20'),('3',259,'20'),('3',260,'20'),('3',261,'20'),('3',262,'20'),('3',263,'20'),('3',264,'20'),('3',265,'20'),('3',266,'20'),('3',267,'20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',268,'20'),('3',269,'20'),('3',270,'20'),('3',271,'20'),('3',272,'20'),('3',273,'20'),('3',274,'20'),('3',275,'20'),('3',276,'20'),('3',277,'20'),('3',278,'20'),('3',279,'20'),('3',280,'20'),('3',281,'20'),('3',282,'20'),('3',283,'20'),('3',284,'20'),('3',285,'20'),('3',286,'20'),('3',287,'20'),('3',288,'20');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',193,'18'),('3',194,'18'),('3',195,'18'),('3',196,'18'),('3',197,'18'),('3',198,'18'),('3',199,'18'),('3',200,'18'),('3',201,'18'),('3',202,'18'),('3',203,'18'),('3',204,'18'),('3',205,'18'),('3',206,'18'),('3',207,'18'),('3',208,'18'),('3',209,'18'),('3',210,'18'),('3',211,'18'),('3',212,'18'),('3',213,'18'),('3',214,'18'),('3',215,'18'),('3',216,'18'),('3',217,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',218,'18'),('3',219,'18'),('3',220,'18'),('3',221,'18'),('3',222,'18'),('3',223,'18'),('3',224,'18'),('3',225,'18'),('3',226,'18'),('3',227,'18'),('3',228,'18'),('3',229,'18'),('3',230,'18'),('3',231,'18'),('3',232,'18'),('3',233,'18'),('3',234,'18'),('3',235,'18'),('3',236,'18'),('3',237,'18'),('3',238,'18'),('3',239,'18'),('3',240,'18'),('3',241,'18'),('3',242,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',243,'18'),('3',244,'18'),('3',245,'18'),('3',246,'18'),('3',247,'18'),('3',248,'18'),('3',249,'18'),('3',250,'18'),('3',251,'18'),('3',252,'18'),('3',253,'18'),('3',254,'18'),('3',255,'18'),('3',256,'18'),('3',257,'18'),('3',258,'18'),('3',259,'18'),('3',260,'18'),('3',261,'18'),('3',262,'18'),('3',263,'18'),('3',264,'18'),('3',265,'18'),('3',266,'18'),('3',267,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',268,'18'),('3',269,'18'),('3',270,'18'),('3',271,'18'),('3',272,'18'),('3',273,'18'),('3',274,'18'),('3',275,'18'),('3',276,'18'),('3',277,'18'),('3',278,'18'),('3',279,'18'),('3',280,'18'),('3',281,'18'),('3',282,'18'),('3',283,'18'),('3',284,'18'),('3',285,'18'),('3',286,'18'),('3',287,'18'),('3',288,'18');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',289,'7'),('3',290,'7'),('3',291,'7'),('3',292,'7'),('3',293,'7'),('3',294,'7'),('3',295,'7'),('3',296,'7'),('3',297,'7'),('3',298,'7'),('3',299,'7'),('3',300,'7'),('3',301,'7'),('3',302,'7'),('3',303,'7'),('3',304,'7'),('3',305,'7'),('3',306,'7'),('3',307,'7'),('3',308,'7'),('3',309,'7'),('3',310,'7'),('3',311,'7'),('3',312,'7'),('3',313,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',314,'7'),('3',315,'7'),('3',316,'7'),('3',317,'7'),('3',318,'7'),('3',319,'7'),('3',320,'7'),('3',321,'7'),('3',322,'7'),('3',323,'7'),('3',324,'7'),('3',325,'7'),('3',326,'7'),('3',327,'7'),('3',328,'7'),('3',329,'7'),('3',330,'7'),('3',331,'7'),('3',332,'7'),('3',333,'7'),('3',334,'7'),('3',335,'7'),('3',336,'7'),('3',337,'7'),('3',338,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',339,'7'),('3',340,'7'),('3',341,'7'),('3',342,'7'),('3',343,'7'),('3',344,'7'),('3',345,'7'),('3',346,'7'),('3',347,'7'),('3',348,'7'),('3',349,'7'),('3',350,'7'),('3',351,'7'),('3',352,'7'),('3',353,'7'),('3',354,'7'),('3',355,'7'),('3',356,'7'),('3',357,'7'),('3',358,'7'),('3',359,'7'),('3',360,'7'),('3',361,'7'),('3',362,'7'),('3',363,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',364,'7'),('3',365,'7'),('3',366,'7'),('3',367,'7'),('3',368,'7'),('3',369,'7'),('3',370,'7'),('3',371,'7'),('3',372,'7'),('3',373,'7'),('3',374,'7'),('3',375,'7'),('3',376,'7'),('3',377,'7'),('3',378,'7'),('3',379,'7'),('3',380,'7'),('3',381,'7'),('3',382,'7'),('3',383,'7'),('3',384,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',289,'24'),('3',290,'24'),('3',291,'24'),('3',292,'24'),('3',293,'24'),('3',294,'24'),('3',295,'24'),('3',296,'24'),('3',297,'24'),('3',298,'24'),('3',299,'24'),('3',300,'24'),('3',301,'24'),('3',302,'24'),('3',303,'24'),('3',304,'24'),('3',305,'24'),('3',306,'24'),('3',307,'24'),('3',308,'24'),('3',309,'24'),('3',310,'24'),('3',311,'24'),('3',312,'24'),('3',313,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',314,'24'),('3',315,'24'),('3',316,'24'),('3',317,'24'),('3',318,'24'),('3',319,'24'),('3',320,'24'),('3',321,'24'),('3',322,'24'),('3',323,'24'),('3',324,'24'),('3',325,'24'),('3',326,'24'),('3',327,'24'),('3',328,'24'),('3',329,'24'),('3',330,'24'),('3',331,'24'),('3',332,'24'),('3',333,'24'),('3',334,'24'),('3',335,'24'),('3',336,'24'),('3',337,'24'),('3',338,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',339,'24'),('3',340,'24'),('3',341,'24'),('3',342,'24'),('3',343,'24'),('3',344,'24'),('3',345,'24'),('3',346,'24'),('3',347,'24'),('3',348,'24'),('3',349,'24'),('3',350,'24'),('3',351,'24'),('3',352,'24'),('3',353,'24'),('3',354,'24'),('3',355,'24'),('3',356,'24'),('3',357,'24'),('3',358,'24'),('3',359,'24'),('3',360,'24'),('3',361,'24'),('3',362,'24'),('3',363,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',364,'24'),('3',365,'24'),('3',366,'24'),('3',367,'24'),('3',368,'24'),('3',369,'24'),('3',370,'24'),('3',371,'24'),('3',372,'24'),('3',373,'24'),('3',374,'24'),('3',375,'24'),('3',376,'24'),('3',377,'24'),('3',378,'24'),('3',379,'24'),('3',380,'24'),('3',381,'24'),('3',382,'24'),('3',383,'24'),('3',384,'24');
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',385,'21'),('3',386,'21'),('3',387,'21'),('3',388,'21'),('3',389,'21'),('3',390,'21'),('3',391,'21'),('3',392,'21'),('3',393,'21'),('3',394,'21'),('3',395,'21'),('3',396,'21'),('3',397,'21'),('3',398,'21'),('3',399,'21'),('3',400,'21'),('3',401,'21'),('3',402,'21'),('3',403,'21'),('3',404,'21'),('3',405,'21'),('3',406,'21'),('3',407,'21'),('3',408,'21'),('3',409,'21');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',410,'21'),('3',411,'21'),('3',412,'21'),('3',413,'21'),('3',414,'21'),('3',415,'21'),('3',416,'21'),('3',417,'21'),('3',418,'21'),('3',419,'21'),('3',420,'21'),('3',421,'21'),('3',422,'21'),('3',423,'21'),('3',424,'21'),('3',425,'21'),('3',426,'21'),('3',427,'21'),('3',428,'21'),('3',429,'21'),('3',430,'21'),('3',431,'21'),('3',432,'21'),('3',433,'21'),('3',434,'21');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',435,'21'),('3',436,'21'),('3',437,'21'),('3',438,'21'),('3',439,'21'),('3',440,'21'),('3',441,'21'),('3',442,'21'),('3',443,'21'),('3',444,'21'),('3',445,'21'),('3',446,'21'),('3',447,'21'),('3',448,'21'),('3',449,'21'),('3',450,'21'),('3',451,'21'),('3',452,'21'),('3',453,'21'),('3',454,'21'),('3',455,'21'),('3',456,'21'),('3',457,'21'),('3',458,'21'),('3',459,'21');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',460,'21'),('3',461,'21'),('3',462,'21'),('3',463,'21'),('3',464,'21'),('3',465,'21'),('3',466,'21'),('3',467,'21'),('3',468,'21'),('3',469,'21'),('3',470,'21'),('3',471,'21'),('3',472,'21'),('3',473,'21'),('3',474,'21'),('3',475,'21'),('3',476,'21'),('3',477,'21'),('3',478,'21'),('3',479,'21'),('3',480,'21');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',385,'18'),('3',386,'18'),('3',387,'18'),('3',388,'18'),('3',389,'18'),('3',390,'18'),('3',391,'18'),('3',392,'18'),('3',393,'18'),('3',394,'18'),('3',395,'18'),('3',396,'18'),('3',397,'18'),('3',398,'18'),('3',399,'18'),('3',400,'18'),('3',401,'18'),('3',402,'18'),('3',403,'18'),('3',404,'18'),('3',405,'18'),('3',406,'18'),('3',407,'18'),('3',408,'18'),('3',409,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',410,'18'),('3',411,'18'),('3',412,'18'),('3',413,'18'),('3',414,'18'),('3',415,'18'),('3',416,'18'),('3',417,'18'),('3',418,'18'),('3',419,'18'),('3',420,'18'),('3',421,'18'),('3',422,'18'),('3',423,'18'),('3',424,'18'),('3',425,'18'),('3',426,'18'),('3',427,'18'),('3',428,'18'),('3',429,'18'),('3',430,'18'),('3',431,'18'),('3',432,'18'),('3',433,'18'),('3',434,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',435,'18'),('3',436,'18'),('3',437,'18'),('3',438,'18'),('3',439,'18'),('3',440,'18'),('3',441,'18'),('3',442,'18'),('3',443,'18'),('3',444,'18'),('3',445,'18'),('3',446,'18'),('3',447,'18'),('3',448,'18'),('3',449,'18'),('3',450,'18'),('3',451,'18'),('3',452,'18'),('3',453,'18'),('3',454,'18'),('3',455,'18'),('3',456,'18'),('3',457,'18'),('3',458,'18'),('3',459,'18');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',460,'18'),('3',461,'18'),('3',462,'18'),('3',463,'18'),('3',464,'18'),('3',465,'18'),('3',466,'18'),('3',467,'18'),('3',468,'18'),('3',469,'18'),('3',470,'18'),('3',471,'18'),('3',472,'18'),('3',473,'18'),('3',474,'18'),('3',475,'18'),('3',476,'18'),('3',477,'18'),('3',478,'18'),('3',479,'18'),('3',480,'18');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'4'),('3',482,'4'),('3',483,'4'),('3',484,'4'),('3',485,'4'),('3',486,'4'),('3',487,'4'),('3',488,'4'),('3',489,'4'),('3',490,'4'),('3',491,'4'),('3',492,'4'),('3',493,'4'),('3',494,'4'),('3',495,'4'),('3',496,'4'),('3',497,'4'),('3',498,'4'),('3',499,'4'),('3',500,'4'),('3',501,'4'),('3',502,'4'),('3',503,'4'),('3',504,'4'),('3',505,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'4'),('3',507,'4'),('3',508,'4'),('3',509,'4'),('3',510,'4'),('3',511,'4'),('3',512,'4'),('3',513,'4'),('3',514,'4'),('3',515,'4'),('3',516,'4'),('3',517,'4'),('3',518,'4'),('3',519,'4'),('3',520,'4'),('3',521,'4'),('3',522,'4'),('3',523,'4'),('3',524,'4'),('3',525,'4'),('3',526,'4'),('3',527,'4'),('3',528,'4'),('3',529,'4'),('3',530,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'4'),('3',532,'4'),('3',533,'4'),('3',534,'4'),('3',535,'4'),('3',536,'4'),('3',537,'4'),('3',538,'4'),('3',539,'4'),('3',540,'4'),('3',541,'4'),('3',542,'4'),('3',543,'4'),('3',544,'4'),('3',545,'4'),('3',546,'4'),('3',547,'4'),('3',548,'4'),('3',549,'4'),('3',550,'4'),('3',551,'4'),('3',552,'4'),('3',553,'4'),('3',554,'4'),('3',555,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'4'),('3',557,'4'),('3',558,'4'),('3',559,'4'),('3',560,'4'),('3',561,'4'),('3',562,'4'),('3',563,'4'),('3',564,'4'),('3',565,'4'),('3',566,'4'),('3',567,'4'),('3',568,'4'),('3',569,'4'),('3',570,'4'),('3',571,'4'),('3',572,'4'),('3',573,'4'),('3',574,'4'),('3',575,'4'),('3',576,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'5'),('3',482,'5'),('3',483,'5'),('3',484,'5'),('3',485,'5'),('3',486,'5'),('3',487,'5'),('3',488,'5'),('3',489,'5'),('3',490,'5'),('3',491,'5'),('3',492,'5'),('3',493,'5'),('3',494,'5'),('3',495,'5'),('3',496,'5'),('3',497,'5'),('3',498,'5'),('3',499,'5'),('3',500,'5'),('3',501,'5'),('3',502,'5'),('3',503,'5'),('3',504,'5'),('3',505,'5');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'5'),('3',507,'5'),('3',508,'5'),('3',509,'5'),('3',510,'5'),('3',511,'5'),('3',512,'5'),('3',513,'5'),('3',514,'5'),('3',515,'5'),('3',516,'5'),('3',517,'5'),('3',518,'5'),('3',519,'5'),('3',520,'5'),('3',521,'5'),('3',522,'5'),('3',523,'5'),('3',524,'5'),('3',525,'5'),('3',526,'5'),('3',527,'5'),('3',528,'5'),('3',529,'5'),('3',530,'5');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'5'),('3',532,'5'),('3',533,'5'),('3',534,'5'),('3',535,'5'),('3',536,'5'),('3',537,'5'),('3',538,'5'),('3',539,'5'),('3',540,'5'),('3',541,'5'),('3',542,'5'),('3',543,'5'),('3',544,'5'),('3',545,'5'),('3',546,'5'),('3',547,'5'),('3',548,'5'),('3',549,'5'),('3',550,'5'),('3',551,'5'),('3',552,'5'),('3',553,'5'),('3',554,'5'),('3',555,'5');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'5'),('3',557,'5'),('3',558,'5'),('3',559,'5'),('3',560,'5'),('3',561,'5'),('3',562,'5'),('3',563,'5'),('3',564,'5'),('3',565,'5'),('3',566,'5'),('3',567,'5'),('3',568,'5'),('3',569,'5'),('3',570,'5'),('3',571,'5'),('3',572,'5'),('3',573,'5'),('3',574,'5'),('3',575,'5'),('3',576,'5');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'6'),('3',482,'6'),('3',483,'6'),('3',484,'6'),('3',485,'6'),('3',486,'6'),('3',487,'6'),('3',488,'6'),('3',489,'6'),('3',490,'6'),('3',491,'6'),('3',492,'6'),('3',493,'6'),('3',494,'6'),('3',495,'6'),('3',496,'6'),('3',497,'6'),('3',498,'6'),('3',499,'6'),('3',500,'6'),('3',501,'6'),('3',502,'6'),('3',503,'6'),('3',504,'6'),('3',505,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'6'),('3',507,'6'),('3',508,'6'),('3',509,'6'),('3',510,'6'),('3',511,'6'),('3',512,'6'),('3',513,'6'),('3',514,'6'),('3',515,'6'),('3',516,'6'),('3',517,'6'),('3',518,'6'),('3',519,'6'),('3',520,'6'),('3',521,'6'),('3',522,'6'),('3',523,'6'),('3',524,'6'),('3',525,'6'),('3',526,'6'),('3',527,'6'),('3',528,'6'),('3',529,'6'),('3',530,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'6'),('3',532,'6'),('3',533,'6'),('3',534,'6'),('3',535,'6'),('3',536,'6'),('3',537,'6'),('3',538,'6'),('3',539,'6'),('3',540,'6'),('3',541,'6'),('3',542,'6'),('3',543,'6'),('3',544,'6'),('3',545,'6'),('3',546,'6'),('3',547,'6'),('3',548,'6'),('3',549,'6'),('3',550,'6'),('3',551,'6'),('3',552,'6'),('3',553,'6'),('3',554,'6'),('3',555,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'6'),('3',557,'6'),('3',558,'6'),('3',559,'6'),('3',560,'6'),('3',561,'6'),('3',562,'6'),('3',563,'6'),('3',564,'6'),('3',565,'6'),('3',566,'6'),('3',567,'6'),('3',568,'6'),('3',569,'6'),('3',570,'6'),('3',571,'6'),('3',572,'6'),('3',573,'6'),('3',574,'6'),('3',575,'6'),('3',576,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'9'),('3',482,'9'),('3',483,'9'),('3',484,'9'),('3',485,'9'),('3',486,'9'),('3',487,'9'),('3',488,'9'),('3',489,'9'),('3',490,'9'),('3',491,'9'),('3',492,'9'),('3',493,'9'),('3',494,'9'),('3',495,'9'),('3',496,'9'),('3',497,'9'),('3',498,'9'),('3',499,'9'),('3',500,'9'),('3',501,'9'),('3',502,'9'),('3',503,'9'),('3',504,'9'),('3',505,'9');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'9'),('3',507,'9'),('3',508,'9'),('3',509,'9'),('3',510,'9'),('3',511,'9'),('3',512,'9'),('3',513,'9'),('3',514,'9'),('3',515,'9'),('3',516,'9'),('3',517,'9'),('3',518,'9'),('3',519,'9'),('3',520,'9'),('3',521,'9'),('3',522,'9'),('3',523,'9'),('3',524,'9'),('3',525,'9'),('3',526,'9'),('3',527,'9'),('3',528,'9'),('3',529,'9'),('3',530,'9');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'9'),('3',532,'9'),('3',533,'9'),('3',534,'9'),('3',535,'9'),('3',536,'9'),('3',537,'9'),('3',538,'9'),('3',539,'9'),('3',540,'9'),('3',541,'9'),('3',542,'9'),('3',543,'9'),('3',544,'9'),('3',545,'9'),('3',546,'9'),('3',547,'9'),('3',548,'9'),('3',549,'9'),('3',550,'9'),('3',551,'9'),('3',552,'9'),('3',553,'9'),('3',554,'9'),('3',555,'9');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'9'),('3',557,'9'),('3',558,'9'),('3',559,'9'),('3',560,'9'),('3',561,'9'),('3',562,'9'),('3',563,'9'),('3',564,'9'),('3',565,'9'),('3',566,'9'),('3',567,'9'),('3',568,'9'),('3',569,'9'),('3',570,'9'),('3',571,'9'),('3',572,'9'),('3',573,'9'),('3',574,'9'),('3',575,'9'),('3',576,'9');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'8'),('3',482,'8'),('3',483,'8'),('3',484,'8'),('3',485,'8'),('3',486,'8'),('3',487,'8'),('3',488,'8'),('3',489,'8'),('3',490,'8'),('3',491,'8'),('3',492,'8'),('3',493,'8'),('3',494,'8'),('3',495,'8'),('3',496,'8'),('3',497,'8'),('3',498,'8'),('3',499,'8'),('3',500,'8'),('3',501,'8'),('3',502,'8'),('3',503,'8'),('3',504,'8'),('3',505,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'8'),('3',507,'8'),('3',508,'8'),('3',509,'8'),('3',510,'8'),('3',511,'8'),('3',512,'8'),('3',513,'8'),('3',514,'8'),('3',515,'8'),('3',516,'8'),('3',517,'8'),('3',518,'8'),('3',519,'8'),('3',520,'8'),('3',521,'8'),('3',522,'8'),('3',523,'8'),('3',524,'8'),('3',525,'8'),('3',526,'8'),('3',527,'8'),('3',528,'8'),('3',529,'8'),('3',530,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'8'),('3',532,'8'),('3',533,'8'),('3',534,'8'),('3',535,'8'),('3',536,'8'),('3',537,'8'),('3',538,'8'),('3',539,'8'),('3',540,'8'),('3',541,'8'),('3',542,'8'),('3',543,'8'),('3',544,'8'),('3',545,'8'),('3',546,'8'),('3',547,'8'),('3',548,'8'),('3',549,'8'),('3',550,'8'),('3',551,'8'),('3',552,'8'),('3',553,'8'),('3',554,'8'),('3',555,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'8'),('3',557,'8'),('3',558,'8'),('3',559,'8'),('3',560,'8'),('3',561,'8'),('3',562,'8'),('3',563,'8'),('3',564,'8'),('3',565,'8'),('3',566,'8'),('3',567,'8'),('3',568,'8'),('3',569,'8'),('3',570,'8'),('3',571,'8'),('3',572,'8'),('3',573,'8'),('3',574,'8'),('3',575,'8'),('3',576,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',481,'7'),('3',482,'7'),('3',483,'7'),('3',484,'7'),('3',485,'7'),('3',486,'7'),('3',487,'7'),('3',488,'7'),('3',489,'7'),('3',490,'7'),('3',491,'7'),('3',492,'7'),('3',493,'7'),('3',494,'7'),('3',495,'7'),('3',496,'7'),('3',497,'7'),('3',498,'7'),('3',499,'7'),('3',500,'7'),('3',501,'7'),('3',502,'7'),('3',503,'7'),('3',504,'7'),('3',505,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',506,'7'),('3',507,'7'),('3',508,'7'),('3',509,'7'),('3',510,'7'),('3',511,'7'),('3',512,'7'),('3',513,'7'),('3',514,'7'),('3',515,'7'),('3',516,'7'),('3',517,'7'),('3',518,'7'),('3',519,'7'),('3',520,'7'),('3',521,'7'),('3',522,'7'),('3',523,'7'),('3',524,'7'),('3',525,'7'),('3',526,'7'),('3',527,'7'),('3',528,'7'),('3',529,'7'),('3',530,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',531,'7'),('3',532,'7'),('3',533,'7'),('3',534,'7'),('3',535,'7'),('3',536,'7'),('3',537,'7'),('3',538,'7'),('3',539,'7'),('3',540,'7'),('3',541,'7'),('3',542,'7'),('3',543,'7'),('3',544,'7'),('3',545,'7'),('3',546,'7'),('3',547,'7'),('3',548,'7'),('3',549,'7'),('3',550,'7'),('3',551,'7'),('3',552,'7'),('3',553,'7'),('3',554,'7'),('3',555,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',556,'7'),('3',557,'7'),('3',558,'7'),('3',559,'7'),('3',560,'7'),('3',561,'7'),('3',562,'7'),('3',563,'7'),('3',564,'7'),('3',565,'7'),('3',566,'7'),('3',567,'7'),('3',568,'7'),('3',569,'7'),('3',570,'7'),('3',571,'7'),('3',572,'7'),('3',573,'7'),('3',574,'7'),('3',575,'7'),('3',576,'7');
+
+--
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',577,'10'),('3',578,'10'),('3',579,'10'),('3',580,'10'),('3',581,'10'),('3',582,'10'),('3',583,'10'),('3',584,'10'),('3',585,'10'),('3',586,'10'),('3',587,'10'),('3',588,'10'),('3',589,'10'),('3',590,'10'),('3',591,'10'),('3',592,'10'),('3',593,'10'),('3',594,'10'),('3',595,'10'),('3',596,'10'),('3',597,'10'),('3',598,'10'),('3',599,'10'),('3',600,'10'),('3',601,'10');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',602,'10'),('3',603,'10'),('3',604,'10'),('3',605,'10'),('3',606,'10'),('3',607,'10'),('3',608,'10'),('3',609,'10'),('3',610,'10'),('3',611,'10'),('3',612,'10'),('3',613,'10'),('3',614,'10'),('3',615,'10'),('3',616,'10'),('3',617,'10'),('3',618,'10'),('3',619,'10'),('3',620,'10'),('3',621,'10'),('3',622,'10'),('3',623,'10'),('3',624,'10'),('3',625,'10'),('3',626,'10');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',627,'10'),('3',628,'10'),('3',629,'10'),('3',630,'10'),('3',631,'10'),('3',632,'10'),('3',633,'10'),('3',634,'10'),('3',635,'10'),('3',636,'10'),('3',637,'10'),('3',638,'10'),('3',639,'10'),('3',640,'10'),('3',641,'10'),('3',642,'10'),('3',643,'10'),('3',644,'10'),('3',645,'10'),('3',646,'10'),('3',647,'10'),('3',648,'10'),('3',649,'10'),('3',650,'10'),('3',651,'10');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',652,'10'),('3',653,'10'),('3',654,'10'),('3',655,'10'),('3',656,'10'),('3',657,'10'),('3',658,'10'),('3',659,'10'),('3',660,'10'),('3',661,'10'),('3',662,'10'),('3',663,'10'),('3',664,'10'),('3',665,'10'),('3',666,'10'),('3',667,'10'),('3',668,'10'),('3',669,'10'),('3',670,'10'),('3',671,'10'),('3',672,'10');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',577,'11'),('3',578,'11'),('3',579,'11'),('3',580,'11'),('3',581,'11'),('3',582,'11'),('3',583,'11'),('3',584,'11'),('3',585,'11'),('3',586,'11'),('3',587,'11'),('3',588,'11'),('3',589,'11'),('3',590,'11'),('3',591,'11'),('3',592,'11'),('3',593,'11'),('3',594,'11'),('3',595,'11'),('3',596,'11'),('3',597,'11'),('3',598,'11'),('3',599,'11'),('3',600,'11'),('3',601,'11');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',602,'11'),('3',603,'11'),('3',604,'11'),('3',605,'11'),('3',606,'11'),('3',607,'11'),('3',608,'11'),('3',609,'11'),('3',610,'11'),('3',611,'11'),('3',612,'11'),('3',613,'11'),('3',614,'11'),('3',615,'11'),('3',616,'11'),('3',617,'11'),('3',618,'11'),('3',619,'11'),('3',620,'11'),('3',621,'11'),('3',622,'11'),('3',623,'11'),('3',624,'11'),('3',625,'11'),('3',626,'11');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',627,'11'),('3',628,'11'),('3',629,'11'),('3',630,'11'),('3',631,'11'),('3',632,'11'),('3',633,'11'),('3',634,'11'),('3',635,'11'),('3',636,'11'),('3',637,'11'),('3',638,'11'),('3',639,'11'),('3',640,'11'),('3',641,'11'),('3',642,'11'),('3',643,'11'),('3',644,'11'),('3',645,'11'),('3',646,'11'),('3',647,'11'),('3',648,'11'),('3',649,'11'),('3',650,'11'),('3',651,'11');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',652,'11'),('3',653,'11'),('3',654,'11'),('3',655,'11'),('3',656,'11'),('3',657,'11'),('3',658,'11'),('3',659,'11'),('3',660,'11'),('3',661,'11'),('3',662,'11'),('3',663,'11'),('3',664,'11'),('3',665,'11'),('3',666,'11'),('3',667,'11'),('3',668,'11'),('3',669,'11'),('3',670,'11'),('3',671,'11'),('3',672,'11');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',577,'6'),('3',578,'6'),('3',579,'6'),('3',580,'6'),('3',581,'6'),('3',582,'6'),('3',583,'6'),('3',584,'6'),('3',585,'6'),('3',586,'6'),('3',587,'6'),('3',588,'6'),('3',589,'6'),('3',590,'6'),('3',591,'6'),('3',592,'6'),('3',593,'6'),('3',594,'6'),('3',595,'6'),('3',596,'6'),('3',597,'6'),('3',598,'6'),('3',599,'6'),('3',600,'6'),('3',601,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',602,'6'),('3',603,'6'),('3',604,'6'),('3',605,'6'),('3',606,'6'),('3',607,'6'),('3',608,'6'),('3',609,'6'),('3',610,'6'),('3',611,'6'),('3',612,'6'),('3',613,'6'),('3',614,'6'),('3',615,'6'),('3',616,'6'),('3',617,'6'),('3',618,'6'),('3',619,'6'),('3',620,'6'),('3',621,'6'),('3',622,'6'),('3',623,'6'),('3',624,'6'),('3',625,'6'),('3',626,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',627,'6'),('3',628,'6'),('3',629,'6'),('3',630,'6'),('3',631,'6'),('3',632,'6'),('3',633,'6'),('3',634,'6'),('3',635,'6'),('3',636,'6'),('3',637,'6'),('3',638,'6'),('3',639,'6'),('3',640,'6'),('3',641,'6'),('3',642,'6'),('3',643,'6'),('3',644,'6'),('3',645,'6'),('3',646,'6'),('3',647,'6'),('3',648,'6'),('3',649,'6'),('3',650,'6'),('3',651,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',652,'6'),('3',653,'6'),('3',654,'6'),('3',655,'6'),('3',656,'6'),('3',657,'6'),('3',658,'6'),('3',659,'6'),('3',660,'6'),('3',661,'6'),('3',662,'6'),('3',663,'6'),('3',664,'6'),('3',665,'6'),('3',666,'6'),('3',667,'6'),('3',668,'6'),('3',669,'6'),('3',670,'6'),('3',671,'6'),('3',672,'6');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',577,'8'),('3',578,'8'),('3',579,'8'),('3',580,'8'),('3',581,'8'),('3',582,'8'),('3',583,'8'),('3',584,'8'),('3',585,'8'),('3',586,'8'),('3',587,'8'),('3',588,'8'),('3',589,'8'),('3',590,'8'),('3',591,'8'),('3',592,'8'),('3',593,'8'),('3',594,'8'),('3',595,'8'),('3',596,'8'),('3',597,'8'),('3',598,'8'),('3',599,'8'),('3',600,'8'),('3',601,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',602,'8'),('3',603,'8'),('3',604,'8'),('3',605,'8'),('3',606,'8'),('3',607,'8'),('3',608,'8'),('3',609,'8'),('3',610,'8'),('3',611,'8'),('3',612,'8'),('3',613,'8'),('3',614,'8'),('3',615,'8'),('3',616,'8'),('3',617,'8'),('3',618,'8'),('3',619,'8'),('3',620,'8'),('3',621,'8'),('3',622,'8'),('3',623,'8'),('3',624,'8'),('3',625,'8'),('3',626,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',627,'8'),('3',628,'8'),('3',629,'8'),('3',630,'8'),('3',631,'8'),('3',632,'8'),('3',633,'8'),('3',634,'8'),('3',635,'8'),('3',636,'8'),('3',637,'8'),('3',638,'8'),('3',639,'8'),('3',640,'8'),('3',641,'8'),('3',642,'8'),('3',643,'8'),('3',644,'8'),('3',645,'8'),('3',646,'8'),('3',647,'8'),('3',648,'8'),('3',649,'8'),('3',650,'8'),('3',651,'8');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',652,'8'),('3',653,'8'),('3',654,'8'),('3',655,'8'),('3',656,'8'),('3',657,'8'),('3',658,'8'),('3',659,'8'),('3',660,'8'),('3',661,'8'),('3',662,'8'),('3',663,'8'),('3',664,'8'),('3',665,'8'),('3',666,'8'),('3',667,'8'),('3',668,'8'),('3',669,'8'),('3',670,'8'),('3',671,'8'),('3',672,'8');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',673,'7'),('3',674,'7'),('3',675,'7'),('3',676,'7'),('3',677,'7'),('3',678,'7'),('3',679,'7'),('3',680,'7'),('3',681,'7'),('3',682,'7'),('3',683,'7'),('3',684,'7'),('3',685,'7'),('3',686,'7'),('3',687,'7'),('3',688,'7'),('3',689,'7'),('3',690,'7'),('3',691,'7'),('3',692,'7'),('3',693,'7'),('3',694,'7'),('3',695,'7'),('3',696,'7'),('3',697,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',698,'7'),('3',699,'7'),('3',700,'7'),('3',701,'7'),('3',702,'7'),('3',703,'7'),('3',704,'7'),('3',705,'7'),('3',706,'7'),('3',707,'7'),('3',708,'7'),('3',709,'7'),('3',710,'7'),('3',711,'7'),('3',712,'7'),('3',713,'7'),('3',714,'7'),('3',715,'7'),('3',716,'7'),('3',717,'7'),('3',718,'7'),('3',719,'7'),('3',720,'7'),('3',721,'7'),('3',722,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',723,'7'),('3',724,'7'),('3',725,'7'),('3',726,'7'),('3',727,'7'),('3',728,'7'),('3',729,'7'),('3',730,'7'),('3',731,'7'),('3',732,'7'),('3',733,'7'),('3',734,'7'),('3',735,'7'),('3',736,'7'),('3',737,'7'),('3',738,'7'),('3',739,'7'),('3',740,'7'),('3',741,'7'),('3',742,'7'),('3',743,'7'),('3',744,'7'),('3',745,'7'),('3',746,'7'),('3',747,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',748,'7'),('3',749,'7'),('3',750,'7'),('3',751,'7'),('3',752,'7'),('3',753,'7'),('3',754,'7'),('3',755,'7'),('3',756,'7'),('3',757,'7'),('3',758,'7'),('3',759,'7'),('3',760,'7'),('3',761,'7'),('3',762,'7'),('3',763,'7'),('3',764,'7'),('3',765,'7'),('3',766,'7'),('3',767,'7'),('3',768,'7');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',673,'24'),('3',674,'24'),('3',675,'24'),('3',676,'24'),('3',677,'24'),('3',678,'24'),('3',679,'24'),('3',680,'24'),('3',681,'24'),('3',682,'24'),('3',683,'24'),('3',684,'24'),('3',685,'24'),('3',686,'24'),('3',687,'24'),('3',688,'24'),('3',689,'24'),('3',690,'24'),('3',691,'24'),('3',692,'24'),('3',693,'24'),('3',694,'24'),('3',695,'24'),('3',696,'24'),('3',697,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',698,'24'),('3',699,'24'),('3',700,'24'),('3',701,'24'),('3',702,'24'),('3',703,'24'),('3',704,'24'),('3',705,'24'),('3',706,'24'),('3',707,'24'),('3',708,'24'),('3',709,'24'),('3',710,'24'),('3',711,'24'),('3',712,'24'),('3',713,'24'),('3',714,'24'),('3',715,'24'),('3',716,'24'),('3',717,'24'),('3',718,'24'),('3',719,'24'),('3',720,'24'),('3',721,'24'),('3',722,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',723,'24'),('3',724,'24'),('3',725,'24'),('3',726,'24'),('3',727,'24'),('3',728,'24'),('3',729,'24'),('3',730,'24'),('3',731,'24'),('3',732,'24'),('3',733,'24'),('3',734,'24'),('3',735,'24'),('3',736,'24'),('3',737,'24'),('3',738,'24'),('3',739,'24'),('3',740,'24'),('3',741,'24'),('3',742,'24'),('3',743,'24'),('3',744,'24'),('3',745,'24'),('3',746,'24'),('3',747,'24');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',748,'24'),('3',749,'24'),('3',750,'24'),('3',751,'24'),('3',752,'24'),('3',753,'24'),('3',754,'24'),('3',755,'24'),('3',756,'24'),('3',757,'24'),('3',758,'24'),('3',759,'24'),('3',760,'24'),('3',761,'24'),('3',762,'24'),('3',763,'24'),('3',764,'24'),('3',765,'24'),('3',766,'24'),('3',767,'24'),('3',768,'24');
+
+
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',769,'2'),('3',770,'2'),('3',771,'2'),('3',772,'2'),('3',773,'2'),('3',774,'2'),('3',775,'2'),('3',776,'2'),('3',777,'2'),('3',778,'2'),('3',779,'2'),('3',780,'2'),('3',781,'2'),('3',782,'2'),('3',783,'2'),('3',784,'2'),('3',785,'2'),('3',786,'2'),('3',787,'2'),('3',788,'2'),('3',789,'2'),('3',790,'2'),('3',791,'2'),('3',792,'2'),('3',793,'2');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',794,'2'),('3',795,'2'),('3',796,'2'),('3',797,'2'),('3',798,'2'),('3',799,'2'),('3',800,'2'),('3',801,'2'),('3',802,'2'),('3',803,'2'),('3',804,'2'),('3',805,'2'),('3',806,'2'),('3',807,'2'),('3',808,'2'),('3',809,'2'),('3',810,'2'),('3',811,'2'),('3',812,'2'),('3',813,'2'),('3',814,'2'),('3',815,'2'),('3',816,'2'),('3',817,'2'),('3',818,'2');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',819,'2'),('3',820,'2'),('3',821,'2'),('3',822,'2'),('3',823,'2'),('3',824,'2'),('3',825,'2'),('3',826,'2'),('3',827,'2'),('3',828,'2'),('3',829,'2'),('3',830,'2'),('3',831,'2'),('3',832,'2'),('3',833,'2'),('3',834,'2'),('3',835,'2'),('3',836,'2'),('3',837,'2'),('3',838,'2'),('3',839,'2'),('3',840,'2'),('3',841,'2'),('3',842,'2'),('3',843,'2');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',844,'2'),('3',845,'2'),('3',846,'2'),('3',847,'2'),('3',848,'2'),('3',849,'2'),('3',850,'2'),('3',851,'2'),('3',852,'2'),('3',853,'2'),('3',854,'2'),('3',855,'2'),('3',856,'2'),('3',857,'2'),('3',858,'2'),('3',859,'2'),('3',860,'2'),('3',861,'2'),('3',862,'2'),('3',863,'2'),('3',864,'2');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',769,'3'),('3',770,'3'),('3',771,'3'),('3',772,'3'),('3',773,'3'),('3',774,'3'),('3',775,'3'),('3',776,'3'),('3',777,'3'),('3',778,'3'),('3',779,'3'),('3',780,'3'),('3',781,'3'),('3',782,'3'),('3',783,'3'),('3',784,'3'),('3',785,'3'),('3',786,'3'),('3',787,'3'),('3',788,'3'),('3',789,'3'),('3',790,'3'),('3',791,'3'),('3',792,'3'),('3',793,'3');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',794,'3'),('3',795,'3'),('3',796,'3'),('3',797,'3'),('3',798,'3'),('3',799,'3'),('3',800,'3'),('3',801,'3'),('3',802,'3'),('3',803,'3'),('3',804,'3'),('3',805,'3'),('3',806,'3'),('3',807,'3'),('3',808,'3'),('3',809,'3'),('3',810,'3'),('3',811,'3'),('3',812,'3'),('3',813,'3'),('3',814,'3'),('3',815,'3'),('3',816,'3'),('3',817,'3'),('3',818,'3');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',819,'3'),('3',820,'3'),('3',821,'3'),('3',822,'3'),('3',823,'3'),('3',824,'3'),('3',825,'3'),('3',826,'3'),('3',827,'3'),('3',828,'3'),('3',829,'3'),('3',830,'3'),('3',831,'3'),('3',832,'3'),('3',833,'3'),('3',834,'3'),('3',835,'3'),('3',836,'3'),('3',837,'3'),('3',838,'3'),('3',839,'3'),('3',840,'3'),('3',841,'3'),('3',842,'3'),('3',843,'3');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',844,'3'),('3',845,'3'),('3',846,'3'),('3',847,'3'),('3',848,'3'),('3',849,'3'),('3',850,'3'),('3',851,'3'),('3',852,'3'),('3',853,'3'),('3',854,'3'),('3',855,'3'),('3',856,'3'),('3',857,'3'),('3',858,'3'),('3',859,'3'),('3',860,'3'),('3',861,'3'),('3',862,'3'),('3',863,'3'),('3',864,'3');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',769,'4'),('3',770,'4'),('3',771,'4'),('3',772,'4'),('3',773,'4'),('3',774,'4'),('3',775,'4'),('3',776,'4'),('3',777,'4'),('3',778,'4'),('3',779,'4'),('3',780,'4'),('3',781,'4'),('3',782,'4'),('3',783,'4'),('3',784,'4'),('3',785,'4'),('3',786,'4'),('3',787,'4'),('3',788,'4'),('3',789,'4'),('3',790,'4'),('3',791,'4'),('3',792,'4'),('3',793,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',794,'4'),('3',795,'4'),('3',796,'4'),('3',797,'4'),('3',798,'4'),('3',799,'4'),('3',800,'4'),('3',801,'4'),('3',802,'4'),('3',803,'4'),('3',804,'4'),('3',805,'4'),('3',806,'4'),('3',807,'4'),('3',808,'4'),('3',809,'4'),('3',810,'4'),('3',811,'4'),('3',812,'4'),('3',813,'4'),('3',814,'4'),('3',815,'4'),('3',816,'4'),('3',817,'4'),('3',818,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',819,'4'),('3',820,'4'),('3',821,'4'),('3',822,'4'),('3',823,'4'),('3',824,'4'),('3',825,'4'),('3',826,'4'),('3',827,'4'),('3',828,'4'),('3',829,'4'),('3',830,'4'),('3',831,'4'),('3',832,'4'),('3',833,'4'),('3',834,'4'),('3',835,'4'),('3',836,'4'),('3',837,'4'),('3',838,'4'),('3',839,'4'),('3',840,'4'),('3',841,'4'),('3',842,'4'),('3',843,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',844,'4'),('3',845,'4'),('3',846,'4'),('3',847,'4'),('3',848,'4'),('3',849,'4'),('3',850,'4'),('3',851,'4'),('3',852,'4'),('3',853,'4'),('3',854,'4'),('3',855,'4'),('3',856,'4'),('3',857,'4'),('3',858,'4'),('3',859,'4'),('3',860,'4'),('3',861,'4'),('3',862,'4'),('3',863,'4'),('3',864,'4');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',769,'15'),('3',770,'15'),('3',771,'15'),('3',772,'15'),('3',773,'15'),('3',774,'15'),('3',775,'15'),('3',776,'15'),('3',777,'15'),('3',778,'15'),('3',779,'15'),('3',780,'15'),('3',781,'15'),('3',782,'15'),('3',783,'15'),('3',784,'15'),('3',785,'15'),('3',786,'15'),('3',787,'15'),('3',788,'15'),('3',789,'15'),('3',790,'15'),('3',791,'15'),('3',792,'15'),('3',793,'15');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',794,'15'),('3',795,'15'),('3',796,'15'),('3',797,'15'),('3',798,'15'),('3',799,'15'),('3',800,'15'),('3',801,'15'),('3',802,'15'),('3',803,'15'),('3',804,'15'),('3',805,'15'),('3',806,'15'),('3',807,'15'),('3',808,'15'),('3',809,'15'),('3',810,'15'),('3',811,'15'),('3',812,'15'),('3',813,'15'),('3',814,'15'),('3',815,'15'),('3',816,'15'),('3',817,'15'),('3',818,'15');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',819,'15'),('3',820,'15'),('3',821,'15'),('3',822,'15'),('3',823,'15'),('3',824,'15'),('3',825,'15'),('3',826,'15'),('3',827,'15'),('3',828,'15'),('3',829,'15'),('3',830,'15'),('3',831,'15'),('3',832,'15'),('3',833,'15'),('3',834,'15'),('3',835,'15'),('3',836,'15'),('3',837,'15'),('3',838,'15'),('3',839,'15'),('3',840,'15'),('3',841,'15'),('3',842,'15'),('3',843,'15');
+INSERT INTO CAR_FAS (cf_cantidad,fk_cf_fase,fk_cf_cargo) VALUES ('3',844,'15'),('3',845,'15'),('3',846,'15'),('3',847,'15'),('3',848,'15'),('3',849,'15'),('3',850,'15'),('3',851,'15'),('3',852,'15'),('3',853,'15'),('3',854,'15'),('3',855,'15'),('3',856,'15'),('3',857,'15'),('3',858,'15'),('3',859,'15'),('3',860,'15'),('3',861,'15'),('3',862,'15'),('3',863,'15'),('3',864,'15');
+
+
+
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 1) WHERE eta_codigo = 1;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 2) WHERE eta_codigo = 2;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 3) WHERE eta_codigo = 3;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 4) WHERE eta_codigo = 4;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 5) WHERE eta_codigo = 5;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 6) WHERE eta_codigo = 6;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 7) WHERE eta_codigo = 7;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 8) WHERE eta_codigo = 8;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 9) WHERE eta_codigo = 9;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 10) WHERE eta_codigo = 10;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 11) WHERE eta_codigo = 11;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 12) WHERE eta_codigo = 12;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 13) WHERE eta_codigo = 13;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 14) WHERE eta_codigo = 14;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 15) WHERE eta_codigo = 15;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 16) WHERE eta_codigo = 16;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 17) WHERE eta_codigo = 17;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 18) WHERE eta_codigo = 18;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 19) WHERE eta_codigo = 19;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 20) WHERE eta_codigo = 20;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 21) WHERE eta_codigo = 21;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 22) WHERE eta_codigo = 22;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 23) WHERE eta_codigo = 23;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 24) WHERE eta_codigo = 24;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 25) WHERE eta_codigo = 25;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 26) WHERE eta_codigo = 26;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 27) WHERE eta_codigo = 27;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 28) WHERE eta_codigo = 28;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 29) WHERE eta_codigo = 29;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 30) WHERE eta_codigo = 30;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 31) WHERE eta_codigo = 31;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 32) WHERE eta_codigo = 32;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 33) WHERE eta_codigo = 33;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 34) WHERE eta_codigo = 34;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 35) WHERE eta_codigo = 35;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 36) WHERE eta_codigo = 36;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 37) WHERE eta_codigo = 37;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 38) WHERE eta_codigo = 38;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 39) WHERE eta_codigo = 39;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 40) WHERE eta_codigo = 40;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 41) WHERE eta_codigo = 41;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 42) WHERE eta_codigo = 42;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 43) WHERE eta_codigo = 43;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 44) WHERE eta_codigo = 44;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 45) WHERE eta_codigo = 45;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 46) WHERE eta_codigo = 46;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 47) WHERE eta_codigo = 47;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 48) WHERE eta_codigo = 48;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 49) WHERE eta_codigo = 49;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 50) WHERE eta_codigo = 50;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 51) WHERE eta_codigo = 51;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 52) WHERE eta_codigo = 52;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 53) WHERE eta_codigo = 53;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 54) WHERE eta_codigo = 54;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 55) WHERE eta_codigo = 55;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 56) WHERE eta_codigo = 56;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 57) WHERE eta_codigo = 57;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 58) WHERE eta_codigo = 58;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 59) WHERE eta_codigo = 59;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 60) WHERE eta_codigo = 60;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 61) WHERE eta_codigo = 61;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 62) WHERE eta_codigo = 62;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 63) WHERE eta_codigo = 63;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 64) WHERE eta_codigo = 64;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 65) WHERE eta_codigo = 65;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 66) WHERE eta_codigo = 66;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 67) WHERE eta_codigo = 67;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 68) WHERE eta_codigo = 68;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 69) WHERE eta_codigo = 69;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 70) WHERE eta_codigo = 70;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 71) WHERE eta_codigo = 71;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 72) WHERE eta_codigo = 72;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 73) WHERE eta_codigo = 73;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 74) WHERE eta_codigo = 74;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 75) WHERE eta_codigo = 75;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 76) WHERE eta_codigo = 76;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 67) WHERE eta_codigo = 67;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 68) WHERE eta_codigo = 68;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 69) WHERE eta_codigo = 69;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 70) WHERE eta_codigo = 70;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 71) WHERE eta_codigo = 71;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 72) WHERE eta_codigo = 72;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 73) WHERE eta_codigo = 73;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 74) WHERE eta_codigo = 74;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 75) WHERE eta_codigo = 75;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 76) WHERE eta_codigo = 76;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 77) WHERE eta_codigo = 77;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 78) WHERE eta_codigo = 78;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 79) WHERE eta_codigo = 79;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 80) WHERE eta_codigo = 80;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 81) WHERE eta_codigo = 81;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 82) WHERE eta_codigo = 82;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 83) WHERE eta_codigo = 83;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 84) WHERE eta_codigo = 84;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 85) WHERE eta_codigo = 85;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 86) WHERE eta_codigo = 86;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 87) WHERE eta_codigo = 87;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 88) WHERE eta_codigo = 88;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 89) WHERE eta_codigo = 89;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 90) WHERE eta_codigo = 90;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 91) WHERE eta_codigo = 91;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 92) WHERE eta_codigo = 92;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 93) WHERE eta_codigo = 93;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 94) WHERE eta_codigo = 94;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 95) WHERE eta_codigo = 95;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'I.I: Analisis de informacion' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 96) WHERE eta_codigo = 96;
+
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 97) WHERE eta_codigo = 97;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 98) WHERE eta_codigo = 98;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 99) WHERE eta_codigo = 99;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 100) WHERE eta_codigo = 100;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 101) WHERE eta_codigo = 101;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 102) WHERE eta_codigo = 102;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 103) WHERE eta_codigo = 103;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 104) WHERE eta_codigo = 104;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 105) WHERE eta_codigo = 105;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 106) WHERE eta_codigo = 106;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 107) WHERE eta_codigo = 107;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 108) WHERE eta_codigo = 108;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 109) WHERE eta_codigo = 109;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 110) WHERE eta_codigo = 110;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 111) WHERE eta_codigo = 111;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 112) WHERE eta_codigo = 112;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 113) WHERE eta_codigo = 113;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 114) WHERE eta_codigo = 114;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 115) WHERE eta_codigo = 115;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 116) WHERE eta_codigo = 116;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 117) WHERE eta_codigo = 117;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 118) WHERE eta_codigo = 118;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 119) WHERE eta_codigo = 119;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 120) WHERE eta_codigo = 120;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 121) WHERE eta_codigo = 121;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 122) WHERE eta_codigo = 122;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 123) WHERE eta_codigo = 123;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 124) WHERE eta_codigo = 124;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 125) WHERE eta_codigo = 125;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 126) WHERE eta_codigo = 126;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 127) WHERE eta_codigo = 127;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 128) WHERE eta_codigo = 128;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 129) WHERE eta_codigo = 129;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 130) WHERE eta_codigo = 130;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 131) WHERE eta_codigo = 131;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 132) WHERE eta_codigo = 132;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 133) WHERE eta_codigo = 133;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 134) WHERE eta_codigo = 134;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 135) WHERE eta_codigo = 135;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 136) WHERE eta_codigo = 136;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 137) WHERE eta_codigo = 137;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 138) WHERE eta_codigo = 138;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 139) WHERE eta_codigo = 139;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 140) WHERE eta_codigo = 140;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 141) WHERE eta_codigo = 141;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 142) WHERE eta_codigo = 142;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 143) WHERE eta_codigo = 143;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 144) WHERE eta_codigo = 144;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 145) WHERE eta_codigo = 145;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 146) WHERE eta_codigo = 146;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 147) WHERE eta_codigo = 147;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 148) WHERE eta_codigo = 148;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 149) WHERE eta_codigo = 149;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 150) WHERE eta_codigo = 150;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 151) WHERE eta_codigo = 151;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 152) WHERE eta_codigo = 152;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 153) WHERE eta_codigo = 153;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 154) WHERE eta_codigo = 154;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 155) WHERE eta_codigo = 155;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 156) WHERE eta_codigo = 156;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 157) WHERE eta_codigo = 157;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 158) WHERE eta_codigo = 158;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 159) WHERE eta_codigo = 159;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 160) WHERE eta_codigo = 160;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 161) WHERE eta_codigo = 161;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 162) WHERE eta_codigo = 162;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 163) WHERE eta_codigo = 163;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 164) WHERE eta_codigo = 164;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 165) WHERE eta_codigo = 165;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 166) WHERE eta_codigo = 166;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 167) WHERE eta_codigo = 167;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 168) WHERE eta_codigo = 168;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 169) WHERE eta_codigo = 169;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 170) WHERE eta_codigo = 170;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 171) WHERE eta_codigo = 171;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 172) WHERE eta_codigo = 172;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 173) WHERE eta_codigo = 173;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 174) WHERE eta_codigo = 174;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 175) WHERE eta_codigo = 175;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 176) WHERE eta_codigo = 176;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 167) WHERE eta_codigo = 167;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 168) WHERE eta_codigo = 168;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 169) WHERE eta_codigo = 169;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 170) WHERE eta_codigo = 170;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 171) WHERE eta_codigo = 171;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 172) WHERE eta_codigo = 172;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 173) WHERE eta_codigo = 173;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 174) WHERE eta_codigo = 174;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 175) WHERE eta_codigo = 175;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 176) WHERE eta_codigo = 176;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 177) WHERE eta_codigo = 177;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 178) WHERE eta_codigo = 178;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 179) WHERE eta_codigo = 179;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 180) WHERE eta_codigo = 180;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 181) WHERE eta_codigo = 181;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 182) WHERE eta_codigo = 182;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 183) WHERE eta_codigo = 183;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 184) WHERE eta_codigo = 184;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 185) WHERE eta_codigo = 185;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 186) WHERE eta_codigo = 186;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 187) WHERE eta_codigo = 187;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 188) WHERE eta_codigo = 188;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 189) WHERE eta_codigo = 189;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 190) WHERE eta_codigo = 190;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 191) WHERE eta_codigo = 191;
+UPDATE ETAPA SET eta_fechainicio = (select fas_fechainicio from fase, etapa where fas_nombre = 'II.I: Restitucion topografica' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 192) WHERE eta_codigo = 192;
+
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 1) WHERE eta_codigo = 1;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 2) WHERE eta_codigo = 2;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 3) WHERE eta_codigo = 3;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 4) WHERE eta_codigo = 4;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 5) WHERE eta_codigo = 5;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 6) WHERE eta_codigo = 6;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 7) WHERE eta_codigo = 7;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 8) WHERE eta_codigo = 8;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 9) WHERE eta_codigo = 9;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 10) WHERE eta_codigo = 10;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 11) WHERE eta_codigo = 11;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 12) WHERE eta_codigo = 12;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 13) WHERE eta_codigo = 13;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 14) WHERE eta_codigo = 14;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 15) WHERE eta_codigo = 15;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 16) WHERE eta_codigo = 16;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 17) WHERE eta_codigo = 17;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 18) WHERE eta_codigo = 18;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 19) WHERE eta_codigo = 19;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 20) WHERE eta_codigo = 20;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 21) WHERE eta_codigo = 21;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 22) WHERE eta_codigo = 22;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 23) WHERE eta_codigo = 23;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 24) WHERE eta_codigo = 24;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 25) WHERE eta_codigo = 25;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 26) WHERE eta_codigo = 26;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 27) WHERE eta_codigo = 27;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 28) WHERE eta_codigo = 28;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 29) WHERE eta_codigo = 29;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 30) WHERE eta_codigo = 30;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 31) WHERE eta_codigo = 31;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 32) WHERE eta_codigo = 32;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 33) WHERE eta_codigo = 33;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 34) WHERE eta_codigo = 34;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 35) WHERE eta_codigo = 35;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 36) WHERE eta_codigo = 36;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 37) WHERE eta_codigo = 37;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 38) WHERE eta_codigo = 38;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 39) WHERE eta_codigo = 39;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 40) WHERE eta_codigo = 40;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 41) WHERE eta_codigo = 41;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 42) WHERE eta_codigo = 42;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 43) WHERE eta_codigo = 43;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 44) WHERE eta_codigo = 44;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 45) WHERE eta_codigo = 45;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 46) WHERE eta_codigo = 46;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 47) WHERE eta_codigo = 47;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 48) WHERE eta_codigo = 48;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 49) WHERE eta_codigo = 49;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 50) WHERE eta_codigo = 50;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 51) WHERE eta_codigo = 51;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 52) WHERE eta_codigo = 52;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 53) WHERE eta_codigo = 53;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 54) WHERE eta_codigo = 54;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 55) WHERE eta_codigo = 55;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 56) WHERE eta_codigo = 56;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 57) WHERE eta_codigo = 57;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 58) WHERE eta_codigo = 58;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 59) WHERE eta_codigo = 59;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 60) WHERE eta_codigo = 60;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 61) WHERE eta_codigo = 61;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 62) WHERE eta_codigo = 62;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 63) WHERE eta_codigo = 63;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 64) WHERE eta_codigo = 64;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 65) WHERE eta_codigo = 65;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 66) WHERE eta_codigo = 66;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 67) WHERE eta_codigo = 67;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 68) WHERE eta_codigo = 68;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 69) WHERE eta_codigo = 69;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 70) WHERE eta_codigo = 70;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 71) WHERE eta_codigo = 71;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 72) WHERE eta_codigo = 72;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 73) WHERE eta_codigo = 73;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 74) WHERE eta_codigo = 74;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 75) WHERE eta_codigo = 75;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 76) WHERE eta_codigo = 76;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 67) WHERE eta_codigo = 67;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 68) WHERE eta_codigo = 68;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 69) WHERE eta_codigo = 69;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 70) WHERE eta_codigo = 70;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 71) WHERE eta_codigo = 71;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 72) WHERE eta_codigo = 72;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 73) WHERE eta_codigo = 73;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 74) WHERE eta_codigo = 74;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 75) WHERE eta_codigo = 75;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 76) WHERE eta_codigo = 76;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 77) WHERE eta_codigo = 77;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 78) WHERE eta_codigo = 78;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 79) WHERE eta_codigo = 79;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 80) WHERE eta_codigo = 80;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 81) WHERE eta_codigo = 81;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 82) WHERE eta_codigo = 82;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 83) WHERE eta_codigo = 83;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 84) WHERE eta_codigo = 84;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 85) WHERE eta_codigo = 85;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 86) WHERE eta_codigo = 86;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 87) WHERE eta_codigo = 87;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 88) WHERE eta_codigo = 88;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 89) WHERE eta_codigo = 89;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 90) WHERE eta_codigo = 90;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 91) WHERE eta_codigo = 91;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 92) WHERE eta_codigo = 92;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 93) WHERE eta_codigo = 93;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 94) WHERE eta_codigo = 94;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 95) WHERE eta_codigo = 95;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'I.II: Reconocimiento preliminar' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 96) WHERE eta_codigo = 96;
+
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 97) WHERE eta_codigo = 97;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 98) WHERE eta_codigo = 98;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 99) WHERE eta_codigo = 99;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 100) WHERE eta_codigo = 100;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 101) WHERE eta_codigo = 101;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 102) WHERE eta_codigo = 102;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 103) WHERE eta_codigo = 103;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 104) WHERE eta_codigo = 104;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 105) WHERE eta_codigo = 105;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 106) WHERE eta_codigo = 106;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 107) WHERE eta_codigo = 107;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 108) WHERE eta_codigo = 108;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 109) WHERE eta_codigo = 109;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 110) WHERE eta_codigo = 110;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 111) WHERE eta_codigo = 111;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 112) WHERE eta_codigo = 112;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 113) WHERE eta_codigo = 113;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 114) WHERE eta_codigo = 114;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 115) WHERE eta_codigo = 115;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 116) WHERE eta_codigo = 116;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 117) WHERE eta_codigo = 117;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 118) WHERE eta_codigo = 118;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 119) WHERE eta_codigo = 119;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 120) WHERE eta_codigo = 120;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 121) WHERE eta_codigo = 121;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 122) WHERE eta_codigo = 122;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 123) WHERE eta_codigo = 123;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 124) WHERE eta_codigo = 124;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 125) WHERE eta_codigo = 125;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 126) WHERE eta_codigo = 126;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 127) WHERE eta_codigo = 127;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 128) WHERE eta_codigo = 128;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 129) WHERE eta_codigo = 129;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 130) WHERE eta_codigo = 130;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 131) WHERE eta_codigo = 131;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 132) WHERE eta_codigo = 132;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 133) WHERE eta_codigo = 133;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 134) WHERE eta_codigo = 134;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 135) WHERE eta_codigo = 135;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 136) WHERE eta_codigo = 136;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 137) WHERE eta_codigo = 137;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 138) WHERE eta_codigo = 138;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 139) WHERE eta_codigo = 139;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 140) WHERE eta_codigo = 140;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 141) WHERE eta_codigo = 141;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 142) WHERE eta_codigo = 142;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 143) WHERE eta_codigo = 143;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 144) WHERE eta_codigo = 144;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 145) WHERE eta_codigo = 145;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 146) WHERE eta_codigo = 146;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 147) WHERE eta_codigo = 147;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 148) WHERE eta_codigo = 148;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 149) WHERE eta_codigo = 149;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 150) WHERE eta_codigo = 150;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 151) WHERE eta_codigo = 151;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 152) WHERE eta_codigo = 152;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 153) WHERE eta_codigo = 153;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 154) WHERE eta_codigo = 154;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 155) WHERE eta_codigo = 155;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 156) WHERE eta_codigo = 156;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 157) WHERE eta_codigo = 157;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 158) WHERE eta_codigo = 158;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 159) WHERE eta_codigo = 159;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 160) WHERE eta_codigo = 160;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 161) WHERE eta_codigo = 161;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 162) WHERE eta_codigo = 162;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 163) WHERE eta_codigo = 163;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 164) WHERE eta_codigo = 164;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 165) WHERE eta_codigo = 165;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 166) WHERE eta_codigo = 166;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 167) WHERE eta_codigo = 167;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 168) WHERE eta_codigo = 168;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 169) WHERE eta_codigo = 169;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 170) WHERE eta_codigo = 170;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 171) WHERE eta_codigo = 171;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 172) WHERE eta_codigo = 172;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 173) WHERE eta_codigo = 173;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 174) WHERE eta_codigo = 174;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 175) WHERE eta_codigo = 175;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 176) WHERE eta_codigo = 176;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 167) WHERE eta_codigo = 167;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 168) WHERE eta_codigo = 168;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 169) WHERE eta_codigo = 169;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 170) WHERE eta_codigo = 170;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 171) WHERE eta_codigo = 171;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 172) WHERE eta_codigo = 172;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 173) WHERE eta_codigo = 173;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 174) WHERE eta_codigo = 174;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 175) WHERE eta_codigo = 175;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 176) WHERE eta_codigo = 176;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 177) WHERE eta_codigo = 177;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 178) WHERE eta_codigo = 178;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 179) WHERE eta_codigo = 179;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 180) WHERE eta_codigo = 180;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 181) WHERE eta_codigo = 181;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 182) WHERE eta_codigo = 182;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 183) WHERE eta_codigo = 183;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 184) WHERE eta_codigo = 184;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 185) WHERE eta_codigo = 185;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 186) WHERE eta_codigo = 186;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 187) WHERE eta_codigo = 187;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 188) WHERE eta_codigo = 188;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 189) WHERE eta_codigo = 189;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 190) WHERE eta_codigo = 190;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 191) WHERE eta_codigo = 191;
+UPDATE ETAPA SET eta_fechafin = (select fas_fechafin from fase, etapa where fas_nombre = 'II.VII: Elaboracion de informe' AND fk_fas_etapa = eta_codigo AND fk_fas_etapa = 192) WHERE eta_codigo = 192;
+
+
+-- UPDATE DE FECHAS DE EXPLOTACION
+
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 1) WHERE exp_codigo = 1;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 2) WHERE exp_codigo = 2;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 3) WHERE exp_codigo = 3;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 4) WHERE exp_codigo = 4;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 5) WHERE exp_codigo = 5;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 6) WHERE exp_codigo = 6;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 7) WHERE exp_codigo = 7;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 8) WHERE exp_codigo = 8;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 9) WHERE exp_codigo = 9;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 10) WHERE exp_codigo = 10;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 11) WHERE exp_codigo = 11;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 12) WHERE exp_codigo = 12;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 13) WHERE exp_codigo = 13;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 14) WHERE exp_codigo = 14;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 15) WHERE exp_codigo = 15;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 16) WHERE exp_codigo = 16;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 17) WHERE exp_codigo = 17;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 18) WHERE exp_codigo = 18;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 19) WHERE exp_codigo = 19;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 20) WHERE exp_codigo = 20;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 21) WHERE exp_codigo = 21;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 22) WHERE exp_codigo = 22;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 23) WHERE exp_codigo = 23;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 24) WHERE exp_codigo = 24;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 25) WHERE exp_codigo = 25;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 26) WHERE exp_codigo = 26;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 27) WHERE exp_codigo = 27;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 28) WHERE exp_codigo = 28;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 29) WHERE exp_codigo = 29;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 30) WHERE exp_codigo = 30;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 31) WHERE exp_codigo = 31;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 32) WHERE exp_codigo = 32;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 33) WHERE exp_codigo = 33;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 34) WHERE exp_codigo = 34;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 35) WHERE exp_codigo = 35;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 36) WHERE exp_codigo = 36;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 37) WHERE exp_codigo = 37;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 38) WHERE exp_codigo = 38;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 39) WHERE exp_codigo = 39;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 40) WHERE exp_codigo = 40;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 41) WHERE exp_codigo = 41;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 42) WHERE exp_codigo = 42;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 43) WHERE exp_codigo = 43;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 44) WHERE exp_codigo = 44;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 45) WHERE exp_codigo = 45;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 46) WHERE exp_codigo = 46;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 47) WHERE exp_codigo = 47;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 48) WHERE exp_codigo = 48;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 49) WHERE exp_codigo = 49;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 50) WHERE exp_codigo = 50;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 51) WHERE exp_codigo = 51;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 52) WHERE exp_codigo = 52;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 53) WHERE exp_codigo = 53;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 54) WHERE exp_codigo = 54;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 55) WHERE exp_codigo = 55;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 56) WHERE exp_codigo = 56;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 57) WHERE exp_codigo = 57;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 58) WHERE exp_codigo = 58;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 59) WHERE exp_codigo = 59;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 60) WHERE exp_codigo = 60;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 61) WHERE exp_codigo = 61;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 62) WHERE exp_codigo = 62;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 63) WHERE exp_codigo = 63;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 64) WHERE exp_codigo = 64;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 65) WHERE exp_codigo = 65;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 66) WHERE exp_codigo = 66;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 67) WHERE exp_codigo = 67;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 68) WHERE exp_codigo = 68;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 69) WHERE exp_codigo = 69;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 70) WHERE exp_codigo = 70;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 71) WHERE exp_codigo = 71;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 72) WHERE exp_codigo = 72;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 73) WHERE exp_codigo = 73;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 74) WHERE exp_codigo = 74;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 75) WHERE exp_codigo = 75;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 76) WHERE exp_codigo = 76;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 77) WHERE exp_codigo = 77;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 78) WHERE exp_codigo = 78;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 79) WHERE exp_codigo = 79;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 80) WHERE exp_codigo = 80;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 81) WHERE exp_codigo = 81;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 82) WHERE exp_codigo = 82;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 83) WHERE exp_codigo = 83;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 84) WHERE exp_codigo = 84;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 85) WHERE exp_codigo = 85;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 86) WHERE exp_codigo = 86;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 87) WHERE exp_codigo = 87;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 88) WHERE exp_codigo = 88;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 89) WHERE exp_codigo = 89;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 90) WHERE exp_codigo = 90;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 91) WHERE exp_codigo = 91;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 92) WHERE exp_codigo = 92;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 93) WHERE exp_codigo = 93;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 94) WHERE exp_codigo = 94;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 95) WHERE exp_codigo = 95;
+UPDATE EXPLOTACION SET exp_fechainicio = (select eta_fechainicio from etapa, explotacion where eta_nombre = 'I: Inventario de informacion' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 96) WHERE exp_codigo = 96;
+
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 1) WHERE exp_codigo = 1;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 2) WHERE exp_codigo = 2;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 3) WHERE exp_codigo = 3;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 4) WHERE exp_codigo = 4;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 5) WHERE exp_codigo = 5;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 6) WHERE exp_codigo = 6;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 7) WHERE exp_codigo = 7;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 8) WHERE exp_codigo = 8;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 9) WHERE exp_codigo = 9;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 10) WHERE exp_codigo = 10;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 11) WHERE exp_codigo = 11;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 12) WHERE exp_codigo = 12;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 13) WHERE exp_codigo = 13;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 14) WHERE exp_codigo = 14;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 15) WHERE exp_codigo = 15;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 16) WHERE exp_codigo = 16;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 17) WHERE exp_codigo = 17;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 18) WHERE exp_codigo = 18;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 19) WHERE exp_codigo = 19;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 20) WHERE exp_codigo = 20;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 21) WHERE exp_codigo = 21;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 22) WHERE exp_codigo = 22;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 23) WHERE exp_codigo = 23;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 24) WHERE exp_codigo = 24;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 25) WHERE exp_codigo = 25;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 26) WHERE exp_codigo = 26;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 27) WHERE exp_codigo = 27;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 28) WHERE exp_codigo = 28;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 29) WHERE exp_codigo = 29;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 30) WHERE exp_codigo = 30;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 31) WHERE exp_codigo = 31;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 32) WHERE exp_codigo = 32;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 33) WHERE exp_codigo = 33;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 34) WHERE exp_codigo = 34;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 35) WHERE exp_codigo = 35;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 36) WHERE exp_codigo = 36;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 37) WHERE exp_codigo = 37;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 38) WHERE exp_codigo = 38;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 39) WHERE exp_codigo = 39;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 40) WHERE exp_codigo = 40;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 41) WHERE exp_codigo = 41;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 42) WHERE exp_codigo = 42;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 43) WHERE exp_codigo = 43;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 44) WHERE exp_codigo = 44;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 45) WHERE exp_codigo = 45;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 46) WHERE exp_codigo = 46;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 47) WHERE exp_codigo = 47;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 48) WHERE exp_codigo = 48;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 49) WHERE exp_codigo = 49;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 50) WHERE exp_codigo = 50;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 51) WHERE exp_codigo = 51;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 52) WHERE exp_codigo = 52;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 53) WHERE exp_codigo = 53;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 54) WHERE exp_codigo = 54;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 55) WHERE exp_codigo = 55;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 56) WHERE exp_codigo = 56;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 57) WHERE exp_codigo = 57;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 58) WHERE exp_codigo = 58;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 59) WHERE exp_codigo = 59;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 60) WHERE exp_codigo = 60;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 61) WHERE exp_codigo = 61;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 62) WHERE exp_codigo = 62;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 63) WHERE exp_codigo = 63;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 64) WHERE exp_codigo = 64;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 65) WHERE exp_codigo = 65;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 66) WHERE exp_codigo = 66;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 67) WHERE exp_codigo = 67;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 68) WHERE exp_codigo = 68;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 69) WHERE exp_codigo = 69;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 70) WHERE exp_codigo = 70;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 71) WHERE exp_codigo = 71;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 72) WHERE exp_codigo = 72;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 73) WHERE exp_codigo = 73;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 74) WHERE exp_codigo = 74;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 75) WHERE exp_codigo = 75;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 76) WHERE exp_codigo = 76;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 77) WHERE exp_codigo = 77;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 78) WHERE exp_codigo = 78;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 79) WHERE exp_codigo = 79;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 80) WHERE exp_codigo = 80;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 81) WHERE exp_codigo = 81;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 82) WHERE exp_codigo = 82;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 83) WHERE exp_codigo = 83;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 84) WHERE exp_codigo = 84;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 85) WHERE exp_codigo = 85;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 86) WHERE exp_codigo = 86;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 87) WHERE exp_codigo = 87;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 88) WHERE exp_codigo = 88;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 89) WHERE exp_codigo = 89;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 90) WHERE exp_codigo = 90;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 91) WHERE exp_codigo = 91;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 92) WHERE exp_codigo = 92;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 93) WHERE exp_codigo = 93;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 94) WHERE exp_codigo = 94;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 95) WHERE exp_codigo = 95;
+UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 96) WHERE exp_codigo = 96;
+
 
