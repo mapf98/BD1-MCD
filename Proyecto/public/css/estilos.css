@@ -424,3 +424,46 @@ button, select {
 .listMin{
   margin-top: 10px;
 }
+
+
+.title{
+  color: white;
+}
+
+.sepRow{
+  margin-top: 30px;
+}
+
+.proBox{
+  margin-top: 70px;
+}
+
+.newEtapa{
+  background-color:#40434E ;
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.hretapa{
+  background-color: white;
+  height: 3px;
+}
+
+.textEtapa{
+  color: white;
+}
+
+.newFase{
+  background-color:#276FBF ;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.newCargo{
+  background-color:#40434E;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}

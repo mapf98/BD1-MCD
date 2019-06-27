@@ -97,6 +97,22 @@ app.get("/Yacimientos",function(req,res){
   }
 });
 
+app.get("/Explotaciones",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('explotaciones',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Explotacion-Configuracion",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('explotacionesConfiguracion',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.get("/Empleados-Agregar",function(req,res){
   let dataCargo;
   let dataLugar;
@@ -707,6 +723,187 @@ app.post("/Yacimientos-Verificar",function(req,res){
   });
 });         
 
+/////////////////////////////////EXPLOTACIONES//////////////////////////////////
+
+app.get("/Explotaciones-Configuracion-Agregar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yac = result.rows;
+        res.render('explotacionesConfiguracionAgregar',{user: userJSON,yac: yac});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/getCargo",function(req,res){
+  client.query('SELECT car_codigo,car_nombre FROM CARGO',(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var car = result.rows;
+      res.send({car:car});
+    }
+  });
+});
+
+app.get("/getTipoMaquinaria",function(req,res){
+  client.query('SELECT tm_codigo,tm_nombre FROM TIPO_MAQUINARIA',(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var TMmaq = result.rows;
+      res.send({TMmaq:TMmaq});
+    }
+  });
+});
+
+app.post("/getYacExp",function(req,res){
+  var verificar = req.body.yacExp;
+  client.query('SELECT exp_codigo FROM EXPLOTACION WHERE fk_exp_yacimiento = $1',[verificar],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null ){
+      res.send('great');
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/AExp",function(req,res){
+  var exp = req.body.AExp; 
+  console.log(exp);
+  client.query('INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO) VALUES (1,$1) RETURNING EXP_CODIGO',[exp],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0].exp_codigo != null){
+      var expCod = result.rows[0];
+      res.send({cod: expCod}); 
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/AEta",function(req,res){
+  var eta = req.body.AEta; 
+  var exp = req.body.AExp;
+  console.log(eta);
+  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,1) RETURNING ETA_CODIGO',[eta,exp],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0].eta_codigo != null){
+      var etaCod = result.rows[0];
+      res.send({cod: etaCod});
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/AFas",function(req,res){
+  var eta = req.body.AEta; 
+  var fas = req.body.AFas;
+  console.log(fas);
+  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,1) RETURNING FAS_CODIGO',[fas,eta],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0].fas_codigo != null){
+      var fasCod = result.rows[0];
+      res.send({cod: fasCod});
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/ACar",function(req,res){
+  var fas = req.body.AFas;
+  var c = req.body.ACarT;
+  var q = req.body.ACarQ;
+  console.log(c+'/'+q);
+  client.query('INSERT INTO CAR_FAS (CF_CANTIDAD,FK_CF_CARGO,FK_CF_FASE) VALUES ($1,$2,$3)',[q,c,fas],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });
+});
+
+app.post("/AMaq",function(req,res){
+  var fas = req.body.AFas;
+  var m = req.body.AMaqT;
+  var q = req.body.AMaqQ;
+  console.log(m+'/'+q);
+  client.query('INSERT INTO TM_FAS (TMF_CANTIDAD,FK_TMF_TM,FK_TMF_FASE) VALUES ($1,$2,$3)',[q,m,fas],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });
+});
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
+
+
+
+      // for (var i = 0; i < dC.e.length; i++) {
+      //   console.log('VALOR DE LA I = ',i);
+      //   client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,1) RETURNING ETA_CODIGO',[dC.e[i].nE,result.rows[0].exp_codigo],(err,result)=>{
+      //     if (err) {
+      //       console.log(err.stack);
+      //       res.send('failed'); 
+      //     }else if(result.rows[0].eta_codigo != null){
+      //       console.log('VALOR DE LA I = ',i);
+      //       for (var j = 0; j < dC.e[i].f.length ; j++) {
+      //         client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,1) RETURNING FAS_CODIGO',[dC.e[i].f[j].nF,result.rows[0].eta_codig],(err,result)=>{
+      //           if (err) {
+      //             console.log(err.stack);
+      //             res.send('failed'); 
+      //           }else if(result.rows[0].fas_codigo != null){
+
+      //             for (var k = 0; k < dC.e[i].f[j].c[k].length; k++) {
+      //               client.query('INSERT INTO CAR_FAS (CF_CANTIDAD,FK_CF_CARGO,FK_CF_FASE) VALUES ($1,$2,$3)',[dC.e[i].f[j].c[k].cq,dC.e[i].f[j].c[k].c,result.rows[0].fas_codigo],(err,result)=>{
+      //                 if (err) {
+      //                   console.log(err.stack);
+      //                   res.send('failed'); 
+      //                 }else{
+                        
+      //                 }
+      //               });
+      //             }
+
+      //             for (var g = 0; g < dC.e[i].f[j].m[g].length; g++) {
+      //               client.query('INSERT INTO TM_FAS (TMF_CANTIDAD,FK_TMF_TM,FK_TMF_FASE) VALUES ($1,$2,$3)',[dC.e[i].f[j].c[g].mq,dC.e[i].f[j].c[g].m,result.rows[0].fas_codigo],(err,result)=>{
+      //                 if (err) {
+      //                   console.log(err.stack);
+      //                   res.send('failed'); 
+      //                 }else{
+                        
+      //                 }
+      //               });
+      //             }
+
+      //           }
+      //         }); 
+      //       }
+      //     }
+      //   });
+      // }
