@@ -3,6 +3,9 @@ var globalIDExplotacionEtapa = 1;
 var globalIDExplotacionFase = 1;
 var globalIDCargo = 1;
 var globalIDMaquinaria = 1;
+var uE = false;
+var nU = false;
+var dU = false;
 
 var modYac = {
     "d": [],
@@ -12,6 +15,7 @@ var modYac = {
 
 var dataConfig = {
 	"yac": "",
+	"dur": 0,
     "e": []
 } 
 
@@ -230,28 +234,37 @@ $('#verificarEmpleado').on('submit',function(e){
 	                    </div>\n\
 	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
 	                </div>');
-
-				$("#gcgeneroEmpleado option[value="+ response.dataV[0].emp_genero +"]").attr("selected",true);
+				
+				console.log(response.sinU);
 
 				selectRol = $('#gcrolEmpleado');
 				selectRol.html('');
 				for (var i = response.roles.length - 1; i >= 0; i--) {
 					selectRol.append('<option value="'+response.roles[i].rol_codigo+'">'+response.roles[i].rol_nombre+'</option>');
 				}
-				$("#gcrolEmpleado option[value="+ response.dataV[0].rol_codigo +"]").attr("selected",true);
+
+				if(response.sinU == true){
+					console.log('El empleado no tiene usuario');
+					$('#gcusuarioEmpleado').attr('value',"");
+					$('#gcpasswordEmpleado').attr('value',"");
+				}else{
+					$("#gcrolEmpleado option[value="+ response.dataV[0].rol_codigo +"]").attr("selected",true);
+					uE = true;
+				}
 
 				selectCargo = $('#gccargoEmpleado');
 				selectCargo.html('');
 				for (var i = response.cargos.length - 1; i >= 0; i--) {
 					selectCargo.append('<option value="'+response.cargos[i].car_codigo+'">'+response.cargos[i].car_nombre+'</option>');
 				}
+
 				$("#gccargoEmpleado option[value="+ response.dataV[0].car_codigo +"]").attr("selected",true);
 
 				selectEstado = $('#estadoSelect');
 				selectEstado.html('');
 				for (var i = response.estados.length - 1; i >= 0; i--) {
 					selectEstado.append('<option value="'+response.estados[i].lug_codigo+'">'+response.estados[i].lug_nombre+'</option>');
-				}
+				}				
 
 				$("#estadoSelect option[value="+ response.dataV[0].estcod +"]").attr("selected",true);
 				estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
@@ -285,40 +298,61 @@ $('#guardarCambioEmpleado').on('submit',function(e){
 	let passwordGC = $('#gcpasswordEmpleado');
 	let rolGC = $('#gcrolEmpleado');
 
-	$.ajax({
-		url: '/Empleados-Modificar',
-		method: 'POST',
-		data: {
-			nombreGC: nombreGC.val(),
-			apellidoGC: apellidoGC.val(),
-			cedulaGC: cedulaGC.val(),
-			telefonoGC: telefonoGC.val(),
-			generoGC: generoGC.val(),
-			fnacGC: fnacGC.val(),
-			cargoGC: cargoGC.val(),
-			parroquiaGC: parroquiaGC.val(),
-			usuarioGC: usuarioGC.val(),
-			passwordGC: passwordGC.val(),
-			rolGC: rolGC.val()
-		},
-		success: function(response){
-			if(response == 'great'){
-				alert('El empleado fue MODIFICADO satisfactoriamente');
-				var boxGCEmp = $('#boxGC');
-				boxGCEmp.addClass('fadeOut');
-				boxGCEmp.html('');
-				var boxModEmp = $('#guardarCambioEmpleado');
-				boxModEmp.append(`\n\
-                    <div class="boxPrevMod animated fadeIn">\n\
-                      <h4 class="text-center">Selecciona un usuario para modificar su ficha</h4>\n\
-                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
-                    </div>\n\
-				`);
-			}else{
-				alert('El empleado NO SE PUDO MOFICAR, revisa los campos por informacion duplicada');
-			}			
+	if((passwordGC.val() != "" && usuarioGC.val() == "") || (passwordGC.val() == "" && usuarioGC.val() != "")){
+		alert('Completa el formulario de usuario o deja en blanco los campos');
+	}else{
+		if(uE == false && passwordGC.val() != "" && usuarioGC.val() != ""){
+			nU = true; 
 		}
-	});
+
+		if(uE == true && passwordGC.val() == "" && usuarioGC.val() == ""){
+			dU = true; 
+		}
+
+		$.ajax({
+			url: '/Empleados-Modificar',
+			method: 'POST',
+			data: {
+				nombreGC: nombreGC.val(),
+				apellidoGC: apellidoGC.val(),
+				cedulaGC: cedulaGC.val(),
+				telefonoGC: telefonoGC.val(),
+				generoGC: generoGC.val(),
+				fnacGC: fnacGC.val(),
+				cargoGC: cargoGC.val(),
+				parroquiaGC: parroquiaGC.val(),
+				usuarioGC: usuarioGC.val(),
+				passwordGC: passwordGC.val(),
+				rolGC: rolGC.val(),
+				uE: uE,
+				nU: nU,
+				dU: dU
+			},
+			success: function(response){
+				if(response == 'great'){
+					alert('El empleado fue MODIFICADO satisfactoriamente');
+					var boxGCEmp = $('#boxGC');
+					boxGCEmp.addClass('fadeOut');
+					boxGCEmp.html('');
+					var boxModEmp = $('#guardarCambioEmpleado');
+					boxModEmp.append(`\n\
+	                    <div class="boxPrevMod animated fadeIn">\n\
+	                      <h4 class="text-center">Selecciona un usuario para modificar su ficha</h4>\n\
+	                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+	                    </div>\n\
+					`);
+				    uE = false;
+				    nU = false;
+				    dU = false;
+				}else{
+					alert('El empleado NO SE PUDO MOFICAR, revisa los campos por informacion duplicada');
+					uE = false;
+				    nU = false;
+				    dU = false;
+				}			
+			}
+		});
+	}	
 });
 
 //Login
@@ -1321,17 +1355,37 @@ function insertConfig(dataConfig){
 	});
 }
 
+function resetYac(){
+	$.ajax({
+		url: '/ER',
+		method: 'GET',
+		success: function(response){
+			if(response.yac != null){
+				alert('Se inserto la configuracion');
+				var yacBox = $('#yacimientoConfigurar');
+				yacBox.html('');
+				for (var i = response.yac.length - 1; i >= 0; i--) {
+					yacBox.append('<option value="'+response.yac[i].yac_codigo+'">'+response.yac[i].yac_nombre+'</option>');
+				}
+			}else{
+				alert('Hubo un error al buscar los nuevos yacimientos');
+			}
+		}
+	});
+}
+
 
 $('#agregarConfiguracion').on('submit',function(e){
 	e.preventDefault();
 	var yacimientoExp = $('#yacimientoConfigurar').children(":selected");
+	var expDur = $('#duracionExplotacionConfigurar');
 
 
 	$.ajax({
 		url: '/getYacExp',
 		method: 'POST',
 		data:{
-			yacExp: yacimientoExp.val()
+			yacExp: yacimientoExp.val(),
 		},
 		success: function(response){
 				if(response == 'great'){
@@ -1397,11 +1451,14 @@ $('#agregarConfiguracion').on('submit',function(e){
 							start++;		
 						}
 						dataConfig.yac = yacimientoExp.val();
+						dataConfig.dur = expDur.val();
+						console.log('Llego aqui');
 						$.ajax({
 							url: '/AExp',
 							method: 'POST',
 							data:{
-								AExp: dataConfig.yac 
+								AExp: dataConfig.yac,
+								ADur: dataConfig.dur
 							},
 							success:function(exp){
 								if(exp != null){
@@ -1506,6 +1563,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 									console.log(globalIDMaquinaria);
 									console.log(globalIDCargo);
 									console.log(globalIDExplotacionFase);	
+									resetYac();
 								}else{
 									alert('Error en agregar la explotacion');
 								}

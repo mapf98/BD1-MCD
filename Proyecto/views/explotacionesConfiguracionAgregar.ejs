@@ -123,13 +123,17 @@
                   <form action="/Explotaciones-Configuracion-Agregar" method="POST" id="agregarConfiguracion">
                     <div class="form-row">
                       <div class="col-md-2 mb-3"></div>
-                      <div class="col-md-8 mb-3">
-                        <label for="yacimientoConfigurar">Yacimientos (Los listados no poseen configuración actualmente)</label>
+                      <div class="col-md-5 mb-3">
+                        <label for="yacimientoConfigurar">Yacimientos</label>
                         <select class="form-control formsCRUD" id="yacimientoConfigurar" required>
                           <% for(var i=0; i < yac.length; i++) {%>
                             <option value='<%=yac[i].yac_codigo%>'><%=yac[i].yac_nombre%></option>
                           <%}%>
                         </select>
+                      </div>
+                      <div class="col-md-3 mb-3">
+                        <label for="duracionExplotacionConfigurar">Duración (Días)</label>
+                        <input type="number" min="1" step="1" class="form-control formsCRUD" id="duracionExplotacionConfigurar" required>
                       </div>
                       <div class="col-md-2 mb-3"></div>
                     </div>
