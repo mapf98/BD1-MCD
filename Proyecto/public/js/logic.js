@@ -1,7 +1,10 @@
 var globalIDMineralYacimiento = 1;
 var globalIDExplotacionEtapa = 1;
+var globalIDExplotacionEtapaR = 0;
 var globalIDExplotacionFase = 1;
+var globalIDExplotacionFaseR = 0;
 var globalIDCargo = 1;
+var globalIDCargoR = 0;
 var globalIDMaquinaria = 1;
 var uE = false;
 var nU = false;
@@ -16,6 +19,7 @@ var modYac = {
 var dataConfig = {
 	"yac": "",
 	"dur": 0,
+	"estimado":0,
     "e": []
 } 
 
@@ -26,7 +30,7 @@ var dataConfig = {
 
 // var dataConfig = {
 // 	"yac": "codigo",
-//     "e": [{"f":[ { "c":[{"cod":"","q":""}] , "m":[{"cod":"","q":""}] ,"nF":"nombreFase"} ],"nE":"NOMBRETAPA"}]
+//     "e": [{"f":[ { "c":[{"cod":"","q":"","sueldo":""}] , "m":[{"cod":"","q":"","costo":""}] ,"nF":"nombreFase","estF":""} ],"nE":"NOMBRETAPA","estE":""}]
 // } 
 
 // console.log(dataConfig.e[0].nE);
@@ -601,6 +605,10 @@ $('#menuItemAgregarConfiguracion').on('click',function(){
 	window.location.href = "/Explotaciones-Configuracion-Agregar";
 });
 
+$('#menuItemConsultarConfiguracion').on('click',function(){
+	window.location.href = "/Explotaciones-Configuracion-Consultar";
+});
+
 $('#menuItemConsultarYacimiento').on('click',function(){
 	window.location.href = "/Yacimientos-Consultar";
 });
@@ -657,6 +665,14 @@ $(document).ready( function () {
 
 $(document).ready( function () {
     $('#table_id_yacimientos').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_configuraciones').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_detalleConfiguracion').DataTable();
 });
 
 //ESTILOS
@@ -1016,16 +1032,20 @@ function addEtapa(button,list){
 			listEtapa.append('\n\
 					<div class="newEtapa animated fadeIn" id="'+nextID+'">\n\
 					<div class="form-row">\n\
-					<div class="col-md-3 mb-3">\n\
+					<div class="col-md-2 mb-3">\n\
 					<h3 class="text-center textEtapa">Etapa</h3>\n\
 					</div>\n\
-					<div class="col-md-6 mb-3">\n\
+					<div class="col-md-4 mb-3">\n\
 					<label for="en'+nextID+'" class="textEtapa">Nombre de la etapa</label>\n\
 					<input type="text" class="form-control formsCRUD" id="en'+nextID+'" required>\n\
 					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					<label for="ee'+nextID+'" class="textEtapa">Estimado (Bs)</label>\n\
+					<input type="number" min="0.01" step="0.01" value="0" class="form-control formsCRUD" id="ee'+nextID+'" disabled>\n\
+					</div>\n\
 					<div class="col-md-2 mb-3">\n\
 					<label for="re'+nextID+'" class="hackerText">Hacker</label>\n\
-					<button class="btn btn-danger btn-block" id="re'+nextID+'" >Eliminar</button>\n\
+					<button class="btn btn-danger btn-block" id="re'+nextID+'" >X</button>\n\
 					</div>\n\
 					</div>\n\
 					<hr class="hretapa">\n\
@@ -1052,7 +1072,9 @@ function addEtapa(button,list){
 				boxDelete = $(boxMinDelete).parent();
 				$(boxDelete).removeClass('fadeIn');
 				$(boxDelete).addClass('fadeOut');
+				removeUpExp($('#ee'+nextID+'').val());
 				setTimeout(function(){
+					globalIDExplotacionEtapaR++;
 					boxDelete.remove();
 				},300);
 			});
@@ -1071,14 +1093,18 @@ function addFase(button,list,etapa){
 			listFase.append('\n\
 				<div class="newFase animated fadeIn" id="e'+etapa+'f'+nextID+'">\n\
 				<div class="form-row">\n\
-				<div class="col-md-3 mb-3">\n\
+				<div class="col-md-2 mb-3">\n\
 				<h3 class="text-center textEtapa">Fase</h3>\n\
 				</div>\n\
-				<div class="col-md-6 mb-3">\n\
+				<div class="col-md-4 mb-3">\n\
 				<label for="e'+etapa+'fn'+nextID+'" class="textEtapa">Nombre de la fase</label>\n\
 				<input type="text" class="form-control formsCRUD" id="e'+etapa+'fn'+nextID+'" required>\n\
 				</div>\n\
-				<div class="col-md-3 mb-3">\n\
+				<div class="col-md-4 mb-3">\n\
+				<label for="e'+etapa+'fe'+nextID+'" class="textEtapa">Estimado (Bs)</label>\n\
+				<input type="text" class="form-control min="0.01" step="0.01" value="0" formsCRUD" id="e'+etapa+'fe'+nextID+'" disabled>\n\
+				</div>\n\
+				<div class="col-md-2 mb-3">\n\
 				<label for="re'+etapa+'f'+nextID+'" class="hackerText">Hacker</label>\n\
 				<button class="btn btn-danger btn-block" id="re'+etapa+'f'+nextID+'" >Eliminar</button>\n\
 				</div>\n\
@@ -1116,7 +1142,10 @@ function addFase(button,list,etapa){
 				boxDelete = $(boxMinDelete).parent();
 				$(boxDelete).removeClass('fadeIn');
 				$(boxDelete).addClass('fadeOut');
+				removeUpFase($('#e'+etapa+'fe'+nextID+'').val(),etapa);
+				removeUpExp($('#e'+etapa+'fe'+nextID+'').val());
 				setTimeout(function(){
+					globalIDExplotacionFaseR++;
 					boxDelete.remove();
 				},300);
 			});
@@ -1135,26 +1164,37 @@ function addCargo(button,list,etapa,fase){
 				url: '/getCargo',
 				method: 'GET', 
 				success: function(response){
+						var add = true;
+						var valuePrev = 0;
+						var cantAdd = true;
+						var cantPrev = false;
 						if(response.car != null){
 							var nextID = globalCargo;
 							listCargo.append('\n\
 								<div class="newCargo animated fadeIn">\n\
-								<div class="form-row">\n\
-								<div class="col-md-6 mb-3">\n\
-								<label for="e'+etapa+'f'+fase+'c'+nextID+'" class="textEtapa">Cargo</label>\n\
-								<select class="form-control formsCRUD" id="e'+etapa+'f'+fase+'c'+nextID+'" required></select>\n\
-								</div>\n\
-								<div class="col-md-3 mb-3">\n\
-								<label for="e'+etapa+'f'+fase+'cq'+nextID+'" class="textEtapa">Cantidad</label>\n\
-								<input type="number" min="1" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'cq'+nextID+'" required>\n\
-								</div>\n\
-								<div class="col-md-3 mb-3">\n\
-								<label for="re'+etapa+'f'+fase+'c'+nextID+'" class="hackerText">Hacker</label>\n\
-								<button class="btn btn-danger btn-block" id="re'+etapa+'f'+fase+'c'+nextID+'" >X</button>\n\
-								</div>\n\
-								</div>\n\
-								\n\
-								</div>\n\
+									<div class="form-row">\n\
+										<div class="col-md-8 mb-3">\n\
+											<label for="e'+etapa+'f'+fase+'c'+nextID+'" class="textEtapa">Cargo</label>\n\
+											<select class="form-control formsCRUD" id="e'+etapa+'f'+fase+'c'+nextID+'" required></select>\n\
+										</div>\n\
+										<div class="col-md-4 mb-3">\n\
+											<label for="e'+etapa+'f'+fase+'cq'+nextID+'" class="textEtapa">Cantidad</label>\n\
+											<input type="number" min="1" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'cq'+nextID+'" required>\n\
+										</div>\n\
+									</div>\n\
+									<div class="form-row">\n\
+										<div class="col-md-8 mb-3">\n\
+										    <div class="input-group mb-2 mr-sm-2">\n\
+										    	<div class="input-group-prepend">\n\
+											    	<div class="input-group-text">Bs</div>\n\
+											  	</div>\n\
+											    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'cs'+nextID+'" required>\n\
+											</div>\n\
+										</div>\n\
+										<div class="col-md-4 mb-3">\n\
+											<button class="btn btn-danger btn-block" id="re'+etapa+'f'+fase+'c'+nextID+'" >X</button>\n\
+										</div>\n\
+									</div>\n\
 								\n\
 								</div>\n\
 								');
@@ -1165,7 +1205,6 @@ function addCargo(button,list,etapa,fase){
 								selectCargo.append('<option value="'+response.car[i].car_codigo+'">'+response.car[i].car_nombre+'</option>');
 							}
 
-
 							$('#re'+etapa+'f'+fase+'c'+nextID+'').on('click',function(e){
 								e.preventDefault();
 								$('#e'+etapa+'f'+fase+'cq'+nextID+'').attr('value',-1);
@@ -1174,9 +1213,60 @@ function addCargo(button,list,etapa,fase){
 								boxDelete = $(boxMinDelete).parent();
 								$(boxDelete).removeClass('fadeIn');
 								$(boxDelete).addClass('fadeOut');
+								removeEstimado(valuePrev);
+								removeEstimadoFase(valuePrev,etapa,fase);
+								removeEstimadoEtapa(valuePrev,etapa);
 								setTimeout(function(){
+									globalIDCargoR++;
 									boxDelete.remove();
 								},300);
+							});
+
+							$('#e'+etapa+'f'+fase+'cq'+nextID+'').on('change',function(){
+								var costo = $('#e'+etapa+'f'+fase+'cs'+nextID+'');
+								changeNaN(costo);
+								changeNaN(this);
+								var cantidad = $(this).val();
+								if(cantAdd == true){
+									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+									addEstimado(cantidad*(costo.val()));
+									addEstimadoEtapa(cantidad*(costo.val()),etapa);
+									cantPrev = cantidad;
+									valuePrev = cantidad*(costo.val());
+									cantAdd = false;
+								}else{
+									removeEstimado(valuePrev);
+									removeEstimadoFase(valuePrev,etapa,fase);
+									removeEstimadoEtapa(valuePrev,etapa);
+									addEstimadoEtapa(cantidad*(costo.val()),etapa);
+									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+									addEstimado(cantidad*(costo.val()));
+									cantPrev = cantidad;
+									valuePrev = cantidad*(costo.val());								
+								}
+							});
+
+
+							$('#e'+etapa+'f'+fase+'cs'+nextID+'').on('change',function(){
+								var cantidad = $('#e'+etapa+'f'+fase+'cq'+nextID+'');
+								changeNaN(cantidad);
+								changeNaN(this);
+								var value = $(this).val();
+								if(add == true){
+									addEstimadoEtapa(value*(cantidad.val()),etapa);
+									addEstimadoFase(value*(cantidad.val()),etapa,fase);
+									addEstimado(value*(cantidad.val()));
+									valuePrev = value*(cantidad.val());
+									add = false;
+								}else{
+									removeEstimado(valuePrev);
+									removeEstimadoFase(valuePrev,etapa,fase);
+									removeEstimadoEtapa(valuePrev,etapa);
+									addEstimadoEtapa(value*(cantidad.val()),etapa);
+									addEstimadoFase(value*(cantidad.val()),etapa,fase);
+									addEstimado(value*(cantidad.val()));
+									valuePrev = value*(cantidad.val());									
+								}
 							});
 
 							globalCargo++;
@@ -1200,26 +1290,37 @@ function addMaquinaria(button,list,etapa,fase){
 				url: '/getTipoMaquinaria',
 				method: 'GET',
 				success: function(response){
+						var add = true;
+						var valuePrev = 0;
+						var cantAdd = true;
+						var cantPrev = false;
 						if(response.TMmaq != null){
 							var nextID = globalMaquinaria;
 							listMaquinaria.append('\n\
 								<div class="newCargo animated fadeIn" id=" e'+etapa+'f'+fase+'m'+nextID+' ">\n\
-								<div class="form-row">\n\
-								<div class="col-md-6 mb-3">\n\
-								<label for="e'+etapa+'f'+fase+'m'+nextID+'" class="textEtapa">Maquinaria</label>\n\
-								<select class="form-control formsCRUD" id="e'+etapa+'f'+fase+'m'+nextID+'" required></select>\n\
-								</div>\n\
-								<div class="col-md-3 mb-3">\n\
-								<label for="e'+etapa+'f'+fase+'mq'+nextID+'" class="textEtapa">Cantidad</label>\n\
-								<input type="number" min="1" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'mq'+nextID+'" required>\n\
-								</div>\n\
-								<div class="col-md-3 mb-3">\n\
-								<label for="re'+etapa+'f'+fase+'m'+nextID+'" class="hackerText">Hacker</label>\n\
-								<button class="btn btn-danger btn-block" id="re'+etapa+'f'+fase+'m'+nextID+'" >X</button>\n\
-								</div>\n\
-								</div>\n\
-								\n\
-								</div>\n\
+									<div class="form-row">\n\
+										<div class="col-md-8 mb-3">\n\
+											<label for="e'+etapa+'f'+fase+'m'+nextID+'" class="textEtapa">Maquinaria</label>\n\
+											<select class="form-control formsCRUD" id="e'+etapa+'f'+fase+'m'+nextID+'" required></select>\n\
+										</div>\n\
+										<div class="col-md-4 mb-3">\n\
+											<label for="e'+etapa+'f'+fase+'mq'+nextID+'" class="textEtapa">Cantidad</label>\n\
+											<input type="number" min="1" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'mq'+nextID+'" required>\n\
+										</div>\n\
+									</div>\n\
+									<div class="form-row">\n\
+										<div class="col-md-8 mb-3">\n\
+											<div class="input-group mb-2 mr-sm-2">\n\
+										    	<div class="input-group-prepend">\n\
+											    	<div class="input-group-text">Bs</div>\n\
+											  	</div>\n\
+											    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="e'+etapa+'f'+fase+'mc'+nextID+'" required>\n\
+											</div>\n\
+										</div>\n\
+										<div class="col-md-4 mb-4">\n\
+											<button class="btn btn-danger btn-block" id="re'+etapa+'f'+fase+'m'+nextID+'" >X</button>\n\
+										</div>\n\
+									</div>\n\
 								\n\
 								</div>\n\
 								');
@@ -1233,17 +1334,65 @@ function addMaquinaria(button,list,etapa,fase){
 
 							$('#re'+etapa+'f'+fase+'m'+nextID+'').on('click',function(e){
 								e.preventDefault();
-								//modYac.d.push({"cod":$('#'+nextID+'').val(),"c":$('#c'+nextID+'').val(),"t":$('#t'+nextID+'').val(),"id":nextID});
-								//$('#'+nextID+'').attr('id',(nextID)*(-1));
 								$('#e'+etapa+'f'+fase+'mq'+nextID+'').attr('value',-1);
 								boxButtonDelete = $(this).parent();
 								boxMinDelete = $(boxButtonDelete).parent();
 								boxDelete = $(boxMinDelete).parent();
 								$(boxDelete).removeClass('fadeIn');
 								$(boxDelete).addClass('fadeOut');
+								removeEstimado(valuePrev);
+								removeEstimadoFase(valuePrev,etapa,fase);
+								removeEstimadoEtapa(valuePrev,etapa);
 								setTimeout(function(){
 									boxDelete.remove();
 								},300);
+							});
+
+							$('#e'+etapa+'f'+fase+'mq'+nextID+'').on('change',function(){
+								var costo = $('#e'+etapa+'f'+fase+'mc'+nextID+'');
+								changeNaN(costo);
+								changeNaN(this);
+								var cantidad = $(this).val();
+								if(cantAdd == true){
+									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+									addEstimado(cantidad*(costo.val()));
+									addEstimadoEtapa(cantidad*(costo.val()),etapa);
+									cantPrev = cantidad;
+									valuePrev = cantidad*(costo.val());
+									cantAdd = false;
+								}else{
+									removeEstimado(valuePrev);
+									removeEstimadoFase(valuePrev,etapa,fase);
+									removeEstimadoEtapa(valuePrev,etapa);
+									addEstimadoEtapa(cantidad*(costo.val()),etapa);
+									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+									addEstimado(cantidad*(costo.val()));
+									cantPrev = cantidad;
+									valuePrev = cantidad*(costo.val());								
+								}
+							});
+
+
+							$('#e'+etapa+'f'+fase+'mc'+nextID+'').on('change',function(){
+								var cantidad = $('#e'+etapa+'f'+fase+'mq'+nextID+'');
+								changeNaN(cantidad);
+								changeNaN(this);
+								var value = $(this).val();
+								if(add == true){
+									addEstimadoEtapa(value*(cantidad.val()),etapa);
+									addEstimadoFase(value*(cantidad.val()),etapa,fase);
+									addEstimado(value*(cantidad.val()));
+									valuePrev = value*(cantidad.val());
+									add = false;
+								}else{
+									removeEstimado(valuePrev);
+									removeEstimadoFase(valuePrev,etapa,fase);
+									removeEstimadoEtapa(valuePrev,etapa);
+									addEstimadoEtapa(value*(cantidad.val()),etapa);
+									addEstimadoFase(value*(cantidad.val()),etapa,fase);
+									addEstimado(value*(cantidad.val()));
+									valuePrev = value*(cantidad.val());									
+								}
 							});
 
 							globalMaquinaria++;
@@ -1355,6 +1504,66 @@ function insertConfig(dataConfig){
 	});
 }
 
+function addEstimado(value){
+	var estimado = $('#estimadoExplotacionConfigurar');
+	estimado.val(parseFloat(estimado.val())+parseFloat(value));
+}
+
+function removeEstimado(value){
+	var estimado = $('#estimadoExplotacionConfigurar');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function addEstimadoFase(value,etapa,id){
+	var estimado = $('#e'+etapa+'fe'+id+'');
+	estimado.val(parseFloat(estimado.val())+parseFloat(value));
+}
+
+function removeEstimadoFase(value,etapa,id){
+	var estimado = $('#e'+etapa+'fe'+id+'');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function addEstimadoEtapa(value,etapa){
+	var estimado = $('#ee'+etapa+'');
+	estimado.val(parseFloat(estimado.val())+parseFloat(value));
+}
+
+function removeEstimadoEtapa(value,etapa){
+	var estimado = $('#ee'+etapa+'');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function removeUpFase(value,etapa){
+	var estimado = $('#ee'+etapa+'');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function removeUpExp(value){
+	var estimado = $('#estimadoExplotacionConfigurar');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function changeNaN(element){
+	if($(element).val() == "" || parseInt($(element).val()) < 0){
+		$(element).val(0);
+	}
+}
+
+//HACER LA VERIFICACION DE ELEMENTOS MINIMOS PARA REGISTRAR UNA EXPLOTACION
+function verifyMinInsert(){
+	if(globalIDExplotacionEtapa == globalIDExplotacionEtapaR+1){
+		return false;
+	}else if(globalIDExplotacionFase == globalIDExplotacionFaseR+1){
+		return false;
+	}else if((globalIDExplotacionFase-globalIDExplotacionFaseR) != (globalIDCargoR+1)*(globalIDExplotacionFase)){ //HACER LA PUTA VERIFICACION
+		return false;
+	}else{
+		console.log(globalIDExplotacionFase+'=='+(globalIDCargoR+1));
+		return true;
+	}	
+}
+
 function resetYac(){
 	$.ajax({
 		url: '/ER',
@@ -1379,8 +1588,11 @@ $('#agregarConfiguracion').on('submit',function(e){
 	e.preventDefault();
 	var yacimientoExp = $('#yacimientoConfigurar').children(":selected");
 	var expDur = $('#duracionExplotacionConfigurar');
+	var expEstimado = $('#estimadoExplotacionConfigurar');
 
-
+	console.log(globalIDExplotacionEtapa,globalIDExplotacionEtapaR);
+	console.log(globalIDExplotacionFase,globalIDExplotacionFaseR);
+	console.log(globalIDCargo,globalIDCargoR);
 	$.ajax({
 		url: '/getYacExp',
 		method: 'POST',
@@ -1391,7 +1603,6 @@ $('#agregarConfiguracion').on('submit',function(e){
 				if(response == 'great'){
 					alert('El yacimiento selecionado actualmente posee otra configuracion o explotacion activa!');
 				}else{
-					alert('El yacimiento puede ser asignado a esta configuracion!');
 					if(verifyNameEtapa()==true && verifyNameFase()==true && verifyCargoFase()==true && verifyMaquinariaFase()==true){
 						var start = 1;
 						var arrayPos = 0;				
@@ -1401,14 +1612,14 @@ $('#agregarConfiguracion').on('submit',function(e){
 							if($('#en'+start+'').val() !== undefined && $('#en'+start+'').val() !== 'xxkkzz' ){
 								var arrayCargo = 0;		
 								var arrayMaquinaria = 0;
-								dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val()});
+								dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val(),"estE":$('#ee'+start+'').val()});
 								var f=1;
 								console.log(globalIDExplotacionFase);
 								while(globalIDExplotacionFase > f){
 
 									//Se registra las fases para etapa antes insertada
 									if( ($('#e'+(start)+'fn'+f+'').val() !== 'xxkkzz') && ($('#e'+(start)+'fn'+f+'').val() !== undefined)){
-										dataConfig.e[arrayPos].f.push({ "c":[] , "m":[] ,"nF": $('#e'+(start)+'fn'+f+'').val() });		
+										dataConfig.e[arrayPos].f.push({ "c":[] , "m":[] ,"nF": $('#e'+(start)+'fn'+f+'').val(), "estF": $('#e'+(start)+'fe'+f+'').val()});		
 
 
 
@@ -1419,7 +1630,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 											//Se registra los cargos para cada fase insertada
 											if($('#e'+start+'f'+(f)+'c'+k+'').val() !== undefined && $('#e'+start+'f'+(f)+'cq'+k+'').val() !== -1){
 												console.log('F= '+f);
-												dataConfig.e[arrayPos].f[arrayCargo].c.push({"cod":$('#e'+start+'f'+(f)+'c'+k+'').val(),"q":$('#e'+start+'f'+(f)+'cq'+k+'').val()});
+												dataConfig.e[arrayPos].f[arrayCargo].c.push({"cod":$('#e'+start+'f'+(f)+'c'+k+'').val(),"q":$('#e'+start+'f'+(f)+'cq'+k+'').val(),"salario":$('#e'+start+'f'+(f)+'cs'+k+'').val()});
 												console.log('Registro C desde ='+'#e'+start+'f'+(f)+'c'+k);
 											}  
 											k++;												
@@ -1435,7 +1646,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 											console.log('#e'+start+'f'+(f)+'m'+t+'');
 											//Se registra las maquinarias para cada fase insertada
 											if($('#e'+start+'f'+(f)+'m'+t+'').val() !== undefined && $('#e'+start+'f'+(f)+'mq'+t+'').val() !== -1){
-												dataConfig.e[arrayPos].f[arrayMaquinaria].m.push({"cod":$('#e'+start+'f'+(f)+'m'+t+'').val(),"q":$('#e'+start+'f'+(f)+'mq'+t+'').val()});
+												dataConfig.e[arrayPos].f[arrayMaquinaria].m.push({"cod":$('#e'+start+'f'+(f)+'m'+t+'').val(),"q":$('#e'+start+'f'+(f)+'mq'+t+'').val(),"costo":$('#e'+start+'f'+(f)+'mc'+t+'').val()});
 												console.log('Registro M desde ='+'#e'+start+'f'+(f)+'m'+t);
 												
 											}  
@@ -1452,13 +1663,14 @@ $('#agregarConfiguracion').on('submit',function(e){
 						}
 						dataConfig.yac = yacimientoExp.val();
 						dataConfig.dur = expDur.val();
-						console.log('Llego aqui');
+						dataConfig.estimado = expEstimado.val();
 						$.ajax({
 							url: '/AExp',
 							method: 'POST',
 							data:{
 								AExp: dataConfig.yac,
-								ADur: dataConfig.dur
+								ADur: dataConfig.dur,
+								AEst: dataConfig.estimado
 							},
 							success:function(exp){
 								if(exp != null){
@@ -1469,7 +1681,8 @@ $('#agregarConfiguracion').on('submit',function(e){
 											method: 'POST',
 											data:{
 												AEta: dataConfig.e[i].nE,
-												AExp: exp.cod.exp_codigo
+												AExp: exp.cod.exp_codigo,
+												AEst: dataConfig.e[i].estE
 											},
 											success:function(eta){
 												if(eta != null){
@@ -1481,7 +1694,8 @@ $('#agregarConfiguracion').on('submit',function(e){
 															method: 'POST',
 															data:{
 																AEta: eta.cod.eta_codigo,
-																AFas: dataConfig.e[i].f[j].nF
+																AFas: dataConfig.e[i].f[j].nF,
+																AEst: dataConfig.e[i].f[j].estF
 															},
 															success:function(fas){
 																if(fas != null){
@@ -1494,6 +1708,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 																			data:{
 																				ACarT: dataConfig.e[i].f[j].c[k].cod,
 																				ACarQ: dataConfig.e[i].f[j].c[k].q,
+																				ACarS: dataConfig.e[i].f[j].c[k].salario,
 																				AFas: fas.cod.fas_codigo
 																			},
 																			success:function(car){
@@ -1514,6 +1729,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 																			data:{
 																				AMaqT: dataConfig.e[i].f[j].m[v].cod,
 																				AMaqQ: dataConfig.e[i].f[j].m[v].q,
+																				AMaqC: dataConfig.e[i].f[j].m[v].costo,
 																				AFas: fas.cod.fas_codigo
 																			},
 																			success:function(maq){
@@ -1558,6 +1774,8 @@ $('#agregarConfiguracion').on('submit',function(e){
 									},300);
 									$('#listEtapa').removeClass('fadeOut');
 									$('#listEtapa').addClass('fadeIn');
+									$('#duracionExplotacionConfigurar').val(0);
+									$('#estimadoExplotacionConfigurar').val(0);
 									console.log(dataConfig);
 									console.log(globalIDExplotacionEtapa);
 									console.log(globalIDMaquinaria);
@@ -1580,3 +1798,135 @@ $('#agregarConfiguracion').on('submit',function(e){
 	});	
 
 });
+
+$('#yacimientoSelect').on('click',function(){
+	var etapaSelect = $('#yacimientoEtapa');
+	var selectedOption = $(this).children(":selected").val();
+	console.log(selectedOption);
+	$.ajax({
+		url: '/YS',
+		method: 'POST',
+		data:{
+			yacCod: selectedOption
+		},
+		success: function(response){
+			if(response.yacimientosExpEtapa[0] != null){
+				var yacEtapa = $('#yacimientoEtapa');
+				yacEtapa.html('');
+				for (var i = response.yacimientosExpEtapa.length - 1; i >= 0; i--) {
+					yacEtapa.append('<option value="'+response.yacimientosExpEtapa[i].eta_codigo+'">'+response.yacimientosExpEtapa[i].eta_nombre+'</option>');
+				}
+				$('#yacimientoEtapa').trigger('click');
+			}else{
+				alert('Hubo un error al buscar las etapas para este yacimiento');
+			}
+		}
+	});
+});
+
+$('#yacimientoEtapa').on('click',function(){
+	var faseSelect = $('#yacimientoFase');
+	var selectedOption = $(this).children(":selected").val();
+	var dataTableDetalle = $('#tbodyDetalle');
+	console.log(selectedOption);
+	$.ajax({
+		url: '/ES',
+		method: 'POST',
+		data:{
+			etapaCod: selectedOption
+		},
+		success: function(response){
+			if(response.yacimientosEtapaFase[0] != null){
+				dataTableDetalle.html('');
+				for (var i = 0; i < response.yacimientosEtapaFase.length; i++){
+					$.ajax({
+						url: '/EsDetalle',
+						method: 'POST',
+						data:{
+							faseCod: response.yacimientosEtapaFase[i].fas_codigo
+						},
+						success:function(res){
+							if(res.detalleFase != null && res != 'failed'){
+								dataTableDetalle.append('\n\
+								<tr>\n\
+		                          <td class="text-center" value="'+response.yacimientosEtapaFase[i].fas_codigo+'">'+response.yacimientosEtapaFase[i].fas_nombre+'</td>\n\
+		                          <td class="text-center">\n\
+		                          	<select class="form-control formsCRUD" id="c'+i+'" required>\n\
+			                         \n\
+			                        </select>\n\
+		                          </td>\n\
+		                          <td class="text-center">\n\
+		                          	<select class="form-control formsCRUD" id="m'+i+'" required>\n\
+			                         \n\
+			                        </select>\n\
+		                          </td>\n\
+		                          <td class="text-center" id="tc'+i+'""></td>\n\
+		                          <td class="text-center" id="totalM'+i+'">'+res.detalleFase[0].maquinarias+'</td>\n\
+		                          <td class="text-center">'+res.detalleFase[0].fas_costototal+'</td>\n\
+		                        </tr>');	
+
+
+								$.ajax({
+									url: '/detalleCargo',
+									method: 'POST',
+									data:{
+										faseCod: response.yacimientosEtapaFase[i].fas_codigo
+									},
+									success:function(cargos){
+										if(cargos.detalleCargos != null && cargos != 'failed'){
+											$('#c'+i+'').html('');
+											for (var k = 0; k < cargos.detalleCargos.length; k++) {
+					                        	$('#c'+i+'').append('<option>'+cargos.detalleCargos[k].car_nombre+' (Cantidad: '+cargos.detalleCargos[k].cf_cantidad+') </option>');
+					                        }
+					                        $('#tc'+i+'').html('');
+					                        $('#tc'+i+'').append(cargos.totalCargos[0].empleados);
+										}else{
+											$('#c'+i+'').html('');
+											$('#c'+i+'').append('<option>No posee cargos asignados</option>');
+										}										
+									},
+									async: false
+								});
+
+								$.ajax({
+									url: '/detalleMaquinarias',
+									method: 'POST',
+									data:{
+										faseCod: response.yacimientosEtapaFase[i].fas_codigo
+									},
+									success:function(maquinarias){
+										if(maquinarias.detalleMaquinarias != null && maquinarias != 'failed'){
+											$('#m'+i+'').html('');
+											for (var k = 0; k < maquinarias.detalleMaquinarias.length; k++) {
+					                        	$('#m'+i+'').append('<option>'+maquinarias.detalleMaquinarias[k].tm_nombre+' (Cantidad: '+maquinarias.detalleMaquinarias[k].tmf_cantidad+') </option>');
+					                        }
+					                        $('#totalM'+i+'').html('');
+					                        $('#totalM'+i+'').append(maquinarias.totalMaquinarias[0].maquinarias);
+										}else{
+											$('#m'+i+'').html('');
+											$('#m'+i+'').append('<option>No posee maquinarias asignadas</option>');
+											$('#totalM'+i+'').html('');
+											$('#totalM'+i+'').append('0');
+										}										
+									},
+									async: false
+								});
+
+							}else{
+								alert('Error en agregar una maquinaria');
+							}
+						},
+						async: false
+					});
+				}
+			}else{
+				alert('Hubo un error al buscar las fases para este etapa');
+			}
+		},
+		async: false
+	});
+});
+
+
+
+$('#yacimientoSelect').trigger('click');

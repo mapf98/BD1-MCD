@@ -7,6 +7,7 @@
     <title>MinerUCAB - Explotaciones</title>
 
     <link rel="icon" href="public/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/animate.css">
     <link href="public/css/bootstrap.min.css" rel="stylesheet">
@@ -112,53 +113,84 @@
           <section class="container-fluid proBox">
             <div class="row">
               <div class="col-lg-2"></div>
-              <div class="col-lg-8"><h1 class="text-center title">Nueva configuración</h1></div>
+              <div class="col-lg-8"><h1 class="text-center title">Configuraciones actuales</h1></div>
               <div class="col-lg-2"></div>
             </div>
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-8">
-                <div class="boxFormAgregarYacimiento animated fadeIn">
+              <div class="col-12">
+                <div class="boxConsultarEmpleado animated slideInUp">
+                  <table id="table_id_configuraciones" class="display">
+                    <thead class="headDataTable">
+                        <tr>
+                          <th class="text-center">Yacimiento</th>
+                          <th class="text-center">Duración</th>
+                          <th class="text-center">Total Etapas</th>
+                          <th class="text-center">Costo total estimado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i=0; i < yacimientosExp.length; i++) {%>
+                        <tr>
+                          <td class="text-center"><%=yacimientosExp[i].yac_nombre%></td>
+                          <td class="text-center"><%=yacimientosExp[i].exp_duracion%> Días</td>
+                          <td class="text-center"><%=yacimientosExp[i].totaletapas%></td>
+                          <td class="text-center"><%=yacimientosExp[i].exp_costototal%> Bs</td>
+                        </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <hr class="hretapa animated slideInUp">
+            <div class="row rowDetalle">
+              <div class="col-12">
+                <div class="boxConsultarEmpleado animated slideInUp">
+                  <div class="container-fluid">
 
-                  <form action="/Explotaciones-Configuracion-Agregar" method="POST" id="agregarConfiguracion">
-                    <div class="form-row">
-                      <div class="col-md-5 mb-3">
-                        <label for="yacimientoConfigurar">Yacimientos</label>
-                        <select class="form-control formsCRUD" id="yacimientoConfigurar" required>
-                          <% for(var i=0; i < yac.length; i++) {%>
-                            <option value='<%=yac[i].yac_codigo%>'><%=yac[i].yac_nombre%></option>
+                    <div class="row rowM">
+                      <div class="col-lg-3"></div>
+                      <div class="col-lg-6"><h2 class="text-center">Consulta detallada <i class="fas fa-book"></i></h2></div>
+                      <div class="col-lg-3"></div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-lg-8">
+                        <label for="yacimientoSelect">Yacimientos</label>
+                        <select class="form-control formsCRUD" id="yacimientoSelect" required>
+                          <% for(var i=0; i < yacimientosExp.length; i++) {%>
+                            <option value='<%=yacimientosExp[i].yac_codigo%>'><%=yacimientosExp[i].yac_nombre%></option>
                           <%}%>
                         </select>
                       </div>
-                      <div class="col-md-3 mb-3">
-                        <label for="duracionExplotacionConfigurar">Duración (Días)</label>
-                        <input type="number" min="1" step="1" class="form-control formsCRUD" id="duracionExplotacionConfigurar" value="0" required>
-                      </div>
-                      <div class="col-md-4 mb-3">
-                        <label for="estimadoExplotacionConfigurar">Estimado (Bs)</label>
-                        <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="estimadoExplotacionConfigurar" value="0" disabled>
+                      <div class="col-lg-4">
+                        <label for="yacimientoEtapa">Etapas</label>
+                        <select class="form-control formsCRUD" id="yacimientoEtapa" required>
+                         
+                        </select>
                       </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                      <div class="col-4"></div>
-                      <div class="col-4">
-                        <button class="btn btn-success btn-block" id="addEtapa">Agregar una nueva etapa</button>
-                      </div>
-                      <div class="col-4"></div>
-                    </div>
 
-                    <hr>
-
-                    <div class="animated fadeIn listEtapa" id="listEtapa">
-                    </div>                      
-
-                    <hr>
-
-                    <button class="btn btnForms btn-block" type="submit">Agregar</button>
-                  </form>
+                  </div>
+                  <hr>
+                  <table id="table_id_detalleConfiguracion" class="display">
+                    <thead class="headDataTable">
+                        <tr>
+                          <th class="text-center">Fase</th>
+                          <th class="text-center">Cargos</th>
+                          <th class="text-center">Maquinaria</th>
+                          <th class="text-center">Total empleados</th>
+                          <th class="text-center">Total maquinaria</th>
+                          <th class="text-center">Costo estimado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyDetalle">
+                      
+                    </tbody>
+                  </table>
                 </div>
               </div>
+            </div>
           </section>
         </main>
       </div>
@@ -168,6 +200,7 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

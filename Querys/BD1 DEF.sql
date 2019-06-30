@@ -343,7 +343,7 @@ CREATE TABLE MAQ_FAS (
 	FK_MF_ESTATUS INTEGER NOT NULL,
 	CONSTRAINT PK_CODIGO_MF PRIMARY KEY (MF_CODIGO),
 	CONSTRAINT FK_MAQUINARIA_MF FOREIGN KEY (FK_MF_MAQUINARIA) REFERENCES MAQUINARIA (MAQ_CODIGO),
-	CONSTRAINT FK_FASE_MF FOREIGN KEY (FK_MF_TM_FASE) REFERENCES FASE (TMF_CODIGO),
+	CONSTRAINT FK_TM_FASE_MF FOREIGN KEY (FK_MF_TM_FASE) REFERENCES TM_FAS (TMF_CODIGO),
 	CONSTRAINT FK_ESTATUS_MF FOREIGN KEY (FK_MF_ESTATUS) REFERENCES ESTATUS (EST_CODIGO),
 	CONSTRAINT CHECK_ESTATUS_MF CHECK (MF_COSTO>0)
 );
@@ -2575,3 +2575,52 @@ INSERT INTO yac_min(
 		INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO,EXP_DURACION) VALUES(3,31,23);
 		INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO,EXP_DURACION) VALUES(3,32,320);
 		INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO,EXP_DURACION) VALUES(3,33,110);
+
+
+
+		SELECT Y.YAC_NOMBRE, EX.EXP_DURACION, COUNT(E.ETA_NOMBRE) AS TotalEtapas
+		FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX
+		WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO
+		GROUP BY Y.YAC_NOMBRE, EX.EXP_DURACION
+		
+		SELECT E.ETA_NOMBRE, COUNT(F.FAS_NOMBRE) AS TotalFases
+		FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F
+		WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO
+		GROUP BY E.ETA_NOMBRE
+		
+		SELECT F.FAS_NOMBRE, SUM(CF.CF_CANTIDAD) AS Totalempleados, SUM(TM.TMF_CODIGO) AS Totalmaquinaria
+		FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, CAR_FAS AS CF, TM_FAS AS TM
+		WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO 
+		AND F.FAS_CODIGO = CF.FK_CF_FASE AND F.FAS_CODIGO = TM.FK_TMF_FASE
+		GROUP BY F.FAS_NOMBRE
+		
+		SELECT F.FAS_NOMBRE, SUM(TM.TMF_CODIGO) AS Totalmaquinaria
+		FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, TM_FAS AS TM
+		WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO 
+		AND F.FAS_CODIGO = TM.FK_TMF_FASE
+		GROUP BY F.FAS_NOMBRE
+		
+		SELECT F.FAS_NOMBRE, SUM(CF.CF_CANTIDAD) AS Totalempleados
+		FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, CAR_FAS AS CF
+		WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND E.ETA_CODIGO = F.FK_FAS_ETAPA
+		AND F.FAS_CODIGO = CF.FK_CF_FASE 
+		GROUP BY F.FAS_NOMBRE
+
+
+
+
+		<!-- <td class="text-center">
+                            <select>
+                              <% for(var j=0; j < metYac.length; j++) {%>
+                                <% if(metYac[j].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
+                                  <option class="text-center"><%=metYac[j].met_nombre%> (<%=metYac[j].ym_cantidad%> Ton)</option>
+                                <%}%>
+                              <%}%>
+
+                              <% for(var k=0; k < nomYac.length; k++) {%>
+                                <% if(nomYac[k].fk_ym_yacimiento == dataTable[i].yac_codigo) {%>                              
+                                  <option class="text-center"><%=nomYac[k].nom_nombre%> (<%=nomYac[k].ym_cantidad%> Ton)</option>
+                                <%}%>
+                              <%}%>
+                            </select>                            
+                          </td> -->

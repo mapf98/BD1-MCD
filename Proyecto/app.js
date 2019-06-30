@@ -589,7 +589,7 @@ app.post("/Empleados-Modificar",function(req,res){
   var uE = varToBoolean(req.body.uE);
   var dU = varToBoolean(req.body.dU);
   console.log(nU,uE,dU);
-  
+
   if(nU == false && uE == true && dU != true){
     client.query('UPDATE EMPLEADO SET emp_nombre=$1,emp_apellido=$2,emp_fechanacimiento=$3,emp_genero= $4,emp_telefono= $5,fk_emp_cargo= $6,fk_emp_lugar= $7 WHERE emp_cedula= $8',[empleadoPrimerNombre,empleadoPrimerApellido,empleadoFechaNacimiento,empleadoGenero,empleadoTelefono,empleadoCargo,empleadoParroquia,empleadoCedula],(err,result)=>{
       if (err) {
@@ -765,9 +765,7 @@ app.post("/Yacimientos-Modificar",function(req,res){
   if(ready){
     res.send('great');
   }
-
 });
-
 
 app.post("/Yacimientos-Verificar",function(req,res){ 
   var yacimientoV = req.body.yacimientoV;
@@ -860,7 +858,6 @@ app.get("/ER",function(req,res){
   });
 });
 
-
 app.get("/getCargo",function(req,res){
   client.query('SELECT car_codigo,car_nombre FROM CARGO',(err,result)=>{
     if (err) {
@@ -901,11 +898,12 @@ app.post("/getYacExp",function(req,res){
 
 app.post("/AExp",function(req,res){
   var exp = req.body.AExp;
-  var dur = req.body.ADur; 
+  var dur = req.body.ADur;
+  var est = req.body.AEst; 
   console.log(exp);
   var estatusExp = 'Disponible';
   var estatusYac = 'CF';
-  client.query('INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO,EXP_DURACION) VALUES ( (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ,$2,$3) RETURNING EXP_CODIGO',[estatusExp,exp,dur],(err,result)=>{
+  client.query('INSERT INTO EXPLOTACION (FK_EXP_ESTATUS,FK_EXP_YACIMIENTO,EXP_DURACION,EXP_COSTOTOTAL) VALUES ( (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ,$2,$3,$4) RETURNING EXP_CODIGO',[estatusExp,exp,dur,est],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -928,9 +926,10 @@ app.post("/AExp",function(req,res){
 app.post("/AEta",function(req,res){
   var eta = req.body.AEta; 
   var exp = req.body.AExp;
+  var est = req.body.AEst;
   var estatusEta = 'Disponible';
   console.log(eta);
-  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING ETA_CODIGO',[eta,exp,estatusEta],(err,result)=>{
+  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS,ETA_COSTOTOTAL) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4) RETURNING ETA_CODIGO',[eta,exp,estatusEta,est],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -946,9 +945,10 @@ app.post("/AEta",function(req,res){
 app.post("/AFas",function(req,res){
   var eta = req.body.AEta; 
   var fas = req.body.AFas;
+  var est = req.body.AEst;
   var estatusFas = 'Disponible';
   console.log(fas);
-  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING FAS_CODIGO',[fas,eta,estatusFas],(err,result)=>{
+  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS,FAS_COSTOTOTAL) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4) RETURNING FAS_CODIGO',[fas,eta,estatusFas,est],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -965,8 +965,9 @@ app.post("/ACar",function(req,res){
   var fas = req.body.AFas;
   var c = req.body.ACarT;
   var q = req.body.ACarQ;
+  var salario = req.body.ACarS;
   console.log(c+'/'+q);
-  client.query('INSERT INTO CAR_FAS (CF_CANTIDAD,FK_CF_CARGO,FK_CF_FASE) VALUES ($1,$2,$3)',[q,c,fas],(err,result)=>{
+  client.query('INSERT INTO CAR_FAS (CF_CANTIDAD,FK_CF_CARGO,FK_CF_FASE,CF_COSTO) VALUES ($1,$2,$3,$4)',[q,c,fas,salario],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -980,8 +981,9 @@ app.post("/AMaq",function(req,res){
   var fas = req.body.AFas;
   var m = req.body.AMaqT;
   var q = req.body.AMaqQ;
+  var costo = req.body.AMaqC;
   console.log(m+'/'+q);
-  client.query('INSERT INTO TM_FAS (TMF_CANTIDAD,FK_TMF_TM,FK_TMF_FASE) VALUES ($1,$2,$3)',[q,m,fas],(err,result)=>{
+  client.query('INSERT INTO TM_FAS (TMF_CANTIDAD,FK_TMF_TM,FK_TMF_FASE,TMF_COSTO) VALUES ($1,$2,$3,$4)',[q,m,fas,costo],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -989,6 +991,136 @@ app.post("/AMaq",function(req,res){
       res.send('great');
     }
   });
+});
+
+app.get("/Explotaciones-Configuracion-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT Y.YAC_NOMBRE, Y.YAC_CODIGO, EX.EXP_DURACION, EX.EXP_COSTOTOTAL, COUNT(E.ETA_NOMBRE) AS TotalEtapas FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO GROUP BY Y.YAC_NOMBRE, Y.YAC_CODIGO, EX.EXP_DURACION, EX.EXP_COSTOTOTAL',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yacimientosExp = result.rows;
+        res.render('explotacionesConfiguracionConsultar',{user: userJSON,yacimientosExp: yacimientosExp});
+      }else{
+        var yacimientosExp = result.rows;
+        res.render('explotacionesConfiguracionConsultar',{user: userJSON,yacimientosExp: yacimientosExp});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/YS",function(req,res){
+  var yacCod = req.body.yacCod;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT E.ETA_NOMBRE, E.ETA_CODIGO, COUNT(F.FAS_NOMBRE) AS TotalFases FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND E.FK_ETA_EXPLOTACION = (SELECT E.EXP_CODIGO FROM EXPLOTACION AS E, YACIMIENTO AS Y WHERE E.FK_EXP_YACIMIENTO = Y.YAC_CODIGO AND Y.YAC_CODIGO = $1) GROUP BY E.ETA_NOMBRE, E.ETA_CODIGO',[yacCod],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yacimientosExpEtapa = result.rows;
+        res.send({yacimientosExpEtapa: yacimientosExpEtapa});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/ES",function(req,res){
+  var etapaCod = req.body.etapaCod;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT F.FAS_NOMBRE, F.FAS_CODIGO FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND F.FK_FAS_ETAPA = $1',[etapaCod],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yacimientosEtapaFase = result.rows;
+        res.send({yacimientosEtapaFase: yacimientosEtapaFase});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/EsDetalle",function(req,res){
+  var faseCod = req.body.faseCod;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT F.FAS_NOMBRE, F.FAS_COSTOTOTAL FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var detalleFase = result.rows;
+        res.send({detalleFase: detalleFase});
+      }else{
+        res.send('failed'); 
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/detalleCargo",function(req,res){
+  var faseCod = req.body.faseCod;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT CF.CF_CANTIDAD, CAR.CAR_NOMBRE FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, CAR_FAS AS CF, CARGO AS CAR WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND CF.FK_CF_FASE = F.FAS_CODIGO AND CF.FK_CF_CARGO = CAR.CAR_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var detalleCargos = result.rows;
+        client.query('SELECT SUM(CF.CF_CANTIDAD) AS empleados FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, CAR_FAS AS CF, CARGO AS CAR WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND CF.FK_CF_FASE = F.FAS_CODIGO AND CF.FK_CF_CARGO = CAR.CAR_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(result.rows[0] != null){
+            var totalCargos = result.rows;
+            res.send({detalleCargos: detalleCargos,totalCargos:totalCargos});
+          }else{
+            res.send('failed'); 
+          }
+        });
+      }else{
+        res.send('failed'); 
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/detalleMaquinarias",function(req,res){
+  var faseCod = req.body.faseCod;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT TMF.TMF_CANTIDAD, TM.TM_NOMBRE FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, TM_FAS AS TMF, TIPO_MAQUINARIA AS TM WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND TMF.FK_TMF_FASE = F.FAS_CODIGO AND TMF.FK_TMF_TM = TM.TM_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var detalleMaquinarias = result.rows;
+        client.query('SELECT SUM(TMF.TMF_CANTIDAD) AS maquinarias FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F, TM_FAS AS TMF, TIPO_MAQUINARIA AS TM WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND TMF.FK_TMF_FASE = F.FAS_CODIGO AND TMF.FK_TMF_TM = TM.TM_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(result.rows[0] != null){
+            var totalMaquinarias = result.rows;
+            res.send({detalleMaquinarias: detalleMaquinarias,totalMaquinarias: totalMaquinarias});
+          }else{
+            res.send('failed'); 
+          }
+        });
+      }else{
+        res.send('failed'); 
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
 });
 
 //Puerto donde se escuchan las peticiones http
