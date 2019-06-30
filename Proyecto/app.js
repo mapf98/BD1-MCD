@@ -334,7 +334,7 @@ app.get("/Yacimientos-Eliminar",function(req,res){
 app.post('/login',function(req,res){
   var userCheck = req.body.user;
   var userPassword = req.body.password;
-  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password FROM empleado AS E, usuario AS U , cargo AS Carg WHERE U.fk_usu_empleado = E.emp_codigo AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1',[userCheck],(err,result)=>{
+  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password FROM empleado AS E, usuario AS U , cargo AS Carg WHERE U.fk_usu_empleado_ci = E.emp_cedula AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1',[userCheck],(err,result)=>{
       if(result.rows[0] != null && result.rows[1] == null){
         if (result.rows[0].usu_password == userPassword){
           userJSON.nombre = result.rows[0].emp_nombre;
@@ -533,6 +533,13 @@ app.post("/Empleados-Modificar",function(req,res){
   });
 });
 
+//Puerto donde se escuchan las peticiones http
+app.listen(8080);
+
+
+
+// MINERALES (METALICOS Y NO METALICOS) -- DAVID
+
 
 app.get("/Minerales",function(req,res){
   if(userJSON.usuario != "none"){
@@ -669,6 +676,11 @@ app.post("/Metalicos-Agregar",function(req,res){
   var nombrePresentacion = req.body.nombrePresentacion;
   var precioMP = req.body.precioMP;
   var preTipo = req.body.preTipo;
+  // var metTipo = req.body.metTipo;
+  // var metProporcion = req.body.metProporcion;
+  // var metMetalico = req.body.metMetalico;
+
+  console.log(preTipo);
 
   if(userJSON.usuario != "none"){
 
@@ -688,6 +700,15 @@ app.post("/Metalicos-Agregar",function(req,res){
       });
       }
 
+      // for (var i = metTipo.length - 1; i >= 0; i--) {
+
+      //   client.query('INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1metalico, fk_mm_2metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[metProporcion[i],metMetalico[i],metalicoNombre],(err,result)=>{
+      //   if (err) {
+      //     console.log(err.stack);
+      //     res.send('failed'); 
+      //   }        
+      // });
+      // }
 
       
     }else{
@@ -722,6 +743,29 @@ app.post("/Metalicos-AgregarPre",function(req,res){
     res.redirect('login');
   }
 });
+
+// app.post("/Metalicos-AgregarMinMet",function(req,res){
+//   var filtro = req.body.filtroMinMet;
+//   if(userJSON.usuario != "none"){
+
+//     client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+//       if (err) {
+//         console.log(err.stack);
+//         res.send('failed'); 
+//       }else if(result.rows[0] != null){
+//         var met = result.rows;
+//         res.send({met: met});
+//       }else{
+//         res.send('failed');
+//       };
+
+//     });
+
+//   }else{
+//     res.redirect('login');
+//   }
+// });
 
 
 
@@ -1061,36 +1105,4 @@ app.post("/NoMetalicos-Modificar",function(req,res){
 
 });
 
-// SECCION Ventas
 
-app.get("/Ventas",function(req,res){
-  if(userJSON.usuario != "none"){
-    res.render('ventas',{user: userJSON});
-  }else{
-    res.redirect('login');
-  }
-});
-
-app.get("/Ventas-Consultar",function(req,res){
-  var fy = 'yyyy';
-  var fm = 'mm';
-  var fd = 'dd';
-  if(userJSON.usuario != "none"){
-    client.query('SELECT V.ven_codigo, to_char(V.ven_fecha,$1) AS year, to_char(V.ven_fecha,$2) AS month, to_char(V.ven_fecha,$3) AS day, ven_montototal, fk_ven_cliente, fk_ven_usuario FROM venta AS V',[fy,fm,fd],(err,result)=>{
-      if (err) {
-        console.log(err.stack);
-        res.send('failed'); 
-      }else if(result.rows[0] != null){
-        console.log(result.rows);
-        res.render('ventasConsultar',{dataTable: result.rows, user: userJSON});
-      }else{
-        res.send('failed');
-      };
-    });
-  }else{
-    res.redirect('login');
-  }
-});
-
-//Puerto donde se escuchan las peticiones http
-app.listen(8080);

@@ -2609,46 +2609,46 @@ INSERT INTO lugar(
 	VALUES 
 
 	--AMAZONAS 
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '14-06-2008', 'Cuenca del Orinoco', 2 , 363),
-	(nextval('yacimiento_yac_codigo_seq'), 20000, '03-02-2001', 'Yapacana', 2 , 366),
-	(nextval('yacimiento_yac_codigo_seq'), 15000, '01-04-2005', 'Munduapo', 2 , 375),
-	(nextval('yacimiento_yac_codigo_seq'), 1000, '25-02-2006', 'Cocuy', 2 , 383),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '14-06-2008', 'Cuenca del Orinoco', 1 , 363),
+	(nextval('yacimiento_yac_codigo_seq'), 20000, '03-02-2001', 'Yapacana', 1 , 366),
+	(nextval('yacimiento_yac_codigo_seq'), 15000, '01-04-2005', 'Munduapo', 1 , 375),
+	(nextval('yacimiento_yac_codigo_seq'), 1000, '25-02-2006', 'Cocuy', 1 , 383),
 	(nextval('yacimiento_yac_codigo_seq'), 3000, '25-02-2002', 'Platanillal', 2 , 372),
 
 	-- ANZOATEGUI
-	(nextval('yacimiento_yac_codigo_seq'), 6000 , '14-06-2017', 'Peñas Blancas', 2 , 389),
-	(nextval('yacimiento_yac_codigo_seq'), 14000, '12-06-2014', 'Del Piar', 2 , 407),
-	(nextval('yacimiento_yac_codigo_seq'), 3500 , '14-06-2011', 'Mallorquín', 2 , 439),
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '16-08-2004', 'Capiricual', 2 , 439),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '14-06-2017', 'Peñas Blancas', 1 , 389),
+	(nextval('yacimiento_yac_codigo_seq'), 14000, '12-06-2014', 'Del Piar', 1 , 407),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '14-06-2011', 'Mallorquín', 1 , 439),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '16-08-2004', 'Capiricual', 1 , 439),
 	(nextval('yacimiento_yac_codigo_seq'), 6000, '01-05-2006', 'Fila Maestra', 2 , 391),
 
 	--APURE
-	(nextval('yacimiento_yac_codigo_seq'), 4300, '12-06-2014', 'Galera de Cinaruco', 2 , 460),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2010', 'Mantecal', 2 , 451),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '12-06-2014', 'Galera de Cinaruco', 1 , 460),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2010', 'Mantecal', 1 , 451),
 	(nextval('yacimiento_yac_codigo_seq'), 11000 , '25-02-2008', 'Biruaca', 1 , 449),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-02-2006', 'El Yagual', 2 , 445),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-02-2006', 'El Yagual', 1 , 445),
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '25-02-2002', 'El Peñal', 2 , 467),
 
 
 	--ARAGUA
-	(nextval('yacimiento_yac_codigo_seq'), 3600 , '13-06-2016', 'Villa del Cura', 2 , 516),
-	(nextval('yacimiento_yac_codigo_seq'), 21000 , '05-12-2001', 'Santa Isabel', 2 , 480),
-	(nextval('yacimiento_yac_codigo_seq'), 6400 , '29-07-2008', 'Taguay', 2 , 510),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '15-03-2016', 'Loma de Hierro', 2 , 506),
+	(nextval('yacimiento_yac_codigo_seq'), 3600 , '13-06-2016', 'Villa del Cura', 1 , 516),
+	(nextval('yacimiento_yac_codigo_seq'), 21000 , '05-12-2001', 'Santa Isabel', 1 , 480),
+	(nextval('yacimiento_yac_codigo_seq'), 6400 , '29-07-2008', 'Taguay', 1 , 510),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '15-03-2016', 'Loma de Hierro', 1 , 506),
 	(nextval('yacimiento_yac_codigo_seq'), 6000 , '16-05-2011', 'Las Lajitas', 2 , 505),
 
 	--BARINAS
-	(nextval('yacimiento_yac_codigo_seq'), 5000 , '06-12-2012', 'Ciudad Bolivia', 2 , 559),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Santa Rosa', 2 , 565),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '13-05-2015', 'Ticoporo', 2 , 524),
-	(nextval('yacimiento_yac_codigo_seq'), 18000 , '05-04-2006', 'Barinitas', 2 , 545),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '06-12-2012', 'Ciudad Bolivia', 1 , 559),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Santa Rosa', 1 , 565),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '13-05-2015', 'Ticoporo', 1 , 524),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '05-04-2006', 'Barinitas', 1 , 545),
 	(nextval('yacimiento_yac_codigo_seq'), 1000, '05-02-2002', 'Guadarrama', 2 , 528),
 
 	--BOLIVAR
-	(nextval('yacimiento_yac_codigo_seq'), 15 , '01-04-2005', 'Punta de Cerro', 2 , 601),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '06-09-2006', 'Pico Cerro Paja', 2 , 602),
-	(nextval('yacimiento_yac_codigo_seq'), 8600 , '02-05-1998', 'El Pao', 2 , 600),
-	(nextval('yacimiento_yac_codigo_seq'), 12000, '03-09-1999', 'Del Callao', 2 , 588),
+	(nextval('yacimiento_yac_codigo_seq'), 15 , '01-04-2005', 'Punta de Cerro', 1 , 601),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '06-09-2006', 'Pico Cerro Paja', 1 , 602),
+	(nextval('yacimiento_yac_codigo_seq'), 8600 , '02-05-1998', 'El Pao', 1 , 600),
+	(nextval('yacimiento_yac_codigo_seq'), 12000, '03-09-1999', 'Del Callao', 1 , 588),
 	(nextval('yacimiento_yac_codigo_seq'), 30000 , '07-05-2009', 'El Dorado', 2 , 610),
 
 	--CARABOBO
@@ -2656,21 +2656,21 @@ INSERT INTO lugar(
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '06-11-2012', 'Gañango', 1 , 639),
 	(nextval('yacimiento_yac_codigo_seq'), 1000 , '08-07-2007', 'Guacara', 1 , 627),
 	(nextval('yacimiento_yac_codigo_seq'), 25000 , '25-02-2002', 'Yagua', 1 , 628),
-	(nextval('yacimiento_yac_codigo_seq'), 6700 , '13-08-2013', 'Los Guayos', 1 , 633),
+	(nextval('yacimiento_yac_codigo_seq'), 6700 , '13-08-2013', 'Los Guayos', 2 , 633),
 
 	--COJEDES 
 	(nextval('yacimiento_yac_codigo_seq'), 9200, '21-07-2017', 'Tinaquillo', 1 , 658),
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '22-11-2015', 'San Carlos', 1 , 658),
 	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Macapo', 1 , 662),
 	(nextval('yacimiento_yac_codigo_seq'), 6000 , '17-07-2017', 'La Aguadita', 1 , 661),
-	(nextval('yacimiento_yac_codigo_seq'), 8000, '25-02-2002', 'Amparo', 1 , 664),
+	(nextval('yacimiento_yac_codigo_seq'), 8000, '25-02-2002', 'Amparo', 2 , 664),
 
 	--DELTA AMACURO
 	(nextval('yacimiento_yac_codigo_seq'), 5000, '28-06-2003', 'Imataca', 1 , 677),
 	(nextval('yacimiento_yac_codigo_seq'), 4000 , '04-11-2018', 'Piacoa', 1 , 679),
 	(nextval('yacimiento_yac_codigo_seq'), 7800 , '04-12-2017', 'Los Castillos', 1 , 681),
 	(nextval('yacimiento_yac_codigo_seq'), 4500 , '04-11-2008', 'La Represalia', 1 , 676),
-	(nextval('yacimiento_yac_codigo_seq'), 9200, '19-06-2006', 'Sacupana', 1 , 679),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '19-06-2006', 'Sacupana', 2 , 679),
 
 
 	--FALCON
@@ -2678,7 +2678,7 @@ INSERT INTO lugar(
 	(nextval('yacimiento_yac_codigo_seq'), 9200 , '12-06-2015', 'Mauroa', 1 , 743),
 	(nextval('yacimiento_yac_codigo_seq'), 11200, '13-06-2014', 'Septentrional', 1 , 692),
 	(nextval('yacimiento_yac_codigo_seq'), 6300 , '22-02-2016', 'El Saladillo', 1 , 699),
-	(nextval('yacimiento_yac_codigo_seq'), 14500 , '25-11-2012', 'El Cantil', 1 , 747),
+	(nextval('yacimiento_yac_codigo_seq'), 14500 , '25-11-2012', 'El Cantil', 2 , 747),
 
 
 	--GUARICO 
@@ -2686,7 +2686,7 @@ INSERT INTO lugar(
 	(nextval('yacimiento_yac_codigo_seq'), 5200 , '06-04-2013', 'Jabilillal', 1 , 781),
 	(nextval('yacimiento_yac_codigo_seq'), 5600 , '13-07-2015', 'El Corozo', 1 , 798),
 	(nextval('yacimiento_yac_codigo_seq'), 17000 , '04-11-2018', 'Serrania del Interior', 1 , 801),
-	(nextval('yacimiento_yac_codigo_seq'), 2050, '25-02-2012', 'El chino', 1 , 805),
+	(nextval('yacimiento_yac_codigo_seq'), 2050, '25-02-2012', 'El chino', 2 , 805),
 
 
 	--LARA 
@@ -2694,56 +2694,56 @@ INSERT INTO lugar(
 	(nextval('yacimiento_yac_codigo_seq'), 8560 , '07-11-2003', 'San Jacinto', 1 , 823),
 	(nextval('yacimiento_yac_codigo_seq'), 16000, '15-09-2006', 'Los Caballos', 1 , 861),
 	(nextval('yacimiento_yac_codigo_seq'), 13000 , '25-01-2012', 'Carorita', 1 , 827),
-	(nextval('yacimiento_yac_codigo_seq'), 1400 , '01-02-2002', 'Quibor', 1 , 832),
+	(nextval('yacimiento_yac_codigo_seq'), 1400 , '01-02-2002', 'Quibor', 2 , 832),
 
 	--MERIDA
 	(nextval('yacimiento_yac_codigo_seq'), 6500 , '02-02-2002', 'Las Tapias', 1 , 919),
 	(nextval('yacimiento_yac_codigo_seq'), 9600 , '25-01-2009', 'El Tigre', 1 , 958),
 	(nextval('yacimiento_yac_codigo_seq'), 15000 , '05-12-2012', 'Zea', 1 , 959),
 	(nextval('yacimiento_yac_codigo_seq'), 6200, '04-11-2016', 'Guaraque', 1 , 905),
-	(nextval('yacimiento_yac_codigo_seq'), 9000 , '25-02-2012', 'Rio Negro', 1 , 907),
+	(nextval('yacimiento_yac_codigo_seq'), 9000 , '25-02-2012', 'Rio Negro', 2 , 907),
 
 	--MIRANDA
 	(nextval('yacimiento_yac_codigo_seq'), 4562, '06-02-2006', 'El Carrizo', 1 , 977),
 	(nextval('yacimiento_yac_codigo_seq'), 7540 , '23-10-2010', 'Capaya', 1 , 962),
 	(nextval('yacimiento_yac_codigo_seq'), 12400, '04-11-2018', 'Colonia Ocumare', 1 , 992),
 	(nextval('yacimiento_yac_codigo_seq'), 4510, '04-11-2018', 'Colonia Mendoza', 1 , 992),
-	(nextval('yacimiento_yac_codigo_seq'), 4620, '25-02-2002', 'Tacata', 1 , 987),
+	(nextval('yacimiento_yac_codigo_seq'), 4620, '25-02-2002', 'Tacata', 2 , 987),
 
 	--MONAGAS
 	(nextval('yacimiento_yac_codigo_seq'), 4800, '15-02-2014', 'Cerro Azul', 1 , 1052),
 	(nextval('yacimiento_yac_codigo_seq'), 7200, '12-05-2006', 'El Guacharo', 1 , 1019),
 	(nextval('yacimiento_yac_codigo_seq'), 6500, '25-02-2002', 'Teresen', 1 , 1023),
 	(nextval('yacimiento_yac_codigo_seq'), 4500, '25-02-2002', 'La Guanota', 1 , 1020),
-	(nextval('yacimiento_yac_codigo_seq'), 1200, '25-02-2002', 'Cachipo', 1 , 1052),
+	(nextval('yacimiento_yac_codigo_seq'), 1200, '25-02-2002', 'Cachipo', 2 , 1052),
 
 	--NUEVA ESPARTA
 	(nextval('yacimiento_yac_codigo_seq'), 4530, '25-02-2014', 'Salinas de Pampatar', 1 , 1068),
 	(nextval('yacimiento_yac_codigo_seq'), 3000 , '13-06-2018', 'Tubores', 1 , 1075),
 	(nextval('yacimiento_yac_codigo_seq'), 4600, '25-06-2002', 'Yaguaraparo', 1 , 1071),
 	(nextval('yacimiento_yac_codigo_seq'), 7000, '18-06-2014', 'Zabala', 1 , 1080),
-	(nextval('yacimiento_yac_codigo_seq'), 9200, '05-02-2002', 'Los Baleales', 1 , 1076),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '05-02-2002', 'Los Baleales', 2 , 1076),
 
 	--PORTUGUESA
 	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-06-2000', 'Agua Blanca', 1 , 245),
 	(nextval('yacimiento_yac_codigo_seq'), 6100 , '25-02-2002', 'Turen', 1 , 1117),
 	(nextval('yacimiento_yac_codigo_seq'), 9100, '25-02-2002', 'Santa Cruz', 1 , 1119),
 	(nextval('yacimiento_yac_codigo_seq'), 4000, '25-02-2002', 'Guanarito', 1 , 1090),
-	(nextval('yacimiento_yac_codigo_seq'), 5000, '25-02-2002', 'La estación', 1 , 1097),
+	(nextval('yacimiento_yac_codigo_seq'), 5000, '25-02-2002', 'La estación', 2 , 1097),
 
 	--SUCRE
 	(nextval('yacimiento_yac_codigo_seq'), 100 , '15-02-2006', 'El Pilar', 1 , 1130),
 	(nextval('yacimiento_yac_codigo_seq'), 1300 , '25-01-2003', 'Paria', 1 , 1173),
 	(nextval('yacimiento_yac_codigo_seq'), 5000 , '04-10-2001', 'Araya', 1 , 1144),
 	(nextval('yacimiento_yac_codigo_seq'), 11000 , '24-09-2013', 'Ayacucho', 1 , 1169),
-	(nextval('yacimiento_yac_codigo_seq'), 6100, '02-12-2004', 'Sucre A', 1 , 1358),
+	(nextval('yacimiento_yac_codigo_seq'), 6100, '02-12-2004', 'Sucre A', 2 , 1358),
 
 	--TACHIRA
 	(nextval('yacimiento_yac_codigo_seq'), 4200 , '25-03-2011', 'Lobatera', 1 , 1216),
 	(nextval('yacimiento_yac_codigo_seq'), 4300, '06-09-2006', 'Seboruco', 1 , 1233),
 	(nextval('yacimiento_yac_codigo_seq'), 13000 , '02-06-2008', 'Delicias', 1 , 1223),
 	(nextval('yacimiento_yac_codigo_seq'), 4600, '14-06-2011', 'San Felix', 1 , 1179),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '14-06-2011', 'Rubio', 1 , 1205),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '14-06-2011', 'Rubio', 2 , 1205),
 
 
 	--TRUJILLO
@@ -2803,7 +2803,7 @@ INSERT INTO lugar(
 
 -- MINERALES NO METALICOS
 
-INSERT INTO min_no_metalico(
+	INSERT INTO min_no_metalico(
 		nom_codigo, nom_nombre, nom_utilidad)
 		VALUES 
 		(nextval('min_no_metalico_nom_codigo_seq'), 'Carbon', 'Generación de electricidad'),
@@ -3031,11 +3031,42 @@ INSERT INTO yac_min(
 		(nextval('yac_min_ym_codigo_seq'), 119, null, 1, 700500),
 		(nextval('yac_min_ym_codigo_seq'), 120, null, 1, 1000);
 
+-- CLIENTES --
+
+
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (25218800,'Evan','Kent', 4241539278,1155);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (10317314,'Emerson','Zamora', 4261666792 ,1207);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (16540327,'Mercedes','Abbott', 4245477306,881);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (15728336,'Jameson','Pratt',4260625430,1361);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (23376628,'Leila','Brock',4249507252,815);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (20156324,'Ciara','Dawson',4265922660,743);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (14589174,'Casey','Gilliam', 4265351416,701);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (16284862,'Winifred','Pearson',4244442504,691);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (14222213,'Felix','Raymond',4260410982,1130);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (18462682,'Caryn','Robles',4244451359,475);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (20383299,'Zia','Macdonald',4243592499,1050);
+	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (24617599,'September','Odom',4269110537,377);
+
+-- VENTAS
+
+		INSERT INTO VENTA(
+		ven_fecha, ven_montototal, fk_ven_cliente, fk_ven_usuario)
+		VALUES 
+		('2017-05-11',	16800	,3	, 4),('2017-06-23',	11790	,12	, 1),('2017-05-10',	2850	,8	, 1),('2019-01-17',	2050	,12	, 2),
+		('2018-11-17',	4179	,7	, 3),('2017-02-14',	5070	,12	, 3),('2017-06-06',	15750	,9	, 2),('2019-01-27',	950	    ,4	, 1),
+		('2018-07-25',	1111	,1	, 5),('2018-11-19',	522	    ,1	, 1),('2017-01-27',	19920	,10	, 4),('2017-03-10',	9880	,8	, 3),
+		('2017-02-14',	7950	,8	, 4),('2019-01-19',	572	    ,1	, 3),('2018-11-28',	3600	,5	, 5),('2018-04-13',	342	    ,3	, 5),
+		('2018-11-03',	4680	,11	, 3),('2018-11-04',	1620	,4	, 4),('2018-11-22',	18500	,9	, 4),('2019-02-15',	69000	,6	, 3),
+		('2017-11-08',	6150	,8	, 5),('2017-11-30',	10736	,11	, 3),('2017-10-19',	2004	,5	, 2),('2016-05-22',	1800	,10	, 1),
+		('2016-12-30',	32469	,3	, 2),('2017-07-25',	7150	,6	, 4),('2017-08-29',	3330	,4	, 5),('2016-04-13',	11340	,3	, 4),
+		('2016-08-19',	18900	,4	, 3),('2017-07-13',	216	    ,2	, 3),('2017-03-07',	3430	,1	, 2),('2017-12-25',	880	    ,4	, 1),
+		('2018-12-30',	3168	,2	, 4),('2018-12-19',	5610	,7	, 1),('2018-04-29',	10500	,1	, 3);
+
 -- EXPLOTACIONES
 
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',1),('3',2),('3',3),('3',4);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',6),('3',7),('3',8),('3',9);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',11),('3',12),('3',13),('3',14);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('3',1,1),('3',2,2),('3',3,3),('3',4,4);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('3',6,5),('3',7,6),('3',8,7),('3',9,8),('3',11,9);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',12),('3',13),('3',14);
 		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',16),('3',17),('3',18),('3',19);
 		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',21),('3',22),('3',23),('3',24);
 		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',26),('3',27),('3',28),('3',29);
@@ -3058,21 +3089,6 @@ INSERT INTO yac_min(
 		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',111),('3',112),('3',113),('3',114);
 		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',116),('3',117),('3',118),('3',119);
 
--- CLIENTES --
-
-
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (25218800,'Evan','Kent', 4241539278,1155);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (10317314,'Emerson','Zamora', 4261666792 ,1207);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (16540327,'Mercedes','Abbott', 4245477306,881);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (15728336,'Jameson','Pratt',4260625430,1361);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (23376628,'Leila','Brock',4249507252,815);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (20156324,'Ciara','Dawson',4265922660,743);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (14589174,'Casey','Gilliam', 4265351416,701);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (16284862,'Winifred','Pearson',4244442504,691);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (14222213,'Felix','Raymond',4260410982,1130);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (18462682,'Caryn','Robles',4244451359,475);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (20383299,'Zia','Macdonald',4243592499,1050);
-	INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES (24617599,'September','Odom',4269110537,377);
 
 -- PRESENTACIONES EN MINERALES --
 
@@ -4406,20 +4422,7 @@ INSERT INTO yac_min(
 			('JUEVES',	  '01:00', '05:00'),
 			('VIERNES',   '01:00', '05:00');
 
--- VENTAS
 
-		INSERT INTO VENTA(
-		ven_fecha, ven_montototal, fk_ven_cliente, fk_ven_usuario)
-		VALUES 
-		('2017-05-11',	16800	,3	, 4),('2017-06-23',	11790	,12	, 1),('2017-05-10',	2850	,8	, 1),('2019-01-17',	2050	,12	, 2),
-		('2018-11-17',	4179	,7	, 3),('2017-02-14',	5070	,12	, 3),('2017-06-06',	15750	,9	, 2),('2019-01-27',	950	    ,4	, 1),
-		('2018-07-25',	1111	,1	, 5),('2018-11-19',	522	    ,1	, 1),('2017-01-27',	19920	,10	, 4),('2017-03-10',	9880	,8	, 3),
-		('2017-02-14',	7950	,8	, 4),('2019-01-19',	572	    ,1	, 3),('2018-11-28',	3600	,5	, 5),('2018-04-13',	342	    ,3	, 5),
-		('2018-11-03',	4680	,11	, 3),('2018-11-04',	1620	,4	, 4),('2018-11-22',	18500	,9	, 4),('2019-02-15',	69000	,6	, 3),
-		('2017-11-08',	6150	,8	, 5),('2017-11-30',	10736	,11	, 3),('2017-10-19',	2004	,5	, 2),('2016-05-22',	1800	,10	, 1),
-		('2016-12-30',	32469	,3	, 2),('2017-07-25',	7150	,6	, 4),('2017-08-29',	3330	,4	, 5),('2016-04-13',	11340	,3	, 4),
-		('2016-08-19',	18900	,4	, 3),('2017-07-13',	216	    ,2	, 3),('2017-03-07',	3430	,1	, 2),('2017-12-25',	880	    ,4	, 1),
-		('2018-12-30',	3168	,2	, 4),('2018-12-19',	5610	,7	, 1),('2018-04-29',	10500	,1	, 3);
 
 -- INVENTARIO --
 

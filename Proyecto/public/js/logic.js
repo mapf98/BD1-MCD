@@ -1,18 +1,5 @@
 var globalIDMineralYacimiento = 1;
-var globalIDPresentacionMineral = 1;
-var globalIDPresentacionMineralNM = 1;
 
-var modMet = {
-    "d": [],
-    "u": [],
-    "i": []
-} 
-
-var modNoMet = {
-    "d": [],
-    "u": [],
-    "i": []
-} 
 
 function clearArray(array){
 	var start = 0;
@@ -637,9 +624,52 @@ function mineralTipo(tipo,minerales){
 	});
 }
 
+function verifyAndOrder(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].c = b[flag].c;
+				a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
+}
 
 
-// MINERALES (METALICOS Y NO METALICOS)
+
+
+
+
+// MINERALES (METALICOS Y NO METALICOS) --  DAVID
+
+var globalIDPresentacionMineral = 1;
+
+var globalIDMinetalMetalico = 1;
+
+var modMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+var modNoMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
 
 $(document).ready( function () {
     $('#table_id_metalicos').DataTable();
@@ -667,19 +697,34 @@ $('#agregarMetalico').on('submit',function(e){
 	var prePresentacion = [];
 	var prePrecio = [];
 	var preTipo = [];
+
 	
 	while(globalIDPresentacionMineral>=start){
 
 		preTipo.push( $('#'+start+'').val() );
 		prePresentacion.push( $('#'+start+'').val() );
-		prePrecio.push($('#c'+start+'').val());
+		prePrecio.push($('#p'+start+'').val());
 		start++;
 	}
+
+	// var startMet = 1;
+	// var metMetalico = [];
+	// var metProporcion = [];
+	// var metTipo = [];
+
+
+	// while(globalIDMinetalMetalico>=startMet){
+
+	// 	metTipo.push( $('#'+start+'').val() );
+	// 	metMetalico.push( $('#'+start+'').val() );
+	// 	metProporcion.push($('#p'+start+'').val());
+	// 	startMet++;
+	// }
 
 	if(escalaDureza.val() == 'Selecciona un municipio'){
 		alert('Selecciona lugar valido, elige un estado primero!')
 	}else{
-		if(verifyElementValPre()==true){
+		if((verifyElementValPre()==true)){
 			$.ajax({
 			url: '/Metalicos-Agregar',
 			method: 'POST',
@@ -690,7 +735,10 @@ $('#agregarMetalico').on('submit',function(e){
 				// presentacionMetalico: presentacionMetalico.val(),
 				nombrePresentacion: prePresentacion,
 				precioMP: prePrecio,
-				preTipo: preTipo
+				preTipo: preTipo,
+				// metMetalico: metMetalico,
+				// metProporcion: metProporcion,
+				// metTipo: metTipo
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -776,6 +824,78 @@ function addPre(button,list){
 		});
 
 	globalIDPresentacionMineral++;
+
+});
+	}
+
+addMinMet($('#addMinMet'),$('#listMinMet'));
+
+//Presentacion
+function addMinMet(button,list){
+		button.on('click',function(e){
+	e.preventDefault();
+	listMinMet = $('#listMinMet');
+
+	var nextID = globalIDMinetalMetalico;
+				listMinMet.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxPre" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Compuesto</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="MIN_METALICO">Metalico</option>\n\
+					  </select>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					    <label for="p'+nextID+'" class="boxMinText">Proporcion</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="p'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$USD</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mb-3">\n\
+					  <label for="removePre" class="hackerText">Hacker</label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	metalicoSelect($('#t'+nextID+''),$('#'+nextID+''));
+
+	// $('#remove'+nextID+'').on('click',function(e){
+	// 	e.preventDefault();
+	// 	$('#'+nextID+'').attr('id',(nextID)*(-1));
+	// 	boxButtonDelete = $(this).parent();
+	// 	boxMinDelete = $(boxButtonDelete).parent();
+	// 	boxMinDelete.remove();
+	// });
+
+	$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modMet.d.push({"cod":$('#'+nextID+'').val(),"p":$('#p'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#p'+nextID+'').attr('value',$('#p'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+	globalIDMinetalMetalico++;
 
 });
 	}
@@ -977,7 +1097,7 @@ $('#agregarNoMetalico').on('submit',function(e){
 	var prePrecio = [];
 	var preTipo = [];
 	
-	while(globalIDPresentacionMineralNM>=start){
+	while(globalIDPresentacionMineral>=start){
 
 		preTipo.push( $('#'+start+'').val() );
 		prePresentacion.push( $('#'+start+'').val() );
@@ -1248,11 +1368,7 @@ $('#backToMinerales').on('click',function(){
 	window.location.href = "/Minerales";
 });
 
-// SECCION VENTAS
 
-$('#menuItemConsultarVenta').on('click',function(){
-	window.location.href = "/Ventas-Consultar";
-});
 
 function verifyElementValPre(){
 	var start=1;
@@ -1295,52 +1411,70 @@ function presentacionSelect(tipo,presentaciones){
 }
 
 
-function verifyAndOrderMet(a,b){
-	var start = 0;
-	var forDelete = [];
-	while(a.length>start){
-		var flag = 0;
-		while(b.length >flag){
-			if(a[start].id == b[flag].id ){
-				a[start].p = b[flag].p;
-				// a[start].t = b[flag].t;
-				a[start].cod = b[flag].cod;
-				forDelete.push(flag);
-			}else{
-				console.log('no son iguales');
-			}
-			flag++;
-		}
-		start++;
-	}
 
-	for (var k = forDelete.length - 1; k >= 0; k--) {
-		b.splice(forDelete[k], 1);
-	}
-}
 
-function verifyAndOrder(a,b){
-	var start = 0;
-	var forDelete = [];
-	while(a.length>start){
-		var flag = 0;
-		while(b.length >flag){
-			if(a[start].id == b[flag].id ){
-				a[start].c = b[flag].c;
-				a[start].t = b[flag].t;
-				a[start].cod = b[flag].cod;
-				forDelete.push(flag);
-			}else{
-				console.log('no son iguales');
-			}
-			flag++;
-		}
-		start++;
-	}
+// function verifyElementValMinMet(){
+// 	var start=1;
+// 	while(globalIDMinetalMetalico>=start){
+// 		var flag =1;
+// 		while(globalIDMinetalMetalico>=flag){
+// 			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined)  ){
+// 				return false;
+// 				start = globalIDMinetalMetalico+1;
+// 			}else{
+// 				flag++;
+// 			}
+// 		}
+// 		start++;
+// 	}
+// 	return true;
+// }
 
-	for (var k = forDelete.length - 1; k >= 0; k--) {
-		b.splice(forDelete[k], 1);
-	}
-}
+// // function metalicoSelect(tipo,metalicos){
+// // 	$(tipo).on('click',function(){
+// // 	var optionTipo = tipo.children(":selected").val();
+// // 		$.ajax({
+// // 			url: '/Metalicos-AgregarMinMet',
+// // 			method: 'POST',
+// // 			data:{
+// // 				filtroMinMet: optionTipo.toString()
+// // 			},
+// // 			success: function(response){
+// // 					if(response.met != null){
+						
+// // 							metalicos.html('');
+// // 							for (var i = response.met.length - 1; i >= 0; i--) {
+// // 								metalicos.append('<option value="'+response.met[i].met_codigo+'">'+response.met[i].met_nombre+'</option>');
+// // 							}
+						
+// // 					}	
+// // 			}
+// // 		});	
+// // 	});
+// // }
 
+
+// function verifyAndOrderMet(a,b){
+// 	var start = 0;
+// 	var forDelete = [];
+// 	while(a.length>start){
+// 		var flag = 0;
+// 		while(b.length >flag){
+// 			if(a[start].id == b[flag].id ){
+// 				a[start].p = b[flag].p;
+// 				// a[start].t = b[flag].t;
+// 				a[start].cod = b[flag].cod;
+// 				forDelete.push(flag);
+// 			}else{
+// 				console.log('no son iguales');
+// 			}
+// 			flag++;
+// 		}
+// 		start++;
+// 	}
+
+// 	for (var k = forDelete.length - 1; k >= 0; k--) {
+// 		b.splice(forDelete[k], 1);
+// 	}
+// }
 
