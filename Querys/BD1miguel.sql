@@ -206,6 +206,7 @@ CREATE TABLE EXPLOTACION(
 CREATE TABLE ETAPA (
 	ETA_CODIGO SERIAL,
 	ETA_NOMBRE VARCHAR(50) NOT NULL,
+	ETA_DURACION NUMERIC (25),
 	ETA_FECHAINICIO DATE,
 	ETA_FECHAFIN DATE,
 	ETA_COSTOTOTAL NUMERIC(15,2),
@@ -220,6 +221,7 @@ CREATE TABLE ETAPA (
 CREATE TABLE FASE(
 	FAS_CODIGO SERIAL,
 	FAS_NOMBRE VARCHAR(50) NOT NULL,
+	FAS_DURACION NUMERIC (25),
 	FAS_FECHAINICIO DATE,
 	FAS_FECHAFIN DATE,
 	FAS_COSTOTOTAL NUMERIC(15,2),
@@ -3183,7 +3185,7 @@ INSERT INTO yac_min(
 
 	update explotacion set EXP_COSTOTOTAL = 117000 where exp_codigo between 1 and 96;
 
-	update explotacion set EXP_DURACION = exp_fechafin - exp_fechainicio where exp_codigo between 1 and 96;
+
 
 
 -- MAQUINARIAS
@@ -3993,6 +3995,13 @@ INSERT INTO yac_min(
 	UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 94) WHERE exp_codigo = 94;
 	UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 95) WHERE exp_codigo = 95;
 	UPDATE EXPLOTACION SET exp_fechafin = (select eta_fechafin from etapa, explotacion where eta_nombre = 'II: Geologia de superficie' AND fk_eta_explotacion = exp_codigo AND fk_eta_explotacion = 96) WHERE exp_codigo = 96;
+
+
+-- UPDATES EN DURACION (EXP, ETA Y FAS)
+
+	update explotacion set EXP_DURACION = exp_fechafin - exp_fechainicio where exp_codigo between 1 and 96;
+	update etapa set ETA_DURACION = eta_fechafin - eta_fechainicio where eta_codigo between 1 and 192;
+	update fase set fas_DURACION = fas_fechafin - fas_fechainicio where fas_codigo between 1 and 864;
 
 -- ORDENO CARGOS DE EMPLEADOS --
 
