@@ -1,0 +1,30 @@
+{
+  "name": "minerucab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapf98/BD1-MCD.git"
+  },
+  "author": "davmonroy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapf98/BD1-MCD/issues"
+  },
+  "homepage": "https://github.com/mapf98/BD1-MCD#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "pg": "^7.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
