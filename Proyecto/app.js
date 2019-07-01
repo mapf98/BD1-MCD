@@ -1105,4 +1105,27 @@ app.post("/NoMetalicos-Modificar",function(req,res){
 
 });
 
+// INVENTARIO
+
+app.get("/Inventario-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT inv_codigo, inv_cantidadmovimiento, inv_cantidadactual, inv_fechamovimiento, fk_inv_venta, fk_inv_explotacion, fk_inv_minpre FROM inventario',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+
+        
+            res.render('inventarioConsultar',{dataTable: result.rows, user: userJSON});
+  
+        
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
 

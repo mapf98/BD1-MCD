@@ -1411,6 +1411,17 @@ function presentacionSelect(tipo,presentaciones){
 }
 
 
+// INVENTARIO
+
+$('#menuItemInventario').on('click',function(){
+	window.location.href = "/Inventario-Consultar";
+});
+
+$(document).ready( function () {
+    $('#table_id_inventario').DataTable();
+});
+
+
 
 
 // function verifyElementValMinMet(){
