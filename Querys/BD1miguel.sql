@@ -2611,178 +2611,178 @@ INSERT INTO lugar(
 	VALUES 
 
 	--AMAZONAS 
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '14-06-2008', 'Cuenca del Orinoco', 1 , 363),
-	(nextval('yacimiento_yac_codigo_seq'), 20000, '03-02-2001', 'Yapacana', 1 , 366),
-	(nextval('yacimiento_yac_codigo_seq'), 15000, '01-04-2005', 'Munduapo', 1 , 375),
-	(nextval('yacimiento_yac_codigo_seq'), 1000, '25-02-2006', 'Cocuy', 1 , 383),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '14-06-2008', 'Cuenca del Orinoco', 8 , 363),
+	(nextval('yacimiento_yac_codigo_seq'), 20000, '03-02-2001', 'Yapacana', 8 , 366),
+	(nextval('yacimiento_yac_codigo_seq'), 15000, '01-04-2005', 'Munduapo', 8 , 375),
+	(nextval('yacimiento_yac_codigo_seq'), 1000, '25-02-2006', 'Cocuy', 8 , 383),
 	(nextval('yacimiento_yac_codigo_seq'), 3000, '25-02-2002', 'Platanillal', 2 , 372),
 
 	-- ANZOATEGUI
-	(nextval('yacimiento_yac_codigo_seq'), 6000 , '14-06-2017', 'Peñas Blancas', 1 , 389),
-	(nextval('yacimiento_yac_codigo_seq'), 14000, '12-06-2014', 'Del Piar', 1 , 407),
-	(nextval('yacimiento_yac_codigo_seq'), 3500 , '14-06-2011', 'Mallorquín', 1 , 439),
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '16-08-2004', 'Capiricual', 1 , 439),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '14-06-2017', 'Peñas Blancas', 8 , 389),
+	(nextval('yacimiento_yac_codigo_seq'), 14000, '12-06-2014', 'Del Piar', 8 , 407),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '14-06-2011', 'Mallorquín', 8 , 439),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '16-08-2004', 'Capiricual', 8 , 439),
 	(nextval('yacimiento_yac_codigo_seq'), 6000, '01-05-2006', 'Fila Maestra', 2 , 391),
 
 	--APURE
-	(nextval('yacimiento_yac_codigo_seq'), 4300, '12-06-2014', 'Galera de Cinaruco', 1 , 460),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2010', 'Mantecal', 1 , 451),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '25-02-2008', 'Biruaca', 1 , 449),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-02-2006', 'El Yagual', 1 , 445),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '12-06-2014', 'Galera de Cinaruco', 8 , 460),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2010', 'Mantecal', 8 , 451),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '25-02-2008', 'Biruaca', 8 , 449),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-02-2006', 'El Yagual', 8 , 445),
 	(nextval('yacimiento_yac_codigo_seq'), 10000 , '25-02-2002', 'El Peñal', 2 , 467),
 
 
 	--ARAGUA
-	(nextval('yacimiento_yac_codigo_seq'), 3600 , '13-06-2016', 'Villa del Cura', 1 , 516),
-	(nextval('yacimiento_yac_codigo_seq'), 21000 , '05-12-2001', 'Santa Isabel', 1 , 480),
-	(nextval('yacimiento_yac_codigo_seq'), 6400 , '29-07-2008', 'Taguay', 1 , 510),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '15-03-2016', 'Loma de Hierro', 1 , 506),
+	(nextval('yacimiento_yac_codigo_seq'), 3600 , '13-06-2016', 'Villa del Cura', 8 , 516),
+	(nextval('yacimiento_yac_codigo_seq'), 21000 , '05-12-2001', 'Santa Isabel', 8 , 480),
+	(nextval('yacimiento_yac_codigo_seq'), 6400 , '29-07-2008', 'Taguay', 8 , 510),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '15-03-2016', 'Loma de Hierro', 8 , 506),
 	(nextval('yacimiento_yac_codigo_seq'), 6000 , '16-05-2011', 'Las Lajitas', 2 , 505),
 
 	--BARINAS
-	(nextval('yacimiento_yac_codigo_seq'), 5000 , '06-12-2012', 'Ciudad Bolivia', 1 , 559),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Santa Rosa', 1 , 565),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '13-05-2015', 'Ticoporo', 1 , 524),
-	(nextval('yacimiento_yac_codigo_seq'), 18000 , '05-04-2006', 'Barinitas', 1 , 545),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '06-12-2012', 'Ciudad Bolivia', 8 , 559),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Santa Rosa', 8 , 565),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '13-05-2015', 'Ticoporo', 8 , 524),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '05-04-2006', 'Barinitas', 8 , 545),
 	(nextval('yacimiento_yac_codigo_seq'), 1000, '05-02-2002', 'Guadarrama', 2 , 528),
 
 	--BOLIVAR
-	(nextval('yacimiento_yac_codigo_seq'), 15 , '01-04-2005', 'Punta de Cerro', 1 , 601),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '06-09-2006', 'Pico Cerro Paja', 1 , 602),
-	(nextval('yacimiento_yac_codigo_seq'), 8600 , '02-05-1998', 'El Pao', 1 , 600),
-	(nextval('yacimiento_yac_codigo_seq'), 12000, '03-09-1999', 'Del Callao', 1 , 588),
+	(nextval('yacimiento_yac_codigo_seq'), 15 , '01-04-2005', 'Punta de Cerro', 8 , 601),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '06-09-2006', 'Pico Cerro Paja', 8 , 602),
+	(nextval('yacimiento_yac_codigo_seq'), 8600 , '02-05-1998', 'El Pao', 8 , 600),
+	(nextval('yacimiento_yac_codigo_seq'), 12000, '03-09-1999', 'Del Callao', 8 , 588),
 	(nextval('yacimiento_yac_codigo_seq'), 30000 , '07-05-2009', 'El Dorado', 2 , 610),
 
 	--CARABOBO
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '05-06-2014', 'Santa Rosa BB', 1 , 654),
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '06-11-2012', 'Gañango', 1 , 639),
-	(nextval('yacimiento_yac_codigo_seq'), 1000 , '08-07-2007', 'Guacara', 1 , 627),
-	(nextval('yacimiento_yac_codigo_seq'), 25000 , '25-02-2002', 'Yagua', 1 , 628),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '05-06-2014', 'Santa Rosa BB', 8 , 654),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '06-11-2012', 'Gañango', 8 , 639),
+	(nextval('yacimiento_yac_codigo_seq'), 1000 , '08-07-2007', 'Guacara', 8 , 627),
+	(nextval('yacimiento_yac_codigo_seq'), 25000 , '25-02-2002', 'Yagua', 8 , 628),
 	(nextval('yacimiento_yac_codigo_seq'), 6700 , '13-08-2013', 'Los Guayos', 2 , 633),
 
 	--COJEDES 
-	(nextval('yacimiento_yac_codigo_seq'), 9200, '21-07-2017', 'Tinaquillo', 1 , 658),
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '22-11-2015', 'San Carlos', 1 , 658),
-	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Macapo', 1 , 662),
-	(nextval('yacimiento_yac_codigo_seq'), 6000 , '17-07-2017', 'La Aguadita', 1 , 661),
+	(nextval('yacimiento_yac_codigo_seq'), 9200, '21-07-2017', 'Tinaquillo', 8 , 658),
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '22-11-2015', 'San Carlos', 8 , 658),
+	(nextval('yacimiento_yac_codigo_seq'), 7000 , '25-02-2002', 'Macapo', 8 , 662),
+	(nextval('yacimiento_yac_codigo_seq'), 6000 , '17-07-2017', 'La Aguadita', 8 , 661),
 	(nextval('yacimiento_yac_codigo_seq'), 8000, '25-02-2002', 'Amparo', 2 , 664),
 
 	--DELTA AMACURO
-	(nextval('yacimiento_yac_codigo_seq'), 5000, '28-06-2003', 'Imataca', 1 , 677),
-	(nextval('yacimiento_yac_codigo_seq'), 4000 , '04-11-2018', 'Piacoa', 1 , 679),
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '04-12-2017', 'Los Castillos', 1 , 681),
-	(nextval('yacimiento_yac_codigo_seq'), 4500 , '04-11-2008', 'La Represalia', 1 , 676),
+	(nextval('yacimiento_yac_codigo_seq'), 5000, '28-06-2003', 'Imataca', 8 , 677),
+	(nextval('yacimiento_yac_codigo_seq'), 4000 , '04-11-2018', 'Piacoa', 8 , 679),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '04-12-2017', 'Los Castillos', 8 , 681),
+	(nextval('yacimiento_yac_codigo_seq'), 4500 , '04-11-2008', 'La Represalia', 8 , 676),
 	(nextval('yacimiento_yac_codigo_seq'), 9200, '19-06-2006', 'Sacupana', 2 , 679),
 
 
 	--FALCON
-	(nextval('yacimiento_yac_codigo_seq'), 11000, '18-11-2003', 'El Trueno', 1 , 740),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '12-06-2015', 'Mauroa', 1 , 743),
-	(nextval('yacimiento_yac_codigo_seq'), 11200, '13-06-2014', 'Septentrional', 1 , 692),
-	(nextval('yacimiento_yac_codigo_seq'), 6300 , '22-02-2016', 'El Saladillo', 1 , 699),
+	(nextval('yacimiento_yac_codigo_seq'), 11000, '18-11-2003', 'El Trueno', 8 , 740),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '12-06-2015', 'Mauroa', 8 , 743),
+	(nextval('yacimiento_yac_codigo_seq'), 11200, '13-06-2014', 'Septentrional', 8 , 692),
+	(nextval('yacimiento_yac_codigo_seq'), 6300 , '22-02-2016', 'El Saladillo', 8 , 699),
 	(nextval('yacimiento_yac_codigo_seq'), 14500 , '25-11-2012', 'El Cantil', 2 , 747),
 
 
 	--GUARICO 
-	(nextval('yacimiento_yac_codigo_seq'), 19000, '15-10-2007', 'Sabana Grande', 1 , 783),
-	(nextval('yacimiento_yac_codigo_seq'), 5200 , '06-04-2013', 'Jabilillal', 1 , 781),
-	(nextval('yacimiento_yac_codigo_seq'), 5600 , '13-07-2015', 'El Corozo', 1 , 798),
-	(nextval('yacimiento_yac_codigo_seq'), 17000 , '04-11-2018', 'Serrania del Interior', 1 , 801),
+	(nextval('yacimiento_yac_codigo_seq'), 19000, '15-10-2007', 'Sabana Grande', 8 , 783),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '06-04-2013', 'Jabilillal', 8 , 781),
+	(nextval('yacimiento_yac_codigo_seq'), 5600 , '13-07-2015', 'El Corozo', 8 , 798),
+	(nextval('yacimiento_yac_codigo_seq'), 17000 , '04-11-2018', 'Serrania del Interior', 8 , 801),
 	(nextval('yacimiento_yac_codigo_seq'), 2050, '25-02-2012', 'El chino', 2 , 805),
 
 
 	--LARA 
-	(nextval('yacimiento_yac_codigo_seq'), 4500, '01-09-2006', 'El Tocuyo', 1 , 846),
-	(nextval('yacimiento_yac_codigo_seq'), 8560 , '07-11-2003', 'San Jacinto', 1 , 823),
-	(nextval('yacimiento_yac_codigo_seq'), 16000, '15-09-2006', 'Los Caballos', 1 , 861),
-	(nextval('yacimiento_yac_codigo_seq'), 13000 , '25-01-2012', 'Carorita', 1 , 827),
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '01-09-2006', 'El Tocuyo', 8 , 846),
+	(nextval('yacimiento_yac_codigo_seq'), 8560 , '07-11-2003', 'San Jacinto', 8 , 823),
+	(nextval('yacimiento_yac_codigo_seq'), 16000, '15-09-2006', 'Los Caballos', 8 , 861),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '25-01-2012', 'Carorita', 8 , 827),
 	(nextval('yacimiento_yac_codigo_seq'), 1400 , '01-02-2002', 'Quibor', 2 , 832),
 
 	--MERIDA
-	(nextval('yacimiento_yac_codigo_seq'), 6500 , '02-02-2002', 'Las Tapias', 1 , 919),
-	(nextval('yacimiento_yac_codigo_seq'), 9600 , '25-01-2009', 'El Tigre', 1 , 958),
-	(nextval('yacimiento_yac_codigo_seq'), 15000 , '05-12-2012', 'Zea', 1 , 959),
-	(nextval('yacimiento_yac_codigo_seq'), 6200, '04-11-2016', 'Guaraque', 1 , 905),
+	(nextval('yacimiento_yac_codigo_seq'), 6500 , '02-02-2002', 'Las Tapias', 8 , 919),
+	(nextval('yacimiento_yac_codigo_seq'), 9600 , '25-01-2009', 'El Tigre', 8 , 958),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '05-12-2012', 'Zea', 8 , 959),
+	(nextval('yacimiento_yac_codigo_seq'), 6200, '04-11-2016', 'Guaraque', 8 , 905),
 	(nextval('yacimiento_yac_codigo_seq'), 9000 , '25-02-2012', 'Rio Negro', 2 , 907),
 
 	--MIRANDA
-	(nextval('yacimiento_yac_codigo_seq'), 4562, '06-02-2006', 'El Carrizo', 1 , 977),
-	(nextval('yacimiento_yac_codigo_seq'), 7540 , '23-10-2010', 'Capaya', 1 , 962),
-	(nextval('yacimiento_yac_codigo_seq'), 12400, '04-11-2018', 'Colonia Ocumare', 1 , 992),
-	(nextval('yacimiento_yac_codigo_seq'), 4510, '04-11-2018', 'Colonia Mendoza', 1 , 992),
+	(nextval('yacimiento_yac_codigo_seq'), 4562, '06-02-2006', 'El Carrizo', 8 , 977),
+	(nextval('yacimiento_yac_codigo_seq'), 7540 , '23-10-2010', 'Capaya', 8 , 962),
+	(nextval('yacimiento_yac_codigo_seq'), 12400, '04-11-2018', 'Colonia Ocumare', 8 , 992),
+	(nextval('yacimiento_yac_codigo_seq'), 4510, '04-11-2018', 'Colonia Mendoza', 8 , 992),
 	(nextval('yacimiento_yac_codigo_seq'), 4620, '25-02-2002', 'Tacata', 2 , 987),
 
 	--MONAGAS
-	(nextval('yacimiento_yac_codigo_seq'), 4800, '15-02-2014', 'Cerro Azul', 1 , 1052),
-	(nextval('yacimiento_yac_codigo_seq'), 7200, '12-05-2006', 'El Guacharo', 1 , 1019),
-	(nextval('yacimiento_yac_codigo_seq'), 6500, '25-02-2002', 'Teresen', 1 , 1023),
-	(nextval('yacimiento_yac_codigo_seq'), 4500, '25-02-2002', 'La Guanota', 1 , 1020),
+	(nextval('yacimiento_yac_codigo_seq'), 4800, '15-02-2014', 'Cerro Azul', 8 , 1052),
+	(nextval('yacimiento_yac_codigo_seq'), 7200, '12-05-2006', 'El Guacharo', 8 , 1019),
+	(nextval('yacimiento_yac_codigo_seq'), 6500, '25-02-2002', 'Teresen', 8 , 1023),
+	(nextval('yacimiento_yac_codigo_seq'), 4500, '25-02-2002', 'La Guanota', 8 , 1020),
 	(nextval('yacimiento_yac_codigo_seq'), 1200, '25-02-2002', 'Cachipo', 2 , 1052),
 
 	--NUEVA ESPARTA
-	(nextval('yacimiento_yac_codigo_seq'), 4530, '25-02-2014', 'Salinas de Pampatar', 1 , 1068),
-	(nextval('yacimiento_yac_codigo_seq'), 3000 , '13-06-2018', 'Tubores', 1 , 1075),
-	(nextval('yacimiento_yac_codigo_seq'), 4600, '25-06-2002', 'Yaguaraparo', 1 , 1071),
-	(nextval('yacimiento_yac_codigo_seq'), 7000, '18-06-2014', 'Zabala', 1 , 1080),
+	(nextval('yacimiento_yac_codigo_seq'), 4530, '25-02-2014', 'Salinas de Pampatar', 8 , 1068),
+	(nextval('yacimiento_yac_codigo_seq'), 3000 , '13-06-2018', 'Tubores', 8 , 1075),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '25-06-2002', 'Yaguaraparo', 8 , 1071),
+	(nextval('yacimiento_yac_codigo_seq'), 7000, '18-06-2014', 'Zabala', 8 , 1080),
 	(nextval('yacimiento_yac_codigo_seq'), 9200, '05-02-2002', 'Los Baleales', 2 , 1076),
 
 	--PORTUGUESA
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-06-2000', 'Agua Blanca', 1 , 245),
-	(nextval('yacimiento_yac_codigo_seq'), 6100 , '25-02-2002', 'Turen', 1 , 1117),
-	(nextval('yacimiento_yac_codigo_seq'), 9100, '25-02-2002', 'Santa Cruz', 1 , 1119),
-	(nextval('yacimiento_yac_codigo_seq'), 4000, '25-02-2002', 'Guanarito', 1 , 1090),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-06-2000', 'Agua Blanca', 8 , 245),
+	(nextval('yacimiento_yac_codigo_seq'), 6100 , '25-02-2002', 'Turen', 8 , 1117),
+	(nextval('yacimiento_yac_codigo_seq'), 9100, '25-02-2002', 'Santa Cruz', 8 , 1119),
+	(nextval('yacimiento_yac_codigo_seq'), 4000, '25-02-2002', 'Guanarito', 8 , 1090),
 	(nextval('yacimiento_yac_codigo_seq'), 5000, '25-02-2002', 'La estación', 2 , 1097),
 
 	--SUCRE
-	(nextval('yacimiento_yac_codigo_seq'), 100 , '15-02-2006', 'El Pilar', 1 , 1130),
-	(nextval('yacimiento_yac_codigo_seq'), 1300 , '25-01-2003', 'Paria', 1 , 1173),
-	(nextval('yacimiento_yac_codigo_seq'), 5000 , '04-10-2001', 'Araya', 1 , 1144),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '24-09-2013', 'Ayacucho', 1 , 1169),
+	(nextval('yacimiento_yac_codigo_seq'), 100 , '15-02-2006', 'El Pilar', 8 , 1130),
+	(nextval('yacimiento_yac_codigo_seq'), 1300 , '25-01-2003', 'Paria', 8 , 1173),
+	(nextval('yacimiento_yac_codigo_seq'), 5000 , '04-10-2001', 'Araya', 8 , 1144),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '24-09-2013', 'Ayacucho', 8 , 1169),
 	(nextval('yacimiento_yac_codigo_seq'), 6100, '02-12-2004', 'Sucre A', 2 , 1358),
 
 	--TACHIRA
-	(nextval('yacimiento_yac_codigo_seq'), 4200 , '25-03-2011', 'Lobatera', 1 , 1216),
-	(nextval('yacimiento_yac_codigo_seq'), 4300, '06-09-2006', 'Seboruco', 1 , 1233),
-	(nextval('yacimiento_yac_codigo_seq'), 13000 , '02-06-2008', 'Delicias', 1 , 1223),
-	(nextval('yacimiento_yac_codigo_seq'), 4600, '14-06-2011', 'San Felix', 1 , 1179),
+	(nextval('yacimiento_yac_codigo_seq'), 4200 , '25-03-2011', 'Lobatera', 8 , 1216),
+	(nextval('yacimiento_yac_codigo_seq'), 4300, '06-09-2006', 'Seboruco', 8 , 1233),
+	(nextval('yacimiento_yac_codigo_seq'), 13000 , '02-06-2008', 'Delicias', 8 , 1223),
+	(nextval('yacimiento_yac_codigo_seq'), 4600, '14-06-2011', 'San Felix', 8 , 1179),
 	(nextval('yacimiento_yac_codigo_seq'), 7200, '14-06-2011', 'Rubio', 2 , 1205),
 
 
 	--TRUJILLO
-	(nextval('yacimiento_yac_codigo_seq'), 7200 , '24-01-2001', 'San Miguel', 1 , 1258),
-	(nextval('yacimiento_yac_codigo_seq'), 4600 , '15-03-2015', 'Mocoy', 1 , 1324 ),
-	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'El progreso', 1 , 1285 ),
-	(nextval('yacimiento_yac_codigo_seq'), 11000 , '19-06-2007', 'La ceiba', 1 , 1286 ),
-	(nextval('yacimiento_yac_codigo_seq'), 3500 , '30-06-2015', 'Motatán', 1 , 1296 ),
+	(nextval('yacimiento_yac_codigo_seq'), 7200 , '24-01-2001', 'San Miguel', 8 , 1258),
+	(nextval('yacimiento_yac_codigo_seq'), 4600 , '15-03-2015', 'Mocoy', 8 , 1324 ),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'El progreso', 8 , 1285 ),
+	(nextval('yacimiento_yac_codigo_seq'), 11000 , '19-06-2007', 'La ceiba', 8 , 1286 ),
+	(nextval('yacimiento_yac_codigo_seq'), 3500 , '30-06-2015', 'Motatán', 2 , 1296 ),
 
 	--VARGAS
-	(nextval('yacimiento_yac_codigo_seq'), 9400 , '15-03-2010', 'Urimare', 1 , 1324 ),
-	(nextval('yacimiento_yac_codigo_seq'), 8000 , '15-03-2015', 'Naiguata', 1 , 1346 ),
-	(nextval('yacimiento_yac_codigo_seq'), 15000 , '03-09-2014', 'El junko', 1 , 1342 ),
-	(nextval('yacimiento_yac_codigo_seq'), 6920 , '15-02-2010', 'Caruao', 1 , 1340 ),
-	(nextval('yacimiento_yac_codigo_seq'), 4560 , '15-03-2011', 'Carayaca', 1 , 1338 ),
+	(nextval('yacimiento_yac_codigo_seq'), 9400 , '15-03-2010', 'Urimare', 8 , 1324 ),
+	(nextval('yacimiento_yac_codigo_seq'), 8000 , '15-03-2015', 'Naiguata', 8 , 1346 ),
+	(nextval('yacimiento_yac_codigo_seq'), 15000 , '03-09-2014', 'El junko', 8 , 1342 ),
+	(nextval('yacimiento_yac_codigo_seq'), 6920 , '15-02-2010', 'Caruao', 8 , 1340 ),
+	(nextval('yacimiento_yac_codigo_seq'), 4560 , '15-03-2011', 'Carayaca', 2 , 1338 ),
 
 	--YARACUY
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '23-03-2000', 'Sierra de Aroa', 1 , 1349),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-02-2002', 'Cambimba', 1 , 1358),
-	(nextval('yacimiento_yac_codigo_seq'), 5200 , '25-10-2002', 'La Trinidad', 1 , 1355),
-	(nextval('yacimiento_yac_codigo_seq'), 18000 , '11-11-2011', 'Monge', 1 , 1356),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-03-2008', 'Sucre', 1 , 1365),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '23-03-2000', 'Sierra de Aroa', 8 , 1349),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-02-2002', 'Cambimba', 8 , 1358),
+	(nextval('yacimiento_yac_codigo_seq'), 5200 , '25-10-2002', 'La Trinidad', 8 , 1355),
+	(nextval('yacimiento_yac_codigo_seq'), 18000 , '11-11-2011', 'Monge', 8 , 1356),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '25-03-2008', 'Sucre', 2 , 1365),
 
 	--ZULIA
-	(nextval('yacimiento_yac_codigo_seq'), 45000 , '01-09-2012', 'Guasare', 1 , 1425),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-06-2010', 'Cachirí', 1 , 1425),
-	(nextval('yacimiento_yac_codigo_seq'), 7800 , '14-06-2013', 'El carrasquero', 1 , 1426),
-	(nextval('yacimiento_yac_codigo_seq'), 3200 , '07-01-2002', 'Socuy', 1 , 1423),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '25-04-2015', 'Inciarte', 1 , 1427),
+	(nextval('yacimiento_yac_codigo_seq'), 45000 , '01-09-2012', 'Guasare', 8 , 1425),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '25-06-2010', 'Cachirí', 8 , 1425),
+	(nextval('yacimiento_yac_codigo_seq'), 7800 , '14-06-2013', 'El carrasquero', 8 , 1426),
+	(nextval('yacimiento_yac_codigo_seq'), 3200 , '07-01-2002', 'Socuy', 8 , 1423),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '25-04-2015', 'Inciarte', 2 , 1427),
 
 	--DISTRITO CAPITAL
 
-	(nextval('yacimiento_yac_codigo_seq'), 10000 , '16-09-2014', 'Altagracia', 1 , 1476 ),
-	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-03-2015', 'San Pedro', 1 , 1493 ),
-	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'Macarao', 1 , 1488 ),
-	(nextval('yacimiento_yac_codigo_seq'), 8000, '01-06-2011', 'San Juan', 1 , 1492 ),
-	(nextval('yacimiento_yac_codigo_seq'), 9200 , '15-03-2015', 'San Jose', 1 , 1491 );
+	(nextval('yacimiento_yac_codigo_seq'), 10000 , '16-09-2014', 'Altagracia', 8 , 1476 ),
+	(nextval('yacimiento_yac_codigo_seq'), 6200 , '15-03-2015', 'San Pedro', 8 , 1493 ),
+	(nextval('yacimiento_yac_codigo_seq'), 7500 , '15-03-2015', 'Macarao', 8 , 1488 ),
+	(nextval('yacimiento_yac_codigo_seq'), 8000, '01-06-2011', 'San Juan', 8 , 1492 ),
+	(nextval('yacimiento_yac_codigo_seq'), 9200 , '15-03-2015', 'San Jose', 2 , 1491 );
 
 -- MINERALES METALICOS --
 
