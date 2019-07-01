@@ -3066,30 +3066,30 @@ INSERT INTO yac_min(
 
 -- EXPLOTACIONES
 
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('3',1,1),('3',2,2),('3',3,3),('3',4,4);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('3',6,5),('3',7,6),('3',8,7),('3',9,8),('3',11,9);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',12),('3',13),('3',14);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',16),('3',17),('3',18),('3',19);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',21),('3',22),('3',23),('3',24);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',26),('3',27),('3',28),('3',29);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',31),('3',32),('3',33),('3',34);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',36),('3',37),('3',38),('3',39);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',41),('3',42),('3',43),('3',44);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',46),('3',47),('3',48),('3',49);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',51),('3',52),('3',53),('3',54);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',56),('3',57),('3',58),('3',59);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',61),('3',62),('3',63),('3',64);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',66),('3',67),('3',68),('3',69);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',71),('3',72),('3',73),('3',74);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',76),('3',77),('3',78),('3',79);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',81),('3',82),('3',83),('3',84);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',86),('3',87),('3',88),('3',89);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',91),('3',92),('3',93),('3',94);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',96),('3',97),('3',98),('3',99);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',101),('3',102),('3',103),('3',104);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',106),('3',107),('3',108),('3',109);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',111),('3',112),('3',113),('3',114);
-		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('3',116),('3',117),('3',118),('3',119);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('8',1,1),('8',2,2),('8',3,3),('8',4,4);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento, fk_exp_venta) VALUES ('8',6,5),('8',7,6),('8',8,7),('8',9,8),('8',11,9);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',12),('8',13),('8',14);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',16),('8',17),('8',18),('8',19);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',21),('8',22),('8',23),('8',24);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',26),('8',27),('8',28),('8',29);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',31),('8',32),('8',33),('8',34);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',36),('8',37),('8',38),('8',39);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',41),('8',42),('8',43),('8',44);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',46),('8',47),('8',48),('8',49);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',51),('8',52),('8',53),('8',54);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',56),('8',57),('8',58),('8',59);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',61),('8',62),('8',63),('8',64);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',66),('8',67),('8',68),('8',69);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',71),('8',72),('8',73),('8',74);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',76),('8',77),('8',78),('8',79);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',81),('8',82),('8',83),('8',84);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',86),('8',87),('8',88),('8',89);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',91),('8',92),('8',93),('8',94);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',96),('8',97),('8',98),('8',99);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',101),('8',102),('8',103),('8',104);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',106),('8',107),('8',108),('8',109);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',111),('8',112),('8',113),('8',114);
+		INSERT INTO EXPLOTACION (fk_exp_estatus,fk_exp_yacimiento) VALUES ('8',116),('8',117),('8',118),('8',119);
 
 
 -- PRESENTACIONES EN MINERALES --
