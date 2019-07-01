@@ -1,0 +1,12 @@
+<html>
+<head>
+	<title>Hola TEST EJS</title>
+	<link rel="stylesheet" type="text/css" href="public/css/test.css">
+</head>
+<body>
+	<h1> El dato de abajo se trajo de base de datos</h1>
+	<% for(var i=0; i < test.length; i++) {%>
+		<h2><%= test[i].nombre %></h2>
+	<%}%>
+</body>
+</html>

@@ -1,0 +1,479 @@
+/*COLORES BASE
+
+Azul: #276FBF;
+Rojo mas claro:#EF233C;
+Rojo mas fuerte:#D80032;
+Gris mas fuerte:#2D3142;
+Gris mas claro:#40434E;
+
+*/
+ 
+/*PLANTILLA BASE*/
+
+body{
+  background-image: url('../images/prism.png');
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  background-color: #276FBF;
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: .5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+.text-sidebar{
+  color: #fff;
+}
+
+.text-footer{
+  font-size: 14px;
+  color: #fff;
+}
+
+.iconSideMenu{
+  margin-bottom: -0.2rem;
+}
+
+.footerSideBar{
+  position: absolute;
+  top:500px;
+}
+
+.rowButtonSidebar{
+  margin-top: 20px;
+}
+
+/*LOGIN USERS*/
+
+.formBox{
+  background-color: #292F36;
+  border-radius: 10px;
+  padding: 25px;
+}
+
+.imgLogin{
+  height: 160px;
+  width: 160px;
+}
+
+.containerLogin{
+  margin-top:45px;
+}
+
+.horizontalDivider{
+  background-color: #1A5B1B;
+  height: 2px;
+}
+
+.formsField{
+  background-color: transparent;
+  border-color: transparent transparent white transparent;
+  border-width: 1px;
+  border-radius: 2px;
+  transition: 0.2s ease-in-out;
+  color: white;
+}
+
+.formsFieldError{
+  border-color: transparent transparent red transparent;
+  transition: 0.5s ease-in-out;
+}
+
+.form-control.formsField:hover,
+.form-control.formsField:focus{
+  border-radius: 3px;
+  color: white;
+  background-color: transparent;
+  box-shadow: none;
+  border-color: white;
+}
+
+.labelInputs{
+  color: white;
+}
+
+.buttonLogin{
+  margin-top: 40px;
+}
+
+.textErrorUp{
+  color: white;
+  font-size: 14px;
+  margin-top: 40px;
+  transition: 1s ease-in-out;
+}
+
+.textErrorDown{
+  color: white;
+  font-size: 14px;
+  margin-top: 70px;
+  transition: 1s ease-in-out;
+}
+
+.footerLogin{
+  background-color: #292F36;
+  margin-top: 100px;
+  height: 82px;
+}
+
+.textfooter{
+  color: white;
+}
+
+.divlinkLogin{
+  padding: 8px;
+  margin-top: 20px;
+}
+
+.textForgotPassword{
+  color: white;
+  cursor: pointer;
+}
+
+.modalUserForgot{
+  margin-top: 180px;
+}
+
+.titleLogin{
+  color: white;
+}
+
+
+
+/*HOME*/
+
+.textUser{
+  margin-bottom: 1rem;
+}
+
+.blockTextHomeUser{
+  margin-top: 20px;
+}
+
+.homeBox{
+  margin-top: 120px;
+}
+
+.secondRow{
+  margin-top: 120px;
+}
+
+.lastRowMenu{
+  margin-top: 120px;
+  margin-bottom: 110px;
+}
+
+.iconsMenu{
+  font-size: 70px;
+}
+
+.boxMenuItem{
+  padding: 30px;
+  border-radius:10px; 
+  background-color:white;
+}
+
+.boxMenuItem:hover{
+  background-color: #276FBF;
+  color: white;
+  cursor: pointer;
+  transition: 0.1s ease-in-out;
+}
+
+.btnHome{
+  padding: 5px;
+  background-color: #40434E;
+  width: 140px;
+  color: white;
+}
+
+.btnHome:hover{
+  color: white;
+  background-color:#2D3142;
+}
+
+.sideInfo{
+  margin-top: -45px;
+}
+
+/*Caja*/
+
+.rowButtonBack{
+  margin-top: 60px;
+}
+
+.cajaBox{
+  margin-top: 260px;
+}
+
+.btnBack{
+  background-color:#EF233C;
+  color: white;
+}
+
+#backToHome:focus{
+  box-shadow: 0 0 0 0.2rem rgba(239, 35, 60, 0.2);
+}
+
+.btnBack:hover{
+  color: white;
+  background-color:#D80032; 
+}
+
+.sectionOptions{
+  margin-top: 30px;
+}
+
+.iconsSideMenuGH:hover{
+  cursor: pointer;
+}
+
+.iconsSideMenuGH{
+  color: #fff;
+}
+
+.activeOption{
+  background-color: #464F51;
+  border-radius: 10px;
+}
+
+.text-sidebar{
+  color: #EDF2F4;
+}
+
+.tagUser{
+  background-color: #40434E;
+  padding: 10px;
+}
+
+/*Proyectos*/
+
+.proyectosBox{
+  margin-top: 120px;
+}
+
+.rowDivider{
+  margin-top: 50px;
+}
+
+/*Empleados*/
+
+.boxFormAgregarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+  margin-top: 50px;
+}
+
+.textTitle{
+  color: #fff;
+}
+
+.empleadosAgregarBox{
+  margin-top: 30px;
+}
+
+.form-control.formsCRUD:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.1rem rgba(39, 111, 191, 0.7);
+}
+
+.btnForms{
+  background-color:#02A9EA;
+  color: white;
+}
+
+.btnForms:hover{
+  background-color: rgba(39, 111, 191, 1);
+  color: white;
+}
+
+.boxConsultarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+}
+
+.headDataTable{
+  background-color: #276FBF;
+  color: white; 
+}
+
+
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 0.5em;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #40434E;
+}
+
+.dataTables_wrapper .dataTables_filter input:focus {
+  border-color:  #276FBF;
+  border-width: 1.2px;
+}
+
+button, select {
+  text-transform: none;
+  border-width: 1px;
+  border-radius: 2px;
+  border-color: #40434E;
+}
+
+
+.boxFormElminarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.empleadosEliminarBox{
+  margin-top: 220px;
+}
+
+.boxFormModificarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+}
+
+.boxModificarEmpleado{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  margin-top: 20px;
+  height: 480px;
+} 
+
+.hackerText{
+  color: white;
+}
+
+.boxPrevMod{
+  margin-top: 160px;
+  margin-bottom: 160px;
+}
+
+.iconMod{
+  font-size: 60px;
+}
+
+
+/*CAROLINA*/
+/*Mensajes*/
+.anuncio{
+  color:#fff;
+  text-align: center;}
+
+.btnOption{
+  background-color:#fff;
+  color: black;
+  margin:0 0 10px 0 ;
+}
+
+#option:focus{
+  box-shadow: 0 0 0 0.2rem rgba(239, 35, 60, 0.2);
+}
+
+.btnOption:hover{
+  color: white;
+  background-color:#276FBF; 
+}
+
+/*MIGUEL*/
+/*Yacimiento*/
+.boxFormAgregarYacimiento{
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 50px;
+  margin-top: 0px;
+}
+  
+.blockMin{
+  background-color: #40434E;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.boxMinText{
+  color: white;
+}
+
+.boxAgregarMinID{
+  margin-bottom: 10px;
+}
+
+.listMin{
+  margin-top: 10px;
+}
+
+
+/*Formularios*/
+.card-body{
+  background-color: white;}
+
+
+.btnSave{
+  background-color:gray;
+  color: white;
+  margin:0 0 10px 0 ;
+}
+
+.btnSave:hover{
+  color: white;
+  background-color:#276FBF; 
+}
+
+.titulo{
+  color:#fff;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.info{
+border-image: initial;
+border: 2px solid grey;
+background-color: white;
+color:black;
+}
+
+
+.table {
+  background-color: white;
+}
+
+#new{
+  font-size: 25px;
+  color:white;
+}
+
+/*TABLA CONSULTA CON FILAS HIJAS*/
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
