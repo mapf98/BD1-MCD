@@ -1258,8 +1258,8 @@ $('#guardarCambioNoMetalico').on('submit',function(e){
 		start++;		
 	}
 
-	verifyAndOrder(modNoMet.u,modNoMet.i);
-	verifyAndOrder(modNoMet.d,modNoMet.u);
+	verifyAndOrderMet(modNoMet.u,modNoMet.i);
+	verifyAndOrderMet(modNoMet.d,modNoMet.u);
 
 	console.log('Por modificar');
 	var test =0;
