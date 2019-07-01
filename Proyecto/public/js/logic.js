@@ -1421,7 +1421,29 @@ $(document).ready( function () {
     $('#table_id_inventario').DataTable();
 });
 
+function verifyAndOrderMet(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].p = b[flag].p;
+				// a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
 
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
+}
 
 
 // function verifyElementValMinMet(){
@@ -1465,27 +1487,5 @@ $(document).ready( function () {
 // // }
 
 
-// function verifyAndOrderMet(a,b){
-// 	var start = 0;
-// 	var forDelete = [];
-// 	while(a.length>start){
-// 		var flag = 0;
-// 		while(b.length >flag){
-// 			if(a[start].id == b[flag].id ){
-// 				a[start].p = b[flag].p;
-// 				// a[start].t = b[flag].t;
-// 				a[start].cod = b[flag].cod;
-// 				forDelete.push(flag);
-// 			}else{
-// 				console.log('no son iguales');
-// 			}
-// 			flag++;
-// 		}
-// 		start++;
-// 	}
 
-// 	for (var k = forDelete.length - 1; k >= 0; k--) {
-// 		b.splice(forDelete[k], 1);
-// 	}
-// }
 
