@@ -476,3 +476,72 @@ button, select {
 .rowM{
   margin-bottom: 15px;
 }
+
+.boxEliminarConfiguracion{
+  padding: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.boxEliminar{
+  margin-top: 250px;
+}
+
+.anuncio{
+  color:#fff;
+  text-align: center;}
+
+.btnOption{
+  background-color:#fff;
+  color: black;
+  margin:0 0 10px 0 ;
+}
+
+#option:focus{
+  box-shadow: 0 0 0 0.2rem rgba(239, 35, 60, 0.2);
+}
+
+.btnOption:hover{
+  color: white;
+  background-color:#276FBF; 
+}
+
+.card-body{
+  background-color: white;}
+
+
+.btnSave{
+  background-color:gray;
+  color: white;
+  margin:0 0 10px 0 ;
+}
+
+.btnSave:hover{
+  color: white;
+  background-color:#276FBF; 
+}
+
+.titulo{
+  color:#fff;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.info{
+border-image: initial;
+border: 2px solid grey;
+background-color: white;
+color:black;
+}
+
+
+.table {
+  background-color: white;
+}
+
+#new{
+  font-size: 25px;
+  color:white;
+}

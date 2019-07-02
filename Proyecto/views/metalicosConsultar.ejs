@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>MinerUCAB - Explotaciones</title>
+    <title>MinerUCAB - Metálicos</title>
 
     <link rel="icon" href="public/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/animate.css">
     <link href="public/css/bootstrap.min.css" rel="stylesheet">
@@ -52,9 +53,9 @@
                 <div class="row">
                   <div class="col-lg-2"></div>
                   <div class="col-lg-8">
-                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemExplotaciones">
-                      <p class="text-center iconSideMenu"><i class="fas fa-bomb"></i></p>
-                      <p class="text-center">Explotaciones</p>
+                    <div class="text-center iconsSideMenuGH animated fadeIn activeOption" id="menuItemMinerales">
+                      <p class="text-center iconSideMenu"><i class="fas fa-address-card"></i></p>
+                      <p class="text-center">Minerales</p>
                     </div>
                   </div>
                   <div class="col-lg-2"></div>
@@ -109,57 +110,63 @@
 
         
         <main role="main" class="ml-sm-auto col-lg-10 content">
-          <section class="container-fluid proBox">
+          <section class="container-fluid empleadosAgregarBox">
+            <div class="row titleRow">
+              <div class="col-2"></div>
+              <div class="col-8">
+                <h1 class="text-center textTitle">Minerales Metálicos</h1>
+              </div>
+              <div class="col-2"></div>
+            </div>
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-8"><h1 class="text-center title">Configuración de explotaciones</h1></div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row sepRow">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemAgregarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-plus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Agregar</h2>
+              <div class="col-12">
+                <div class="boxConsultarEmpleado animated fadeIn">
+                  <table id="table_id_metalicos" class="display">
+                    <thead class="headDataTable">
+                        <tr>
+                          <th class="text-center">Código</th>
+                          <th class="text-center">Nombre</th>
+                          <th class="text-center">Escala de Maleabilidad</th>                           
+                          <th class="text-center">Escala de Dureza</th>
+                          <th class="text-center">Presentaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i=0; i < dataTable.length; i++) {%>
+                        <tr>
+                          <td class="text-center"><%=dataTable[i].met_codigo%></td>
+                          <td class="text-center"><%=dataTable[i].met_nombre%></td>
+                          <td class="text-center"><%=dataTable[i].met_escalamaleabilidad%></td>
+                          <td class="text-center"><%=dataTable[i].met_escaladureza%></td>
+
+                          <td class="text-center">
+                            <select>
+                              <% for(var j=0; j < preMet.length; j++) {%>
+                                <% if(preMet[j].fk_mp_metalico == dataTable[i].met_codigo) {%>                              
+                                  <option class="text-center"><%=preMet[j].pre_nombre%> (<%=preMet[j].mp_precio%> Bs)</option>
+                                <%}%>
+                              <%}%>
+                              
+                            </select>                            
+                          </td>
+
+                        </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div class="col-4" id="menuItemConsultarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-search iconsMenu"></i></p>
-                  <h2 class="text-center">Cosultar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemModificarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-pen iconsMenu"></i></p>
-                  <h2 class="text-center">Modificar</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemEliminarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-minus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Eliminar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToExplotaciones"><i class="fas fa-arrow-left"></i> Volver al menú de explotaciones</button>
-              </div>
-              <div class="col-4"></div>
             </div>
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

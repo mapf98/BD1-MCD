@@ -6,6 +6,16 @@ var globalIDExplotacionFaseR = 0;
 var globalIDCargo = 1;
 var globalIDCargoR = 0;
 var globalIDMaquinaria = 1;
+var duracionExplotacion = 0;
+var globalIDDET = 1;
+var globalIDDEV = 1;
+var globalIDDECH=1;
+var globalIDDECR = 1;
+var globalIDDEB=1;
+var globalIDPago=1;
+var gF = 0;
+var gC = 0;
+var gM = 0;
 var uE = false;
 var nU = false;
 var dU = false;
@@ -23,6 +33,13 @@ var dataConfig = {
     "e": []
 } 
 
+var dataIniciar = {
+	"yac": "",
+	"dur": 0,
+	"estimado":0,
+    "e": []
+} 
+
 
 
 
@@ -30,7 +47,7 @@ var dataConfig = {
 
 // var dataConfig = {
 // 	"yac": "codigo",
-//     "e": [{"f":[ { "c":[{"cod":"","q":"","sueldo":""}] , "m":[{"cod":"","q":"","costo":""}] ,"nF":"nombreFase","estF":""} ],"nE":"NOMBRETAPA","estE":""}]
+//     "e": [{"f":[ { "c":[{"cod":"","q":"","sueldo":""}] , "m":[{"cod":"","q":"","costo":""}] ,"nF":"nombreFase","estF":"","dF":0} ],"nE":"NOMBRETAPA","estE":"","dE":0}]
 // } 
 
 // console.log(dataConfig.e[0].nE);
@@ -605,8 +622,24 @@ $('#menuItemAgregarConfiguracion').on('click',function(){
 	window.location.href = "/Explotaciones-Configuracion-Agregar";
 });
 
+$('#menuItemAgregarIniciar').on('click',function(){
+	window.location.href = "/Explotaciones-Agregar-Iniciar";
+});
+
 $('#menuItemConsultarConfiguracion').on('click',function(){
 	window.location.href = "/Explotaciones-Configuracion-Consultar";
+});
+
+$('#menuItemEliminarConfiguracion').on('click',function(){
+	window.location.href = "/Explotaciones-Configuracion-Eliminar";
+});
+
+$('#menuItemIniciarExplotacion').on('click',function(){
+	window.location.href = "/Explotaciones-Iniciar";
+});
+
+$('#menuItemModificarConfiguracion').on('click',function(){
+	window.location.href = "/Explotaciones-Configuracion-Modificar";
 });
 
 $('#menuItemConsultarYacimiento').on('click',function(){
@@ -1017,11 +1050,7 @@ $('#guardarCambioYacimiento').on('submit',function(e){
 	});
 });
 
-
-
 ////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
-
-addEtapa($('#addEtapa'),$('#listEtapa'));
 
 function addEtapa(button,list){
 	button.on('click',function(e){
@@ -1032,19 +1061,20 @@ function addEtapa(button,list){
 			listEtapa.append('\n\
 					<div class="newEtapa animated fadeIn" id="'+nextID+'">\n\
 					<div class="form-row">\n\
-					<div class="col-md-2 mb-3">\n\
-					<h3 class="text-center textEtapa">Etapa</h3>\n\
-					</div>\n\
 					<div class="col-md-4 mb-3">\n\
 					<label for="en'+nextID+'" class="textEtapa">Nombre de la etapa</label>\n\
 					<input type="text" class="form-control formsCRUD" id="en'+nextID+'" required>\n\
 					</div>\n\
-					<div class="col-md-4 mb-3">\n\
+					<div class="col-md-3 mb-3">\n\
 					<label for="ee'+nextID+'" class="textEtapa">Estimado (Bs)</label>\n\
 					<input type="number" min="0.01" step="0.01" value="0" class="form-control formsCRUD" id="ee'+nextID+'" disabled>\n\
 					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					<label for="ed'+nextID+'" class="textEtapa">Duración (Días)</label>\n\
+					<input type="number" min="1" step="1" value="0" class="form-control formsCRUD" id="ed'+nextID+'" disabled>\n\
+					</div>\n\
 					<div class="col-md-2 mb-3">\n\
-					<label for="re'+nextID+'" class="hackerText">Hacker</label>\n\
+					<label for="re'+nextID+'" class="hackerText">H</label>\n\
 					<button class="btn btn-danger btn-block" id="re'+nextID+'" >X</button>\n\
 					</div>\n\
 					</div>\n\
@@ -1073,6 +1103,7 @@ function addEtapa(button,list){
 				$(boxDelete).removeClass('fadeIn');
 				$(boxDelete).addClass('fadeOut');
 				removeUpExp($('#ee'+nextID+'').val());
+				removeDUpExp($('#ed'+nextID+'').val());
 				setTimeout(function(){
 					globalIDExplotacionEtapaR++;
 					boxDelete.remove();
@@ -1086,6 +1117,8 @@ function addEtapa(button,list){
 function addFase(button,list,etapa){
 	var globalFase =1;
 	button.on('click',function(e){
+			var addD = true;
+			var valueDPrev = 0;
 			e.preventDefault();
 			listFase = list;;
 
@@ -1093,19 +1126,20 @@ function addFase(button,list,etapa){
 			listFase.append('\n\
 				<div class="newFase animated fadeIn" id="e'+etapa+'f'+nextID+'">\n\
 				<div class="form-row">\n\
-				<div class="col-md-2 mb-3">\n\
-				<h3 class="text-center textEtapa">Fase</h3>\n\
-				</div>\n\
 				<div class="col-md-4 mb-3">\n\
 				<label for="e'+etapa+'fn'+nextID+'" class="textEtapa">Nombre de la fase</label>\n\
 				<input type="text" class="form-control formsCRUD" id="e'+etapa+'fn'+nextID+'" required>\n\
 				</div>\n\
-				<div class="col-md-4 mb-3">\n\
+				<div class="col-md-3 mb-3">\n\
 				<label for="e'+etapa+'fe'+nextID+'" class="textEtapa">Estimado (Bs)</label>\n\
 				<input type="text" class="form-control min="0.01" step="0.01" value="0" formsCRUD" id="e'+etapa+'fe'+nextID+'" disabled>\n\
 				</div>\n\
+				<div class="col-md-3 mb-3">\n\
+				<label for="e'+etapa+'d'+nextID+'" class="textEtapa">Duración (Días)</label>\n\
+				<input type="number" min="1" step="1" value="0" class="form-control formsCRUD" id="e'+etapa+'d'+nextID+'" requiered>\n\
+				</div>\n\
 				<div class="col-md-2 mb-3">\n\
-				<label for="re'+etapa+'f'+nextID+'" class="hackerText">Hacker</label>\n\
+				<label for="re'+etapa+'f'+nextID+'" class="hackerText">H</label>\n\
 				<button class="btn btn-danger btn-block" id="re'+etapa+'f'+nextID+'" >Eliminar</button>\n\
 				</div>\n\
 				</div>\n\
@@ -1114,7 +1148,7 @@ function addFase(button,list,etapa){
 				<div class="container-fluid">\n\
 				<div class="row">\n\
 				<div class="col-md-6 mb-3">\n\
-				<button class="btn btn-warning btn-block" id="addCe'+etapa+'f'+nextID+'">Agregar un nueva Cargo</button>\n\
+				<button class="btn btn-warning btn-block" id="addCe'+etapa+'f'+nextID+'">Agregar un nuevo Cargo</button>\n\
 				<hr class="hretapa">\n\
 				<div class="listCargo" id="e'+etapa+'listCf'+nextID+'">\n\
 				</div>\n\
@@ -1144,10 +1178,28 @@ function addFase(button,list,etapa){
 				$(boxDelete).addClass('fadeOut');
 				removeUpFase($('#e'+etapa+'fe'+nextID+'').val(),etapa);
 				removeUpExp($('#e'+etapa+'fe'+nextID+'').val());
+				removeDuracionFase(valueDPrev,etapa);
+				removeDUpExp(valueDPrev);
 				setTimeout(function(){
 					globalIDExplotacionFaseR++;
 					boxDelete.remove();
 				},300);
+			});
+
+			$('#e'+etapa+'d'+nextID+'').on('change',function(){
+				changeNaN(this);
+				if(addD == true){
+					valueDPrev = $(this).val();
+					addDuracionFase($(this).val(),etapa);
+					addDUpExp($(this).val());
+					addD = false;
+				}else{
+					removeDuracionFase(valueDPrev,etapa);
+					removeDUpExp(valueDPrev);
+					addDUpExp($('#e'+etapa+'d'+nextID+'').val());
+					addDuracionFase($('#e'+etapa+'d'+nextID+'').val(),etapa);
+					valueDPrev = $('#e'+etapa+'d'+nextID+'').val();
+				}
 			});
 
 			globalFase++;
@@ -1406,6 +1458,8 @@ function addMaquinaria(button,list,etapa,fase){
 	});
 }
 
+
+
 function verifyNameEtapa(){
 	var start=1;
 	while(globalIDExplotacionEtapa > start){
@@ -1509,6 +1563,17 @@ function addEstimado(value){
 	estimado.val(parseFloat(estimado.val())+parseFloat(value));
 }
 
+function addDuracionFase(value,etapa){
+	var duracion = $('#ed'+etapa+'');
+	duracion.val(parseInt(duracion.val())+parseInt(value));
+}
+
+function removeDuracionFase(value,etapa){
+	var duracion = $('#ed'+etapa+'');
+	duracion.val(parseInt(duracion.val())-parseInt(value));
+}
+
+
 function removeEstimado(value){
 	var estimado = $('#estimadoExplotacionConfigurar');
 	estimado.val(parseFloat(estimado.val())-parseFloat(value));
@@ -1544,6 +1609,17 @@ function removeUpExp(value){
 	estimado.val(parseFloat(estimado.val())-parseFloat(value));
 }
 
+function addDUpExp(value){
+	console.log('entro AKI');
+	var duracion = $('#duracionExplotacionConfigurar');
+	duracion.val(parseInt(duracion.val())+parseInt(value));
+}
+
+function removeDUpExp(value){
+	var duracion = $('#duracionExplotacionConfigurar');
+	duracion.val(parseInt(duracion.val())-parseInt(value));
+}
+
 function changeNaN(element){
 	if($(element).val() == "" || parseInt($(element).val()) < 0){
 		$(element).val(0);
@@ -1570,8 +1646,25 @@ function resetYac(){
 		method: 'GET',
 		success: function(response){
 			if(response.yac != null){
-				alert('Se inserto la configuracion');
 				var yacBox = $('#yacimientoConfigurar');
+				yacBox.html('');
+				for (var i = response.yac.length - 1; i >= 0; i--) {
+					yacBox.append('<option value="'+response.yac[i].yac_codigo+'">'+response.yac[i].yac_nombre+'</option>');
+				}
+			}else{
+				alert('Hubo un error al buscar los nuevos yacimientos');
+			}
+		}
+	});
+}
+
+function resetYacCF(){
+	$.ajax({
+		url: '/ERCF',
+		method: 'GET',
+		success: function(response){
+			if(response.yac != null){
+				var yacBox = $('#configuracionEliminar');
 				yacBox.html('');
 				for (var i = response.yac.length - 1; i >= 0; i--) {
 					yacBox.append('<option value="'+response.yac[i].yac_codigo+'">'+response.yac[i].yac_nombre+'</option>');
@@ -1606,20 +1699,20 @@ $('#agregarConfiguracion').on('submit',function(e){
 					if(verifyNameEtapa()==true && verifyNameFase()==true && verifyCargoFase()==true && verifyMaquinariaFase()==true){
 						var start = 1;
 						var arrayPos = 0;				
-						console.log(globalIDExplotacionEtapa);
+						//console.log(globalIDExplotacionEtapa);
 						while(globalIDExplotacionEtapa>start){
 							//Se insertan las etapas
 							if($('#en'+start+'').val() !== undefined && $('#en'+start+'').val() !== 'xxkkzz' ){
 								var arrayCargo = 0;		
 								var arrayMaquinaria = 0;
-								dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val(),"estE":$('#ee'+start+'').val()});
+								dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val(),"estE":$('#ee'+start+'').val(),"dE":$('#ed'+start+'').val()});
 								var f=1;
 								console.log(globalIDExplotacionFase);
 								while(globalIDExplotacionFase > f){
 
 									//Se registra las fases para etapa antes insertada
 									if( ($('#e'+(start)+'fn'+f+'').val() !== 'xxkkzz') && ($('#e'+(start)+'fn'+f+'').val() !== undefined)){
-										dataConfig.e[arrayPos].f.push({ "c":[] , "m":[] ,"nF": $('#e'+(start)+'fn'+f+'').val(), "estF": $('#e'+(start)+'fe'+f+'').val()});		
+										dataConfig.e[arrayPos].f.push({ "c":[] , "m":[] ,"nF": $('#e'+(start)+'fn'+f+'').val(), "estF": $('#e'+(start)+'fe'+f+'').val(),"dF":$('#e'+(start)+'d'+f+'').val()});		
 
 
 
@@ -1673,7 +1766,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 								AEst: dataConfig.estimado
 							},
 							success:function(exp){
-								if(exp != null){
+								if(exp.cod.exp_codigo != 0){
 									alert('Se inserto la explotacion exitosamente con el codigo = '+ exp.cod.exp_codigo);
 									for (var i = 0; i < dataConfig.e.length; i++) {
 										$.ajax({
@@ -1682,11 +1775,12 @@ $('#agregarConfiguracion').on('submit',function(e){
 											data:{
 												AEta: dataConfig.e[i].nE,
 												AExp: exp.cod.exp_codigo,
-												AEst: dataConfig.e[i].estE
+												AEst: dataConfig.e[i].estE,
+												AEstD: dataConfig.e[i].dE
 											},
 											success:function(eta){
 												if(eta != null){
-													alert('Se inserto la etapa exitosamente con el codigo = '+ eta.cod.eta_codigo);
+													//alert('Se inserto la etapa exitosamente con el codigo = '+ eta.cod.eta_codigo);
 													console.log(i);
 													for (var j = 0; j < dataConfig.e[i].f.length; j++) {
 														$.ajax({
@@ -1695,11 +1789,12 @@ $('#agregarConfiguracion').on('submit',function(e){
 															data:{
 																AEta: eta.cod.eta_codigo,
 																AFas: dataConfig.e[i].f[j].nF,
-																AEst: dataConfig.e[i].f[j].estF
+																AEst: dataConfig.e[i].f[j].estF,
+																AEstD: dataConfig.e[i].f[j].dF
 															},
 															success:function(fas){
 																if(fas != null){
-																	alert('Se inserto la fase exitosamente con el codigo = '+ fas.cod.fas_codigo+' en la etapa = '+eta.cod.eta_codigo);
+																	//alert('Se inserto la fase exitosamente con el codigo = '+ fas.cod.fas_codigo+' en la etapa = '+eta.cod.eta_codigo);
 
 																	for (var k = 0; k < dataConfig.e[i].f[j].c.length; k++) {
 																		$.ajax({
@@ -1713,7 +1808,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 																			},
 																			success:function(car){
 																				if(car == 'great'){
-																					alert('Se inserto un cargo exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
+																					//alert('Se inserto un cargo exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
 																				}else{
 																					alert('Error en agregar un cargo');
 																				}
@@ -1734,7 +1829,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 																			},
 																			success:function(maq){
 																				if(maq == 'great'){
-																					alert('Se inserto una maquinaria exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
+																					//alert('Se inserto una maquinaria exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
 																				}else{
 																					alert('Error en agregar una maquinaria');
 																				}
@@ -1796,7 +1891,6 @@ $('#agregarConfiguracion').on('submit',function(e){
 				};
 		}
 	});	
-
 });
 
 $('#yacimientoSelect').on('click',function(){
@@ -1863,6 +1957,7 @@ $('#yacimientoEtapa').on('click',function(){
 		                          <td class="text-center" id="tc'+i+'""></td>\n\
 		                          <td class="text-center" id="totalM'+i+'">'+res.detalleFase[0].maquinarias+'</td>\n\
 		                          <td class="text-center">'+res.detalleFase[0].fas_costototal+'</td>\n\
+		                          <td class="text-center">'+res.detalleFase[0].fas_duracion+' Días</td>\n\
 		                        </tr>');	
 
 
@@ -1927,6 +2022,2518 @@ $('#yacimientoEtapa').on('click',function(){
 	});
 });
 
-
-
 $('#yacimientoSelect').trigger('click');
+
+$('#eliminarConfiguracion').on('submit',function(e){
+	e.preventDefault();
+	var yacimientoEliminarConfiguracion = $('#configuracionEliminar').children(":selected");
+	console.log( yacimientoEliminarConfiguracion.val());
+	$.ajax({
+		url: '/Explotaciones-Configuracion-Eliminar',
+		method: 'POST',
+		data:{
+			yacEC: yacimientoEliminarConfiguracion.val()
+		},
+		success:function(response){
+			if(response == 'great'){
+				alert('Se ha eliminado la configuracion para el yacimiento seleccionado');
+				resetYacCF();
+			}else{
+				alert('Hubo un error, verifique');
+			}
+		}
+	});
+});
+
+
+
+////////////////////////// MODIFICAR CONFIGURACION DE EXPLOTACION NO FUNCIONA
+$('#verificarConfiguracion').on('submit',function(e){
+	e.preventDefault();
+	gF =0;
+	gM =0;
+	globalIDExplotacionEtapa = 1;
+	globalIDExplotacionFase = 1;
+	globalIDCargo =1;
+	globalIDMaquinaria =1;
+	var yacimientoVerificarConfiguracion = $('#yacimientoVerificarConfigurar').children(":selected");
+	$.ajax({
+		url: '/Explotaciones-Configuracion-Verificar',
+		method: 'POST',
+		data:{
+			yacMod: yacimientoVerificarConfiguracion.val()
+		},
+		success:function(response){
+			if(response.explotacion[0] != null){
+				var modConfig = $('#modificarConfiguracion');
+				modConfig.html('');
+				modConfig.append('\n\
+					<div class="row">\n\
+					  <div class="col-4">\n\
+					  	<label for="duracionExplotacionConfigurar">Duración (Días)</label>\n\
+                        <input type="number" min="1" step="1" class="form-control formsCRUD" id="duracionExplotacionConfigurar" value="'+response.explotacion[0].exp_duracion+'" disabled>\n\
+					  </div>\n\
+					  <div class="col-4">\n\
+					    <label for="estimadoExplotacionConfigurar">Estimado (Bs)</label>\n\
+                        <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="estimadoExplotacionConfigurar" value="'+response.explotacion[0].exp_costototal+'" disabled>\n\
+					  </div>\n\
+					  <div class="col-4">\n\
+					  	<label for="estatusExplotacion">Estatus</label>\n\
+						<select class="form-control formsCRUD" id="estatusExplotacion" required>\n\
+						</select>\n\
+					  </div>\n\
+					</div>\n\
+					<hr>\n\
+					<div class="row">\n\
+					  <div class="col-4"></div>\n\
+					  <div class="col-4">\n\
+					    <button class="btn btn-success btn-block" id="addEtapa">Agregar una nueva etapa</button>\n\
+					  </div>\n\
+					  <div class="col-4"></div>\n\
+					</div>\n\
+					<hr>\n\
+					<div class="animated fadeIn listEtapa" id="listEtapa">\n\
+					</div>\n\
+					<hr>\n\ ');
+
+				addEtapa($('#addEtapa'),$('#listEtapa'));
+
+				selectEstatus = $('#estatusExplotacion');
+				selectEstatus.html('');
+				for (var i = response.estatus.length - 1; i >= 0; i--) {
+					selectEstatus.append('<option value="'+response.estatus[i].est_codigo+'">'+response.estatus[i].est_nombre+'</option>');
+				}
+				$("#estatusExplotacion option[value="+ response.explotacion[0].fk_exp_estatus+"]").attr("selected",true);
+
+				$.ajax({
+					url: '/ET',
+					method: 'POST',
+					data:{
+						yacMod: yacimientoVerificarConfiguracion.val()
+					},
+					success:function(response){
+						if(response.etapas[0] != null){
+							for (var i = 0; i < response.etapas.length; i++) {
+								$('#addEtapa').trigger('click');
+								$.ajax({
+									url: '/FT',
+									method: 'POST',
+									data:{
+										etapaMod: response.etapas[i].eta_codigo
+									},
+									success:function(res){
+										if(res.fases[0] != null){
+											console.log(res.fases.length);
+											for (var k = 0; k < res.fases.length; k++) {
+												$('#addFe'+(i+1)+'').trigger('click');
+												$.ajax({
+													url: '/FM',
+													method: 'POST',
+													data:{
+														faseMod: res.fases[k].fas_codigo
+													},
+													success:function(res){
+														if(res.maquinarias != null){
+															for (var j = 0; j < res.maquinarias.length; j++){
+																$('#addMe'+(i+1)+'f'+(k+1)+'').trigger('click');
+															}	
+														}
+													},
+													async:false
+												});
+
+												$.ajax({
+													url: '/FC',
+													method: 'POST',
+													data:{
+														faseMod: res.fases[k].fas_codigo
+													},
+													success:function(res){
+														if(res.cargos != null){
+															console.log('i= '+i+' k= '+k);
+															console.log(res.cargos.length);
+															for (var g = 0; g < res.cargos.length; g++){
+																etapa = i+1;
+																fase = k+1;
+																console.log("#addCe"+etapa+"f"+fase+"");
+																$('#addCe'+etapa+'f'+fase+'').trigger('click');														
+															}			
+														}
+													},
+													async: false
+												});
+											}											
+										}else{
+											alert('Hubo un error, verifique');
+										}
+									},
+									async: false
+								});									
+							}
+						}else{
+							alert('Hubo un error, verifique');
+						}
+					},
+					async: false
+				});
+
+			}else{
+				alert('Hubo un error, verifique');
+			}
+		},
+		async: false
+	});
+});
+
+
+
+var dataIniciar = {
+	"yac": "",
+	"dur": 0,
+	"estimado":0,
+    "e": []
+} 
+
+
+var dataCargos = [{}];
+var dataMaquinarias = [{}];
+var dataFechaFases = [{}];
+
+//DEFINICION DEL JSON 
+
+// var dataConfig = {
+// 	"yac": "codigo",
+//     "e": [{"f":[ { "c":[{"cod":"","q":"","sueldo":""}] , "m":[{"cod":"","q":"","costo":""}] ,"nF":"nombreFase","estF":"","dF":0} ],"nE":"NOMBRETAPA","estE":"","dE":0}]
+// }
+
+//dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val(),"estE":$('#ee'+start+'').val(),"dE":$('#ed'+start+'').val()});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+$('#addFormulario').on('click',function(e){
+	dataIniciar.yac = "";
+	dataIniciar.dur = 0;
+	dataIniciar.estimado = 0;
+	dataIniciar.e = [];
+	e.preventDefault();
+	var yacimientoIniciar = $('#yacimientoIniciar').children(':selected').val();
+
+	$.ajax({
+		url: '/ExpDATA',
+		method: 'POST',
+		data:{
+			yacMod: yacimientoIniciar
+		},
+		success:function(res){
+			if(res.explotacion != null){
+				dataIniciar.yac = yacimientoIniciar;
+				dataIniciar.dur = res.explotacion[0].exp_duracion;
+				dataIniciar.estimado = res.explotacion[0].exp_costototal;	
+			}else{
+				alert('Hubo un error con la informacion de la explotacion');
+			}
+		},
+		async: false
+	});
+
+	$.ajax({
+		url: '/ET',
+		method: 'POST',
+		data:{
+			yacMod: yacimientoIniciar
+		},
+		success:function(response){
+			if(response.etapas[0] != null){
+				for (var i = 0; i < response.etapas.length; i++) {
+					dataIniciar.e.push({"f":[],"nE":response.etapas[i].eta_nombre,"estE":response.etapas[i].eta_costototal,"dE":response.etapas[i].eta_costototal,"codEta":response.etapas[i].eta_codigo});
+					$.ajax({
+						url: '/FT',
+						method: 'POST',
+						data:{
+							etapaMod: response.etapas[i].eta_codigo
+						},
+						success:function(res){
+							if(res.fases[0] != null){
+								for (var k = 0; k < res.fases.length; k++) {
+									dataIniciar.e[i].f.push({ "c":[] , "m":[] ,"nF": res.fases[k].fas_nombre, "estF":  res.fases[k].fas_costototal,"dF": res.fases[k].fas_duracion,"codFas": res.fases[k].fas_codigo});
+									$.ajax({
+										url: '/FC',
+										method: 'POST',
+										data:{
+											faseMod: res.fases[k].fas_codigo
+										},
+										success:function(res){
+											if(res.cargos != null){
+												for (var g = 0; g < res.cargos.length; g++) {
+													dataIniciar.e[i].f[k].c.push({"cod":res.cargos[g].car_codigo,"nC":res.cargos[g].car_nombre,"q":res.cargos[g].cf_cantidad,"salario":res.cargos[g].cf_costo,"cfC":res.cargos[g].cf_codigo});
+												}			
+											}
+										},
+										async: false
+									});
+									 $.ajax({
+										url: '/FM',
+										method: 'POST',
+										data:{
+											faseMod: res.fases[k].fas_codigo
+										},
+										success:function(res){
+											if(res.maquinarias != null){
+												for (var j = 0; j < res.maquinarias.length; j++){
+													dataIniciar.e[i].f[k].m.push({"cod":res.maquinarias[j].tm_codigo,"nM":res.maquinarias[j].tm_nombre,"q":res.maquinarias[j].tmf_cantidad,"costo":res.maquinarias[j].tmf_costo,"tmfC":res.maquinarias[j].tmf_codigo});
+												}	
+											}
+										},
+										async:false
+									});
+								}
+							}else{
+								alert('Hubo un error, verifique');
+							}
+						},
+						async: false
+					});									
+				}
+				console.log(dataIniciar);
+			}else{
+				alert('Hubo un error, verifique');
+			}
+		},
+		async: false
+	});
+
+	// MODIFICAR CAMPOS, Y AGREGAR CONSULTA PRA EMPLEADOS Y MAQUINARIAS
+	var listE = $('#listFormulario');
+	listE.html('');
+	for (var i = 0; i < dataIniciar.e.length; i++) {
+		listE.append('\n\
+					<div class="newEtapa animated fadeIn" id="'+(i+1)+'">\n\
+					<div class="form-row">\n\
+					<div class="col-md-4 mb-3">\n\
+					<label for="en'+(i+1)+'" class="textEtapa">Nombre de la etapa</label>\n\
+					<input type="text" class="form-control formsCRUD" id="en'+(i+1)+'" value="'+dataIniciar.e[i].nE+'" required>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					</div>\n\
+					</div>\n\
+					<hr class="hretapa">\n\
+					<div class="listFase" id="listFe'+(i+1)+'">\n\
+					</div>\n\
+					</div>\n\
+			');
+		var listF = $('#listFe'+(i+1)+'');
+		listF.html('');
+		for (var k = 0; k < dataIniciar.e[i].f.length; k++) {
+			listF.append('\n\
+				<div class="newFase animated fadeIn" id="e'+(i+1)+'f'+(k+1)+'">\n\
+				<div class="form-row">\n\
+				<div class="col-md-4 mb-3">\n\
+				<label for="e'+(i+1)+'fn'+(k+1)+'" class="textEtapa">Nombre de la fase</label>\n\
+				<input type="text" class="form-control formsCRUD" id="e'+(i+1)+'fn'+(k+1)+'" value="'+dataIniciar.e[i].f[k].nF+'" required>\n\
+				</div>\n\
+				<div class="col-md-4 mb-3">\n\
+				<label for="e'+(i+1)+'fi'+(k+1)+'i" class="textEtapa">Fecha Inicio</label>\n\
+				<input type="date" class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'i" required>\n\
+				</div>\n\
+				<div class="col-md-4 mb-3">\n\
+				<label for="e'+(i+1)+'ff'+(k+1)+'" class="textEtapa">Fecha Fin</label>\n\
+				<input type="date" class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'f" requiered>\n\
+				</div>\n\
+				</div>\n\
+				<hr class="hretapa">\n\
+				\n\
+				<div class="container-fluid">\n\
+				<div class="row">\n\
+				<div class="col-md-6 mb-3">\n\
+				<hr class="hretapa">\n\
+				<div class="listCargo" id="e'+(i+1)+'listCf'+(k+1)+'">\n\
+				</div>\n\
+				</div>\n\
+				<div class="col-md-6 mb-3">\n\
+				<hr class="hretapa">\n\
+				<div class="listMaquinaria" id="e'+(i+1)+'listMf'+(k+1)+'">\n\
+				</div>\n\
+				</div>\n\
+				</div>\n\
+				</div>\n\
+				\n\
+				</div>\n\
+				');
+
+			var listC = $('#e'+(i+1)+'listCf'+(k+1)+'');
+			var listM = $('#e'+(i+1)+'listMf'+(k+1)+'');
+
+			listC.html('');
+			for (var j = 0; j < dataIniciar.e[i].f[k].c.length; j++) {
+				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++) {
+					listC.append('\n\
+					<div class="newCargo animated fadeIn">\n\
+						<div class="form-row">\n\
+							<div class="col-md-12 mb-3">\n\
+								<label for="e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'" class="textEtapa">Empleado ('+dataIniciar.e[i].f[k].c[j].nC+')</label>\n\
+								<select class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'" name="'+dataIniciar.e[i].f[k].c[j].cfC+'" required></select>\n\
+							</div>\n\
+						</div>\n\
+						<div class="form-row">\n\
+							<div class="col-md-12 mb-3">\n\
+								<label for="e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'" class="textEtapa">Horario</label>\n\
+								<select class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'" required></select>\n\
+							</div>\n\
+						</div>\n\
+					\n\
+					</div>\n\
+					');
+
+					var cargos;
+
+					$.ajax({
+						url: '/getEmpleados',
+						method: 'POST',
+						data:{
+							eC: dataIniciar.e[i].f[k].c[j].nC
+						},
+						success:function(res){
+							if(res.car != null){
+								cargos = res.car;
+							}else{
+								alert('Hubo un error con la informacion de cargos');
+							}
+						},
+						async: false
+					});
+
+					selectCargo = $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'');
+					selectCargo.html('');
+					for (var y = cargos.length - 1; y >= 0; y--) {
+						selectCargo.append('<option value="'+cargos[y].emp_codigo+'">'+cargos[y].emp_nombre+' '+cargos[y].emp_apellido+' / CI: '+cargos[y].emp_cedula+'</option>');
+					}
+
+					var horarios;
+					$.ajax({
+						url: '/horarios',
+						method: 'GET',
+						success:function(res){
+							if(res.horarios != null){
+								horarios = res.horarios;	
+							}else{
+								alert('Hubo un error con los horarios de la explotacion');
+							}
+						},
+						async: false
+					});
+
+					console.log('Horarios= ',horarios);
+
+					selectHorario = $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'');
+					selectHorario.html('');
+					for (var y = horarios.length - 1; y >= 0; y--) {
+						selectHorario.append('<option value="'+horarios[y].hor_codigo+'">'+horarios[y].hor_dia+' ('+horarios[y].hor_horainicio+' a '+horarios[y].hor_horafin+' )</option>');
+					}
+				}
+				
+			}
+
+			listM.html('');
+			for (var p = 0; p < dataIniciar.e[i].f[k].m.length; p++) {
+				for (var u = 0; u < dataIniciar.e[i].f[k].m[p].q; u++) {
+					listM.append('\n\
+					<div class="newCargo animated fadeIn">\n\
+						<div class="form-row">\n\
+							<div class="col-md-12 mb-3">\n\
+								<label for="e'+(i+1)+'f'+(k+1)+'m'+(p+1)+'e'+(u+1)+'" class="textEtapa">Maquinaria ('+dataIniciar.e[i].f[k].m[p].nM+')</label>\n\
+								<select class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'m'+(p+1)+'e'+(u+1)+'" name="'+dataIniciar.e[i].f[k].m[p].tmfC+'" required></select>\n\
+							</div>\n\
+						</div>\n\
+					\n\
+					</div>\n\
+					');
+
+					$.ajax({
+						url: '/getMaquinarias',
+						method: 'POST',
+						data:{
+							mT:dataIniciar.e[i].f[k].m[p].nM
+						},
+						success:function(res){
+							if(res.TMmaq != null){
+								maquinarias = res.TMmaq;
+							}else{
+								alert('Hubo un error con la informacion de maquinarias');
+							}
+						},
+						async: false
+					});
+
+					selectMaquinaria = $('#e'+(i+1)+'f'+(k+1)+'m'+(p+1)+'e'+(u+1)+'');
+					selectMaquinaria.html('');
+					for (var v = maquinarias.length - 1; v >= 0; v--) {
+						selectMaquinaria.append('<option value="'+maquinarias[v].maq_codigo+'">'+maquinarias[v].maq_nombre+'</option>');
+					}
+				}
+				
+			}
+
+			
+		}
+	}
+
+	// dataIniciar.yac = "";
+	// dataIniciar.dur = 0;
+	// dataIniciar.estimado = 0;
+	// dataIniciar.e = [];
+});
+
+$('#iniciarExplotacion').on('submit',function(e){
+	e.preventDefault();
+
+	for (var i = 0; i < dataIniciar.e.length; i++) {
+
+		for (var k = 0; k < dataIniciar.e[i].f.length; k++) {
+			dataFechaFases.push({"codFas": dataIniciar.e[i].f[k].codFas,"fi":$('#e'+(i+1)+'f'+(k+1)+'i').val(),"ff":$('#e'+(i+1)+'f'+(k+1)+'f').val()});
+		
+			for (var j = 0; j < dataIniciar.e[i].f[k].c.length; j++) {
+				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++){
+					//console.log($('#en'+(i+1)+'').val());
+					dataCargos.push({"codCF":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').attr('name'),"codC":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').children(':selected').val(),"h": $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'').val()});
+				}	
+
+				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++){
+					//console.log($('#en'+(i+1)+'').val());
+					dataMaquinarias.push({"codF":dataIniciar.e[i].f[k].codFas,"codM":$('#e'+(i+1)+'f'+(k+1)+'m'+(j+1)+'e'+(h+1)+'').children(':selected').val()});
+				}	
+				
+			}			
+		}								
+	}
+	console.log(dataCargos);
+	console.log(dataMaquinarias);
+	console.log(dataFechaFases);
+
+	$.ajax({
+		url: '/ExplotacionIniciarEmpleados',
+		method: 'POST',
+		data:{
+			c: dataCargos[i]
+		},
+		success:function(res){
+			if(res == "great"){
+				alert('Moidificaciones realizadas correctamente');
+			}else{
+				alert('Hubo un error con la informacion de maquinarias');
+			}
+		},
+		async: false
+	});
+
+	$.ajax({
+		url: '/ExplotacionIniciarMaquinarias',
+		method: 'POST',
+		data:{
+			m: dataMaquinarias[i]
+		},
+		success:function(res){
+			if(res == "great"){
+				alert('Moidificaciones realizadas correctamente');
+			}else{
+				alert('Hubo un error con la informacion de maquinarias');
+			}
+		},
+		async: false
+	});
+
+	$.ajax({
+		url: '/ExplotacionIniciarFases',
+		method: 'POST',
+		data:{
+			f: dataFechaFases[i]
+		},
+		success:function(res){
+			if(res == "great"){
+				alert('Moidificaciones realizadas correctamente');
+			}else{
+				alert('Hubo un error con la informacion de maquinarias');
+			}
+		},
+		async: false
+	});
+});
+
+addEtapa($('#addEtapa'),$('#listEtapa'));
+
+
+
+
+///////////////////////MINERALES
+
+
+// MINERALES (METALICOS Y NO METALICOS) --  DAVID
+
+var globalIDPresentacionMineral = 1;
+
+var globalIDMinetalMetalico = 1;
+
+var modMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+var modNoMet = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+$(document).ready( function () {
+    $('#table_id_metalicos').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_no_metalicos').DataTable();
+});
+
+$(document).ready( function () {
+    $('#table_id_ventas').DataTable();
+});
+
+$('#agregarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreMetalico = $('#nombreMetalico');
+	let escalaMaleabilidad = $('#escalaMaleabilidad');
+	let escalaDureza = $('#escalaDureza');
+
+
+
+	var start = 1;
+	var prePresentacion = [];
+	var prePrecio = [];
+	var preTipo = [];
+
+	
+	while(globalIDPresentacionMineral>=start){
+
+		preTipo.push( $('#'+start+'').val() );
+		prePresentacion.push( $('#'+start+'').val() );
+		prePrecio.push($('#p'+start+'').val());
+		start++;
+	}
+
+
+	if(escalaDureza.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if((verifyElementValPre()==true)){
+			$.ajax({
+			url: '/Metalicos-Agregar',
+			method: 'POST',
+			data: {
+				nombreMetalico: nombreMetalico.val(),
+				escalaMaleabilidad: escalaMaleabilidad.val(),
+				escalaDureza: escalaDureza.val(),
+				// presentacionMetalico: presentacionMetalico.val(),
+				nombrePresentacion: prePresentacion,
+				precioMP: prePrecio,
+				preTipo: preTipo,
+				// metMetalico: metMetalico,
+				// metProporcion: metProporcion,
+				// metTipo: metTipo
+			},
+			success: function(response){
+				if(response == 'great'){
+					alert('El mineral fue registrado satisfactoriamente');
+				}else{
+					alert('El mineral no se pudo agregar, revisa los campos');
+				}			
+			}
+		});
+			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+		}
+	}
+	
+});
+
+addPre($('#addPre'),$('#listPre'));
+
+//Presentacion
+function addPre(button,list){
+		button.on('click',function(e){
+	e.preventDefault();
+	listPre = $('#listPre');
+
+	var nextID = globalIDPresentacionMineral;
+				listPre.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxPre" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Asignar</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="PRESENTACION">Presentacion</option>\n\
+					  </select>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Presentacion</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					    <label for="p'+nextID+'" class="boxMinText">Precio</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="p'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">Bs</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mb-3">\n\
+					  <label for="removePre" class="hackerText">Hacker</label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	presentacionSelect($('#t'+nextID+''),$('#'+nextID+''));
+
+	$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modMet.d.push({"cod":$('#'+nextID+'').val(),"p":$('#p'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#p'+nextID+'').attr('value',$('#p'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+	globalIDPresentacionMineral++;
+
+});
+	}
+
+addMinMet($('#addMinMet'),$('#listMinMet'));
+
+//Presentacion
+function addMinMet(button,list){
+		button.on('click',function(e){
+	e.preventDefault();
+	listMinMet = $('#listMinMet');
+
+	var nextID = globalIDMinetalMetalico;
+				listMinMet.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxPre" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Compuesto</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="MIN_METALICO">Metalico</option>\n\
+					  </select>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					    <label for="p'+nextID+'" class="boxMinText">Proporcion</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="p'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">Bs</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mb-3">\n\
+					  <label for="removePre" class="hackerText">Hacker</label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	metalicoSelect($('#t'+nextID+''),$('#'+nextID+''));
+
+
+	$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modMet.d.push({"cod":$('#'+nextID+'').val(),"p":$('#p'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#p'+nextID+'').attr('value',$('#p'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+	globalIDMinetalMetalico++;
+
+});
+	}
+
+$('#eliminarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreMetalico = $('#nombreMetalico');
+
+	$.ajax({
+		url: '/Metalicos-Eliminar',
+		method: 'POST',
+		data: {
+			nombreMetalico: nombreMetalico.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral metálico fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El empleado NO SE PUDO ELIMINAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+
+
+$('#verificarMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreMetalicoV = $('#nombreMetalicoVerificar');
+
+	$.ajax({
+		url: '/Metalicos-Verificar',
+		method: 'POST',
+		data: {
+			nombreMetV: nombreMetalicoV.val(),
+		},
+		success: function(response){
+			if(response.dataV != null){
+
+				var boxModMet = $('#guardarCambioMetalico');
+
+				boxModMet.html('');
+				boxModMet.append(' \n\
+					<div class="animated" id="boxGC">\n\
+	                    <div class="form-row animated fadeIn animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gccodigo">Código</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gccodigo" value="'+response.dataV[0].met_codigo+'" disabled>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcnombreMetalico">Nombre</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcnombreMetalico" value="'+response.dataV[0].met_nombre+'" disabled>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcmaleabilidad">Escala de Maleabilidad</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gcmaleabilidad" value="'+response.dataV[0].met_escalamaleabilidad+'" required>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcdureza">Escala de Dureza</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gcdureza" value="'+response.dataV[0].met_escaladureza+'" required>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <hr>\n\
+						<div class="row">\n\
+	                    <div class="col-4"></div>\n\
+						<div class="col-4">\n\
+						<button class="btn btn-success btn-block" id="addPre">Asignar presentacion</button>\n\
+						</div>\n\
+						<div class="col-4"></div>\n\
+						</div>\n\
+						<div class="listPre" id="listPre">\n\
+						</div>\n\
+						</div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	                </div>');
+
+				addPre($('#addPre'),$('#listPre'));
+
+				function setPre(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
+				}
+
+				var pre=0;
+				while(response.preMet.length>pre){
+					if(response.preMet[pre].fk_mp_metalico == response.dataV[0].met_codigo){
+						$('#addPre').trigger('click');
+						$('#t'+(globalIDPresentacionMineral-1)+'').trigger('click');
+						setPre(globalIDPresentacionMineral-1,response.preMet[pre].pre_codigo);
+						$('#p'+(globalIDPresentacionMineral-1)+'').attr("value",response.preMet[pre].mp_precio);
+						modMet.u.push({"cod":response.preMet[pre].pre_codigo,"p":response.preMet[pre].mp_precio,"id":globalIDPresentacionMineral-1,"o":response.preMet[pre].pre_codigo});
+					}
+					pre++;
+				}
+				
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a mineral para modificar');				
+			}			
+		}
+	});
+});
+
+$('#guardarCambioMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreMetalico');
+	let maleabilidadGC = $('#gcmaleabilidad');
+	let durezaGC = $('#gcdureza');
+	let codigoGC = $('#gccodigo');
+
+	var start = 1;
+	clearArray(modMet.i);
+	while(globalIDPresentacionMineral>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var p = $('#p'+start+'').val();
+			
+			modMet.i.push({"cod": cod ,"p": p, "id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrderMet(modMet.u,modMet.i);
+	verifyAndOrderMet(modMet.d,modMet.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modMet.u.length>test){
+		console.log(modMet.u[test].p + "/"+modMet.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modMet.i.length>test){
+		console.log(modMet.i[test].p+ "/"+modMet.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modMet.d.length>test){
+		console.log(modMet.d[test].p+ "/"+modMet.d[test].cod);
+		test++;
+	}
+
+	$.ajax({
+		url: '/Metalicos-Modificar',
+		method: 'POST',
+		data: {
+			codigoGC: codigoGC.val(),
+			nombreGC: nombreGC.val(),
+			maleabilidadGC: maleabilidadGC.val(),
+			durezaGC: durezaGC.val(),
+			modMet: modMet
+
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral fue MODIFICADO satisfactoriamente');
+				var boxGCMet = $('#boxGC');
+				boxGCMet.addClass('fadeOut');
+				boxGCMet.html('');
+				var boxModMet = $('#guardarCambioMetalico');
+				boxModMet.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un mineral para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+				globalIDPresentacionMineral =1;
+				clearArray(modMet.i);
+				clearArray(modMet.d);
+				clearArray(modMet.u);
+			}else{
+				alert('El mineral NO SE PUDO MOFICAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+$('#agregarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreNoMetalico = $('#nombreNoMetalico');
+	let utilidadNoMetalico = $('#utilidadNoMetalico');
+
+	var start = 1;
+	var prePresentacion = [];
+	var prePrecio = [];
+	var preTipo = [];
+	
+	while(globalIDPresentacionMineral>=start){
+
+		preTipo.push( $('#'+start+'').val() );
+		prePresentacion.push( $('#'+start+'').val() );
+		prePrecio.push($('#p'+start+'').val());
+		start++;
+	}
+
+	if(utilidadNoMetalico.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if(verifyElementValPre()==true){
+			$.ajax({
+			url: '/NoMetalicos-Agregar',
+			method: 'POST',
+			data: {
+				nombreNoMetalico: nombreNoMetalico.val(),
+				utilidadNoMetalico: utilidadNoMetalico.val(),
+				// presentacionMetalico: presentacionMetalico.val(),
+				nombrePresentacion: prePresentacion,
+				precioMP: prePrecio,
+				preTipo: preTipo
+			},
+			success: function(response){
+				if(response == 'great'){
+					alert('El mineral fue registrado satisfactoriamente');
+				}else{
+					alert('El mineral no se pudo agregar, revisa los campos');
+				}			
+			}
+		});
+			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
+		}
+	}
+	
+});
+
+$('#eliminarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreNoMetalico = $('#nombreNoMetalico');
+
+	$.ajax({
+		url: '/NoMetalicos-Eliminar',
+		method: 'POST',
+		data: {
+			nombreNoMetalico: nombreNoMetalico.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral no metálico fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El mineral NO SE PUDO ELIMINAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+$('#verificarNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreNoMetalicoV = $('#nombreNoMetalicoVerificar');
+
+	$.ajax({
+		url: '/NoMetalicos-Verificar',
+		method: 'POST',
+		data: {
+			nombreNoMetV: nombreNoMetalicoV.val(),
+		},
+		success: function(response){
+			if(response.dataV != null){
+
+				var boxModNoMet = $('#guardarCambioNoMetalico');
+
+				boxModNoMet.html('');
+				boxModNoMet.append(' \n\
+					<div class="animated" id="boxGC">\n\
+	                    <div class="form-row animated fadeIn animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gccodigo">Código</label>\n\
+	                        <input type="number" class="form-control formsCRUD" id="gccodigo" value="'+response.dataV[0].nom_codigo+'" disabled>\n\
+	                      </div>\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcnombreNoMetalico">Nombre</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcnombreNoMetalico" value="'+response.dataV[0].nom_nombre+'" disabled>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-6 mb-3">\n\
+	                        <label for="gcutilidad">Utilidad</label>\n\
+	                        <input type="text" class="form-control formsCRUD" id="gcutilidad" value="'+response.dataV[0].nom_utilidad+'" required>\n\
+	                      </div>\n\
+	                    </div>\n\
+	                    <hr>\n\
+						<div class="row">\n\
+	                    <div class="col-4"></div>\n\
+						<div class="col-4">\n\
+						<button class="btn btn-success btn-block" id="addPre">Asignar presentacion</button>\n\
+						</div>\n\
+						<div class="col-4"></div>\n\
+						</div>\n\
+						<div class="listPre" id="listPre">\n\
+						</div>\n\
+						</div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	                </div>');
+
+				addPre($('#addPre'),$('#listPre'));
+
+				function setPre(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
+				}
+
+				var pre=0;
+				while(response.preNoMet.length>pre){
+					if(response.preNoMet[pre].fk_mp_nometalico == response.dataV[0].nom_codigo){
+						$('#addPre').trigger('click');
+						$('#t'+(globalIDPresentacionMineral-1)+'').trigger('click');
+						setPre(globalIDPresentacionMineral-1,response.preNoMet[pre].pre_codigo);
+						$('#p'+(globalIDPresentacionMineral-1)+'').attr("value",response.preNoMet[pre].mp_precio);
+						modNoMet.u.push({"cod":response.preNoMet[pre].pre_codigo,"p":response.preNoMet[pre].mp_precio,"id":globalIDPresentacionMineral-1,"o":response.preNoMet[pre].pre_codigo});
+					}
+					pre++;
+				}
+				
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a mineral para modificar');				
+			}			
+		}
+	});
+});
+
+$('#guardarCambioNoMetalico').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreNoMetalico');
+	let utilidadGC = $('#gcutilidad');
+	let codigoGC = $('#gccodigo');
+
+	console.log(nombreGC.val() + utilidadGC.val() + codigoGC.val());
+
+	var start = 1;
+	clearArray(modNoMet.i);
+	while(globalIDPresentacionMineral>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var p = $('#p'+start+'').val();
+			modNoMet.i.push({"cod": cod ,"p": p ,"id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrderMet(modNoMet.u,modNoMet.i);
+	verifyAndOrderMet(modNoMet.d,modNoMet.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modNoMet.u.length>test){
+		console.log(modNoMet.u[test].t + "/"+ modNoMet.u[test].p + "/"+modNoMet.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modNoMet.i.length>test){
+		console.log(modNoMet.i[test].t + "="+modNoMet.i[test].p+ "/"+modNoMet.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modNoMet.d.length>test){
+		console.log(modNoMet.d[test].t + "="+modNoMet.d[test].p+ "/"+modNoMet.d[test].cod);
+		test++;
+	}
+
+	$.ajax({
+		url: '/NoMetalicos-Modificar',
+		method: 'POST',
+		data: {
+			codigoGC: codigoGC.val(),
+			nombreGC: nombreGC.val(),
+			utilidadGC: utilidadGC.val(),
+			modNoMet: modNoMet
+
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El mineral fue MODIFICADO satisfactoriamente');
+				console.log("hola");
+				var boxGCNoMet = $('#boxGC');
+				boxGCNoMet.addClass('fadeOut');
+				boxGCNoMet.html('');
+				var boxmodNoMet = $('#guardarCambioNoMetalico');
+				boxmodNoMet.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un mineral para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+				globalIDPresentacionMineral =1;
+				clearArray(modNoMet.i);
+				clearArray(modNoMet.d);
+				clearArray(modNoMet.u);
+			}else{
+				alert('El mineral NO SE PUDO MOFICAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+
+$('#menuItemMinerales').on('click',function(){
+	window.location.href = "/minerales";
+});
+
+$('#menuItemMetalicos').on('click',function(){
+	window.location.href = "/metalicos";
+});
+
+$('#menuItemNoMetalicos').on('click',function(){
+	window.location.href = "/nometalicos";
+});
+
+$('#menuItemAgregarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Agregar";
+});
+
+$('#menuItemAgregarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Agregar";
+});
+
+$('#menuItemConsultarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Consultar";
+});
+
+$('#menuItemConsultarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Consultar";
+});
+
+$('#menuItemModificarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Modificar";
+});
+
+$('#menuItemModificarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Modificar";
+});
+
+
+$('#menuItemEliminarMetalico').on('click',function(){
+	window.location.href = "/Metalicos-Eliminar";
+});
+
+$('#menuItemEliminarNoMetalico').on('click',function(){
+	window.location.href = "/NoMetalicos-Eliminar";
+});
+
+
+$('#backToMinerales').on('click',function(){
+	window.location.href = "/Minerales";
+});
+
+
+
+function verifyElementValPre(){
+	var start=1;
+	while(globalIDPresentacionMineral>=start){
+		var flag =1;
+		while(globalIDPresentacionMineral>=flag){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined)  ){
+				return false;
+				start = globalIDPresentacionMineral+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
+	}
+	return true;
+}
+
+function presentacionSelect(tipo,presentaciones){
+	$(tipo).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+		$.ajax({
+			url: '/Metalicos-AgregarPre',
+			method: 'POST',
+			data:{
+				filtroPre: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.pre != null){
+						
+							presentaciones.html('');
+							for (var i = response.pre.length - 1; i >= 0; i--) {
+								presentaciones.append('<option value="'+response.pre[i].pre_codigo+'">'+response.pre[i].pre_nombre+'</option>');
+							}
+						
+					}	
+			}
+		});	
+	});
+}
+
+
+// INVENTARIO
+
+$('#menuItemInventario').on('click',function(){
+	window.location.href = "/Inventario-Consultar";
+});
+
+$(document).ready( function () {
+    $('#table_id_inventario').DataTable();
+});
+
+function verifyAndOrderMet(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].p = b[flag].p;
+				// a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
+}
+
+
+$('#agregarCliente').on('submit',function(e){
+	e.preventDefault();
+	let nombre = $('#nombreCliente');
+	let apellido = $('#apellidoCliente');
+	let cedula = $('#cedulaCliente');
+	let telefono = $('#telefonoCliente');
+	let parroquia = $ ('#parroquiaSelect');
+
+	$.ajax({
+		url: '/AgregarCliente',
+		method: 'POST',
+		data: {
+			nombre: nombre.val(),
+			apellido: apellido.val(),
+			cedula: cedula.val(),
+			telefono: telefono.val(),
+			parroquia:parroquia.val(),
+		},
+
+		success: function(response){
+			if(response == 'great'){
+				alert('El cliente fue registrado satisfactoriamente');
+			}else{
+				alert('El cliente no se pudo agregar, revisa los campos');
+			}			
+		}
+	});
+});
+
+
+
+$('#eliminarCliente').on('submit',function(e){
+	e.preventDefault();
+	let cedulaCliente = $('#cedulaClienteEliminar');
+
+	$.ajax({
+		url: '/EliminarCliente',
+		method: 'POST',
+		data: {
+			cedulaCli: cedulaCliente.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El cliente fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El cliente NO SE PUDO ELIMINAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+$('#verificarCliente').on('submit',function(e){
+	e.preventDefault();
+	let cedulaClienteV = $('#cedulaClienteVerificar');
+
+	$.ajax({
+		url: '/VerificarCliente',
+		method: 'POST',
+		data: {
+			cedulaCliV: cedulaClienteV.val(),
+		},
+		success: function(response){
+			if(response.dataV != null){
+				var boxModEmp = $('#guardarCambioCliente');
+				boxModEmp.html('');
+				boxModEmp.append(' \n\
+				<div class="animated" id="boxGC">\n\
+					 <div class="form-row animated fadeIn">\n\
+                      <div class="col-md-6 mb-3">\n\
+                        <label for="gcnombreCliente">Nombre</label>\n\
+                        <input type="text" class="form-control formsCRUD" id="gcnombreCliente" value="'+response.dataV[0].cli_nombre+'" required autofocus>\n\
+                      </div>\n\
+                      <div class="col-md-6 mb-3">\n\
+                        <label for="gcapellidoCliente">Apellido</label>\n\
+                        <input type="text" class="form-control formsCRUD" id="gcapellidoCliente" value="'+response.dataV[0].cli_apellido+'" required>\n\
+                      </div>\n\
+                    </div>\n\
+					\n\
+                    <hr>\n\
+					\n\
+                    <div class="form-row animated fadeIn">\n\
+                      <div class="col-md-2 mb-3"></div>\n\
+                      <div class="col-md-4 mb-3">\n\
+                        <label for="gccedulaCliente">Cédula</label>\n\
+                        <input type="text" class="form-control formsCRUD" id="gccedulaCliente" value="'+response.dataV[0].cli_cedula+'" disabled>\n\
+                      </div>\n\
+                     \n\
+                      <div class="col-md-4 mb-3">\n\
+                        <label for="gctelefonoCliente">Teléfono</label>\n\
+                        <input type="text" class="form-control formsCRUD" id="gctelefonoCliente"  value="'+response.dataV[0].cli_telefono+'" required>\n\
+                      </div>\n\
+                      <div class="col-md2 mb-3"></div>\n\
+                    </div>\n\
+					\n\
+						<div class="form-row animated fadeIn">\n\
+	                      <div class="col-md-4 mb-3">\n\
+	                        <label for="estadoCliente">Estado</label>\n\
+	                        <select class="form-control formsCRUD" id="estadoSelect" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                      <div class="col-md-4 mb-3">\n\
+	                        <label for="municipioCliente">Municipio</label>\n\
+	                        <select class="form-control formsCRUD" id="municipioSelect" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                      <div class="col-md-4 mb-3">\n\
+	                        <label for="gcparroquiaCliente">Parroquia</label>\n\
+	                        <select class="form-control formsCRUD" id="parroquiaSelect" required>\n\
+	                        </select>\n\
+	                      </div>\n\
+	                	</div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	            </div>');
+
+	            selectEstado = $('#estadoSelect');
+				selectEstado.html('');
+				for (var i = response.estados.length - 1; i >= 0; i--) {
+					selectEstado.append('<option value="'+response.estados[i].lug_codigo+'">'+response.estados[i].lug_nombre+'</option>');
+				}
+                     
+				$("#estadoSelect option[value="+ response.dataV[0].estcod +"]").attr("selected",true);
+				estadoMunicipio($('#estadoSelect'),$('#municipioSelect'),$('#parroquiaSelect'));
+				$('#estadoSelect').trigger('click');
+				setTimeout(function(){
+					$("#municipioSelect option[value="+ response.dataV[0].muncod +"]").attr("selected",true);
+					$('#municipioSelect').trigger('click');
+				}, 100);
+				setTimeout(function(){
+					$("#parroquiaSelect option[value="+ response.dataV[0].parcod +"]").attr("selected",true);
+				},150);
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a cliente para modificar');				
+			}			
+		}
+	});
+});
+
+$('#guardarCambioCliente').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreCliente');
+	let apellidoGC = $('#gcapellidoCliente');
+	let cedulaGC = $('#gccedulaCliente');
+	let telefonoGC = $('#gctelefonoCliente');
+	let parroquiaGC = $('#parroquiaSelect');
+
+	$.ajax({
+		url: '/ModificarCliente',
+		method: 'POST',
+		data: {
+			nombreGC: nombreGC.val(),
+			apellidoGC: apellidoGC.val(),
+			cedulaGC: cedulaGC.val(),
+			telefonoGC: telefonoGC.val(),
+			parroquiaGC: parroquiaGC.val()
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El cliente fue MODIFICADO satisfactoriamente');
+				var boxGCEmp = $('#boxGC');
+				boxGCEmp.addClass('fadeOut');
+				boxGCEmp.html('');
+				var boxModEmp = $('#guardarCambioCliente');
+				boxModEmp.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un cliente para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+			}else{
+				alert('El cliente NO SE PUDO MOFICAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+
+//---------------------------VENTA -----------------------------------
+  var eliminados = [];
+  var y=0;
+$('#addDEV').on('click',function(e){
+	e.preventDefault();
+	listDEV = $('#listDEV');
+
+	var nextID = globalIDDEV;
+				listDEV.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="t'+nextID+'" class="boxMinText">Tipo</label>\n\
+					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+					  	<option value="MIN_METALICO">Metalico</option>\n\
+	                    <option value="MIN_NO_METALICO">No metalico</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="p'+nextID+'" class="boxMinText">Presentacion</label>\n\
+					  <select class="form-control formsCRUD" id="p'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					   <label for="pr'+nextID+'" class="boxMinText">Precio</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="pr'+nextID+'" disabled>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-4 mx-auto">\n\
+					  <label for="c'+nextID+'" class="boxMinText">Cantidad</label>\n\
+					    <div class="input-group mb-2 mr-sm-2">\n\
+					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="c'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">Ton</div>\n\
+					  	</div>\n\
+					    </div>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					   <label for="mon'+nextID+'" class="boxMinText">Monto</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="mon'+nextID+'" disabled>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <label for="removeMin" class="hackerText">   </label>\n\
+					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+
+	mineralTipo($('#t'+nextID+''),$('#'+nextID+''));
+	mineralpresentacion ($('#'+nextID+''),$('#p'+nextID+''),$('#t'+nextID+''));
+	presentacionprecio ($('#p'+nextID+''),$('#pr'+nextID+''),$('#c'+nextID+''),$('#mon'+nextID+''));
+	//total ($('#c'+nextID+''),$('#pr'+nextID+''),$('#mon'+nextID+''));
+
+	$('#remove'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		console.log (globalIDDEV);
+		eliminados [y] = (nextID*-1);
+		console.log (eliminados); 
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+		y++;
+	});
+	globalIDDEV++;
+});
+
+var tipo =[];
+
+$('#pagar').on('click',function(e){
+	e.preventDefault();
+	var start = 1;
+	//var minTipo = [];
+	var minMin = [];
+	var minCantidad = [];
+	var minPresentacion = [];
+	var minMonto = [];
+	var minPrecio=[];
+	var minTotal = 0 ;//$('#MontoTotal');
+
+	while(globalIDDEV>start){
+		var z=0;
+		var entro = 0;
+		console.log (z);
+		console.log (entro);
+		console.log('hola');
+		while (globalIDDEV>z && entro == 0){
+			if (eliminados[z]==-(start)){
+				entro=1;
+				console.log ('entra al if ')
+			}
+			z++;
+		}
+			if (entro == 0){
+				console.log('entra al else');
+				minMin.push( $('#'+start+'').val() );
+				minCantidad.push($('#c'+start+'').val());
+				minPresentacion.push($('#p'+start+'').val());
+				minMonto.push($('#mon'+start+'').val());
+				minPrecio.push($('#pr'+start+'').val());
+				//start++;
+			}
+		start++;
+	}
+		// var mt=$('#MT');
+		// var total=0;
+		// for (var i = minCantidad.length-1; i >=0 ; i--) {
+		// 	total=total+parseInt($('#mon'+i+'').val());
+		// }
+		// mt.val(total);
+		// console.log(mt.val());
+		// var minTotal=0;
+		// for (var i = minCantidad.length -2; i >=0 ; i--) {
+		// minTotal = minTotal + (minCantidad [i] * minPrecio[i]);
+		// }
+		// console.log ('mintotal arriba',minTotal);
+
+		//$('#MT').val(minTotal);
+
+		$.ajax({
+		url:'/ConsultarInv',
+		method:'POST',
+		data:{
+			minPresentacion:minPresentacion,
+		},
+		success: function (response){
+			if (response.disp != null){
+				console.log (response.disp[0]);
+				for (var i = response.disp.length-1; i >=0 ; i--) {
+				console.log ('entro al ciclo');
+					console.log (minCantidad[i]);
+					console.log (response.disp[i].inv_cantidadactual);
+					if (parseInt(minCantidad[i]) > parseInt(response.disp[i].inv_cantidadactual)){
+						console.log ('entro al if');
+						alert ('No poseemos disponibilidad para el mineral seleccionado');
+
+					}else{	
+						console.log('error');
+						console.log (minCantidad[i]);
+						console.log (response.disp[i].inv_cantidadactual);
+					
+						console.log('entra al else');
+						e.preventDefault();
+						listPago = $('#listPago');
+
+					var nextID = globalIDPago;
+					listPago.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <button class="btn btnSave btn-block" id="transf'+nextID+'" >Transferencia</button>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <button class="btn btnSave btn-block" id="cred'+nextID+'" >Tarjeta de Credito</button>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <button class="btn btnSave btn-block" id="deb'+nextID+'" >Tarjeta de Debito</button>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					   <button class="btn btnSave btn-block" id="cheque'+nextID+'" >Cheque</button>\n\
+					</div>\n\
+					<div class="listDET" id="listDET"></div>\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <button class="btn btn-danger btn-block" id="remove2'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+				$('#remove2'+nextID+'').on('click',function(e){
+					e.preventDefault();
+					$('#'+nextID+'').attr('id',(nextID)*(-1));
+					boxButtonDelete = $(this).parent();
+					boxMinDelete = $(boxButtonDelete).parent();
+					boxMinDelete.remove();
+				});
+				globalIDPago++;
+
+				$('#transf'+nextID+'').on('click',function(e){
+				e.preventDefault();
+				listDET = $('#listDET');
+				console.log (globalIDDET);
+				var nextID = globalIDDET;
+				tipo[globalIDDET-1]="Transf"; 
+				console.log (tipo);
+				console.log ('este es el total', minTotal);
+				listDET.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class = col-md-12>\n\
+					<h5 class=titulo>Transferencia</h5>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="cuen'+nextID+'" class="boxMinText">Nro de Cuenta</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="cuen'+nextID+'" size="20" maxlength="20" required>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="ref'+nextID+'" class="boxMinText">Nro de Referencia (Ultimos 5)</label>\n\
+					 <input type="number" class="form-control formsCRUD" id="ref'+nextID+'" maxlength="5" required>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="ban'+nextID+'" class="boxMinText">Banco</label>\n\
+					  <select class="form-control formsCRUD" id="ban'+nextID+'" required>\n\
+					  	<option value="Banesco">Banesco</option>\n\
+					  	<option value="Banco de Venezuela">Banco de Venezuela</option>\n\
+					  	<option value="Banco Provincial">Banco Provincial</option>\n\
+					  	<option value="BFC">BFC</option>\n\
+					  	<option value="BNC">BNC</option>\n\
+					  	<option value="Banplus">Banplus</option>\n\
+					  	<option value="Bancaribe">Bancaribe</option>\n\
+					  	<option value="Mercantil">Mercantil</option>\n\
+					  	<option value="BOD">BOD</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					   <label for="tmon'+nextID+'" class="boxMinText">Monto</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="tmon'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <label for="removeMin" class="hackerText">   </label>\n\
+					  <button class="btn btn-danger btn-block" id="remove3'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+	$('#remove3'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+	globalIDDET++;
+});//cierra transferencia
+
+				$('#cred'+nextID+'').on('click',function(e){
+				e.preventDefault();
+				listDET = $('#listDET');
+				var nextID = globalIDDET;
+				tipo[globalIDDET-1]='Cred';
+				console.log (tipo);
+				listDET.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class = col-md-12>\n\
+					<h5 class=titulo>Tarjeta de Credito</h5>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="tarj'+nextID+'" class="boxMinText">Nro de Tarjeta</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="tarj'+nextID+'" maxlength="16" required>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="tip'+nextID+'" class="boxMinText">Tipo</label>\n\
+					 <select class="form-control formsCRUD" id="tip'+nextID+'" required>\n\
+					  	<option value="VISA">Visa</option>\n\
+					  	<option value="MASTER">MasterCard</option>\n\
+					  	<option value="AMERICAN EXPRESS">American Express</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="ban'+nextID+'" class="boxMinText">Banco</label>\n\
+					  <select class="form-control formsCRUD" id="ban'+nextID+'" required>\n\
+					  	<option value="Banesco">Banesco</option>\n\
+					  	<option value="Banco de Venezuela">Banco de Venezuela</option>\n\
+					  	<option value="Banco Provincial">Banco Provincial</option>\n\
+					  	<option value="BFC">BFC</option>\n\
+					  	<option value="BNC">BNC</option>\n\
+					  	<option value="Banplus">Banplus</option>\n\
+					  	<option value="Bancaribe">Bancaribe</option>\n\
+					  	<option value="Mercantil">Mercantil</option>\n\
+					  	<option value="BOD">BOD</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					   <label for="tmon'+nextID+'" class="boxMinText">Monto</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="tmon'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <label for="removeMin" class="hackerText">   </label>\n\
+					  <button class="btn btn-danger btn-block" id="remove4'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+	$('#remove4'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+	globalIDDET++;
+});//cierra credito
+
+				$('#deb'+nextID+'').on('click',function(e){
+				e.preventDefault();
+				listDET = $('#listDET');
+				tipo[globalIDDET-1]="Deb"; 
+				var nextID = globalIDDET;
+				listDET.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class = col-md-12>\n\
+					<h5 class=titulo>Tarjeta de Debito</h5>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="tarj'+nextID+'" class="boxMinText">Nro de Tarjeta</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="tarj'+nextID+'" maxlength="16" required>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					  <label for="tip'+nextID+'" class="boxMinText">Tipo</label>\n\
+					 <select class="form-control formsCRUD" id="tip'+nextID+'" required>\n\
+					  	<option value="MAESTRO">Maestro</option>\n\
+					  	<option value="SUICHE7B">Suiche 7B</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="ban'+nextID+'" class="boxMinText">Banco</label>\n\
+					  <select class="form-control formsCRUD" id="ban'+nextID+'" required>\n\
+					  	<option value="Banesco">Banesco</option>\n\
+					  	<option value="Banco de Venezuela">Banco de Venezuela</option>\n\
+					  	<option value="Banco Provincial">Banco Provincial</option>\n\
+					  	<option value="BFC">BFC</option>\n\
+					  	<option value="BNC">BNC</option>\n\
+					  	<option value="Banplus">Banplus</option>\n\
+					  	<option value="Bancaribe">Bancaribe</option>\n\
+					  	<option value="Mercantil">Mercantil</option>\n\
+					  	<option value="BOD">BOD</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					   <label for="tmon'+nextID+'" class="boxMinText">Monto</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="tmon'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <label for="removeMin" class="hackerText">   </label>\n\
+					  <button class="btn btn-danger btn-block" id="remove5'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+	$('#remove5'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+	globalIDDET++;
+});//cierra debito
+
+				$('#cheque'+nextID+'').on('click',function(e){
+				e.preventDefault();
+				listDET = $('#listDET');
+				tipo[globalIDDET-1]="Cheque"; 
+				var nextID = globalIDDET;
+				listDET.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxAddMin" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					<div class = col-md-12>\n\
+					<h5 class=titulo>Cheque</h5>\n\
+					</div>\n\
+					<div class="col-md-6 mb-3">\n\
+					  <label for="cuen'+nextID+'" class="boxMinText">Nro de Cuenta</label>\n\
+					 	<input type="number" class="form-control formsCRUD" id="cuen'+nextID+'" maxlength="20" required>\n\
+					</div>\n\
+					<div class="col-md-6 mb-3">\n\
+					  <label for="ref'+nextID+'" class="boxMinText">Nro de Cheque</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="ref'+nextID+'" maxlength="20" required>\n\
+					</div>\n\
+					<div class="col-md-8 mb-3">\n\
+					  <label for="ban'+nextID+'" class="boxMinText">Banco</label>\n\
+					  <select class="form-control formsCRUD" id="ban'+nextID+'" required>\n\
+					  	<option value="Banesco">Banesco</option>\n\
+					  	<option value="Banco de Venezuela">Banco de Venezuela</option>\n\
+					  	<option value="Banco Provincial">Banco Provincial</option>\n\
+					  	<option value="BFC">BFC</option>\n\
+					  	<option value="BNC">BNC</option>\n\
+					  	<option value="Banplus">Banplus</option>\n\
+					  	<option value="Bancaribe">Bancaribe</option>\n\
+					  	<option value="Mercantil">Mercantil</option>\n\
+					  	<option value="BOD">BOD</option>\n\
+					  </select>\n\
+					</div>\n\
+					<div class="col-md-4 mb-3">\n\
+					   <label for="tmon'+nextID+'" class="boxMinText">Monto</label>\n\
+					   <div class="input-group mb-2 mr-sm-2">\n\
+					  <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="tmon'+nextID+'" required>\n\
+					    <div class="input-group-append">\n\
+					    	<div class="input-group-text">$</div>\n\
+					  	</div>\n\
+						</div>\n\
+					</div>\n\
+					\n\
+					<div class="col-md-2 mx-auto">\n\
+					  <label for="removeMin" class="hackerText">   </label>\n\
+					  <button class="btn btn-danger btn-block" id="remove6'+nextID+'" >Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+
+	$('#remove6'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		$('#'+nextID+'').attr('id',(nextID)*(-1));
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxMinDelete.remove();
+	});
+	globalIDDET++;
+});//cierra cheque
+
+					}//cierra el else
+				}//cierra el for
+			}//cierra el if 
+			else {
+				alert ('Fallo consulta disponibilidad');
+			}
+		}//cierra el success
+		});//cierra el ajax	
+});//cierra pagar
+
+
+
+function verifyElementVal(){
+	var start=1;
+	while(globalIDDEV>=start){
+		var flag =1;
+		while(globalIDDEV>=flag){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined) && ($('#t'+start+'').children(":selected").val() == $('#t'+flag+'').children(":selected").val()) ){
+				return false;
+				start = globalIDDEV+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
+	}
+	return true;
+}
+
+
+//AGREGAR VENTA
+//Primero mostrar las presentaciones disponibles en cada drop nuevo, esto se hace en addMin
+//Luego registrar con un json
+$('#verificarcedula').on('submit',function(e){
+	e.preventDefault();
+	let cedulaCliente = $('#cedulaCliente');
+
+	$.ajax({
+		url: '/NuevaVenta',
+		method: 'POST',
+		data: {
+			cedulaCliente: cedulaCliente.val(),
+		},
+		success: function(response){
+			if(response.datacliente != null){
+				$.ajax({
+					url:'/GuardarClienteNuevaVenta',
+					method: 'POST',
+					data: {
+						cedulaC: response.datacliente[0].cli_cedula,
+						nombreC: response.datacliente[0].cli_nombre,
+						apellidoC: response.datacliente[0].cli_apellido
+					},
+					success: function(response) {
+						if(response == 'guardado'){
+							function redirect(url){
+								window.location.href = url;
+							}
+
+							setTimeout(function(){
+								redirect("/CrearVenta");				
+							},100);
+						}else{
+							alert('No se pudo registrar el comprador actual');
+						}
+						
+					}
+					
+				});
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a cliente para modificar');				
+			}else if(response == 'new'){
+				function redirect(url){
+				window.location.href = url;
+				}
+
+				setTimeout(function(){
+				redirect("/AgregarCliente");
+				},100);
+			}			
+		}
+	});
+});
+
+$('#agregarVenta').on('submit',function(e){
+	e.preventDefault();
+
+	var start = 1;
+	//var minTipo = [];
+	var minMin = [];
+	var minCantidad = [];
+	var minPresentacion = [];
+	var minMonto = [];
+	var minPrecio=[];
+	var tipopago=[];
+
+	var tcuen=[];
+	var tban=[];
+	var tmon=[];
+	var ttip = [];
+	var ttarj=[];
+	var tref = [];
+
+	tipopago=tipo;
+	var minTotal = 0 ;//$('#MontoTotal');
+
+	while(globalIDDEV>=start){
+		//minTipo.push( $('#t'+start+'').val() );
+		minMin.push( $('#'+start+'').val() );
+		minCantidad.push($('#c'+start+'').val());
+		minPresentacion.push($('#p'+start+'').val());
+		minMonto.push($('#mon'+start+'').val());
+		minPrecio.push($('#pr'+start+'').val());
+		start++;
+	}
+
+	start=1;
+
+	while(globalIDDET>=start){
+		tcuen.push( $('#cuen'+start+'').val() );
+		tban.push($('#ban'+start+'').val());
+		tmon.push($('#tmon'+start+'').val());
+		ttip.push($('#tip'+start+'').val());
+		ttarj.push($('#tarj'+start+'').val());
+		tref.push($('#ref'+start+'').val());
+		start++;
+	}
+
+		for (var i = minCantidad.length -2; i >=0 ; i--) {
+		minTotal = minTotal + (minCantidad [i] * minPrecio[i]);
+		
+			if(verifyElementVal()==true){
+				$.ajax({
+				url: '/CrearVenta',
+				method: 'POST',
+				data: {
+
+					minCantidad: minCantidad,
+					minPresentacion: minPresentacion,
+					minMonto: minMonto,
+					minTotal: minTotal,
+					tipopago:tipopago,
+					tcuen:tcuen,
+					tban:tban,
+					tmon:tmon,
+					ttip:ttip,
+					ttarj:ttarj,
+					tref:tref,
+
+				},
+				success: function(response){
+						if(response == 'great'){
+							alert('La venta ha sido procesada exitosamente');
+							function redirect(url){
+							window.location.href = url;
+							}
+
+							setTimeout(function(){
+							redirect("/NuevaVenta");
+							},100);
+
+						}else{
+							alert('La venta no se pudo agregar, revise ');
+						}			
+				}//cierra success
+				});//cierra ajax
+			}
+			else {
+				alert ('La verificacion es falsa');
+			};
+		};
+});//cierra agregar venta
+
+
+var globalIDventa=1;
+var codigo;
+
+$('#verificarComprador').on('submit',function(e){
+	e.preventDefault();
+	let cedulacomp = $('#cedulaComprador');
+	$.ajax({
+		url: '/VerificarComprador',
+		method: 'POST',
+		data: {
+			cedulacomprador: cedulacomp.val(),
+		},
+		success: function(response){
+			if(response.dataC != null){
+				var listventas = $('#guardarCambioVenta');
+				console.log ('entro a guardar cambio venta');
+				listventas.html('');
+				var nextID = globalIDventa;
+				console.log(response.estatus);
+				for (var i = response.dataC.length - 1; i >= 0; i--){
+				listventas.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxGCVen" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="minpre'+nextID+'" class="boxMinText">Mineral/Presentacion</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="minpre'+nextID+'" value="'+response.dataC[i].fk_dev_min_pre+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="cant'+nextID+'" class="boxMinText">Cantidad</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="cant'+nextID+'" value="'+response.dataC[i].dev_cantidad+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="tot'+nextID+'" class="boxMinText">Total</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="tot'+nextID+'" value="'+response.dataC[i].dev_monto+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="est'+nextID+'" class="boxMinText">Estatus</label>\n\
+					 <select class="form-control formsCRUD" id="est'+nextID+'" required></select>\n\
+					</div>\n\
+					<div class="col-md-12 mb-3">\n\
+					<label for="mod'+nextID+'" class="boxMinText"></label>\n\
+					 <button class="btn btn-success btn-block" id="mod'+nextID+'" value="'+response.dataC[i].ven_codigo+'">Modificar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+				selectEstatus = $('#est'+nextID+'');
+				selectEstatus.html('');
+				for (var i = response.estatus.length - 1; i >= 0; i--) {
+					selectEstatus.append('<option value="'+response.estatus[i].est_codigo+'">'+response.estatus[i].est_nombre+'</option>');
+				}
+				$("#est"+nextID+" option[value="+ response.dataC[0].fk_ven_estatus+"]").attr("selected",true);
+			
+	$('#mod'+nextID+'').on('click',function(e){
+		e.preventDefault();
+		var codigo =$(this).val();
+		var estatus=$('#est'+nextID+'').children(":selected").val();
+ 		console.log(estatus);
+		$.ajax({
+		url: '/ModificarVentaSelect',
+		method: 'POST',
+		data: {
+			codigo:codigo,
+			estatus:estatus,
+
+		},
+		success: function(response){
+			if (response =='great'){
+				alert('La venta fue modificada exitosamente');	
+			}
+			else{
+				alert('No se pudo modificar la venta');
+			}	//cierre success	
+		}
+	});//cierre ajax
+
+});//cierra mod
+
+	nextID++;
+}//cierra el for
+			}else if(response == 'failed'){
+				alert('Error, no se consigue ventas para este cliente');				
+			}			
+		}
+	});//cierra ajax
+});//cierra verificar
+
+$('#guardarCambioVenta').on('submit',function(e){
+	e.preventDefault();
+	let nombreGC = $('#gcnombreCliente');
+	let apellidoGC = $('#gcapellidoCliente');
+	let cedulaGC = $('#gccedulaCliente');
+	let telefonoGC = $('#gctelefonoCliente');
+	let parroquiaGC = $('#parroquiaSelect');
+
+	$.ajax({
+		url: '/ModificarVenta',
+		method: 'POST',
+		data: {
+			nombreGC: nombreGC.val(),
+			apellidoGC: apellidoGC.val(),
+			cedulaGC: cedulaGC.val(),
+			telefonoGC: telefonoGC.val(),
+			parroquiaGC: parroquiaGC.val()
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El cliente fue MODIFICADO satisfactoriamente');
+				var boxGCEmp = $('#boxGC');
+				boxGCEmp.addClass('fadeOut');
+				boxGCEmp.html('');
+				var boxModEmp = $('#guardarCambioCliente');
+				boxModEmp.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un cliente para modificar su ficha</h4>\n\
+                      <p class="text-center"><i class="fas fa-address-card iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+			}else{
+				alert('El cliente NO SE PUDO MODIFICAR, revisa los campos');
+			}			
+		}
+	});
+});
+
+var codigo = [];
+$('#verificarComprador2').on('submit',function(e){
+	e.preventDefault();
+	let cedulacomp = $('#cedulaComprador2');
+	$.ajax({
+		url: '/VerificarComprador',
+		method: 'POST',
+		data: {
+			cedulacomprador: cedulacomp.val(),
+		},
+		success: function(response){
+			if(response.dataC != null){
+				var listventas = $('#guardarCambioVenta');
+				console.log ('entro a guardar cambio venta');
+				listventas.html('');
+				var nextID = globalIDventa;
+				for (var i = response.dataC.length - 1; i >= 0; i--){
+				listventas.append(' \n\
+					<div class="boxAgregarMinID animated zoomIn" id="boxGCVen" value="'+nextID+'">\n\
+					<div class="form-row blockMin">\n\
+					\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="minpre'+nextID+'" class="boxMinText">Mineral/Presentacion</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="minpre'+nextID+'" value="'+response.dataC[i].fk_dev_min_pre+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="cant'+nextID+'" class="boxMinText">Cantidad</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="cant'+nextID+'" value="'+response.dataC[i].dev_cantidad+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					  <label for="tot'+nextID+'" class="boxMinText">Total</label>\n\
+					  <input type="number" class="form-control formsCRUD" id="tot'+nextID+'" value="'+response.dataC[i].dev_monto+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-3 mb-3">\n\
+					<label for="elim'+nextID+'" class="boxMinText"></label>\n\
+					 <button class="btn btn-danger btn-block" id="elim'+nextID+'" value="'+response.dataC[i].ven_codigo+'">Eliminar</button>\n\
+					</div>\n\
+					</div>\n\
+					</div>\n\
+				');
+			
+
+	$('#elim'+nextID+'').on('click',function(e){
+		console.log('entro en eliminar');
+		e.preventDefault();
+		codigo =($(this).val());
+ 
+		$.ajax({
+		url: '/EliminarVenta',
+		method: 'POST',
+		data: {
+			codigo:codigo,
+		},
+		success: function(response){
+			if (response =='great'){
+				alert('El usuario fue eliminado satisfactoriamente');
+				function redirect(url){
+							window.location.href = url;
+							}
+
+							setTimeout(function(){
+							redirect("/VerificarComprador2");
+							},100);
+			}
+			else {
+				alert('El usuario no puede ser eliminado');
+			}
+		}
+
+		});
+	});//cierre elim
+
+	nextID++;
+}
+
+}
+
+}
+
+});
+
+});
+
+//------------------GESTION----------------
+$('#backToGestion').on('click',function(){
+	window.location.href = "/Gestion";
+});
+
+//---------CAJA ----------------------
+
+$('#backToCaja').on('click',function(){
+	window.location.href = "/Caja";
+});
+//cliente 
+
+$('#menuItemClientes').on('click',function(){
+	window.location.href = "/Clientes";
+});
+
+$('#backToClientes').on('click',function(){
+	window.location.href = "/Clientes";
+});
+
+$('#CreateCliente').on('click',function(){
+	window.location.href = "/AgregarCliente";
+});
+
+$('#SelectCliente').on('click',function(){
+	window.location.href = "/ConsultaCliente";
+});
+
+$('#UpdateCliente').on('click',function(){
+	window.location.href = "/ModificarCliente";
+});
+
+$('#DeleteCliente').on('click',function(){
+	window.location.href = "/EliminarCliente";
+});
+
+
+//ventas
+$('#backToVentas').on('click',function(){
+	window.location.href = "/Ventas";
+});
+
+$('#CreateVenta').on('click',function(){
+	window.location.href = "/NuevaVenta";
+});
+
+$('#SelectVenta').on('click',function(){
+	window.location.href = "/ConsultaVenta";
+});
+
+$('#UpdateVenta').on('click',function(){
+	window.location.href = "/VerificarComprador";
+});
+
+$('#DeleteVenta').on('click',function(){
+	window.location.href = "/VerificarComprador2";
+});
+
+$('#Verdetalle').on('click',function(){
+	window.location.href = "/DetalleVenta";
+});
+
+$('#Success').on('click',function(){
+	window.location.href = "/SuccessVenta";
+});
+
+
+$(document).ready( function () {
+    $('#consultaDetalleVen').DataTable();
+} );
+
+$(document).ready( function () {
+    $('#consultaVenta').DataTable();
+} );
+
+function estatusventa(estatus){
+	$(estatus).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+		$.ajax({
+			url: '/Ventas-AgregarEstatus',
+			method: 'POST',
+			data:{
+				filtroMin: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.min != null){
+						if(optionTipo == 'MIN_METALICO'){
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].met_codigo+'">'+response.min[i].met_nombre+'</option>');
+							}
+						}else{
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].nom_codigo+'">'+response.min[i].nom_nombre+'</option>');
+							}
+						}
+					}	
+			}
+		});	
+	});
+}
+
+
+function mineralpresentacion(mineral,presentacion,tipo){
+	$(mineral).on('click',function(){
+
+	var optionmineral = mineral.children(":selected").val();
+	var optiontipo = tipo.children(":selected").val();
+
+	console.log(optionmineral);
+	console.log(optiontipo);
+
+		$.ajax({
+			url: '/Ventas-AgregarPre',
+			method: 'POST',
+			data:{
+				filtroPre: optionmineral,
+				filtroT: optiontipo.toString()
+			},
+			success: function(response){
+					if(response.min != null){				
+							presentacion.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								presentacion.append('<option value="'+response.min[i].mp_codigo+'">'+response.min[i].pre_nombre+'</option>');
+							}
+							
+					}
+			}	
+		});
+	});	
+}
+
+function presentacionprecio (presentacion,precio,cantidad,monto){
+	$(presentacion).on('click',function(){
+
+	var optionpresentacion = presentacion.children(":selected").val();
+
+	console.log(optionpresentacion);
+
+		$.ajax({
+			url: '/Ventas-AgregarPrecio',
+			method: 'POST',
+			data:{
+				filtroPre: optionpresentacion,
+			},
+			success: function(response){
+					if(response.min != null){	
+						console.log (response.min[0].mp_precio);				
+							precio.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								precio.attr('value',response.min[i].mp_precio);
+							}
+						total(cantidad,response,monto,$('#MT'));	
+					}
+			}	
+		});
+	});	
+}
+
+
+function total (cantidad,response,monto,mt){
+	$(cantidad).on('focusout',function(){
+
+	var cant = cantidad.val();
+	console.log(cant);
+	console.log (response.min[0].mp_precio);
+
+	var total = (cant*response.min[0].mp_precio);
+	monto.html('');
+	monto.val(total);
+
+	//var valor = mt.val();
+	//sumar (monto);
+	// parseInt(mt.val());
+	// console.log('del input',valor);
+	// console.log('total',parseInt(total));
+	// valor = valor + parseInt(total);
+	// console.log('valor 2',valor);
+	// mt.val(valor);
+
+
+	});
+}
+
+// function sumar (monto) {
+
+// 	$('#MT').on('change',monto,function(){
+// 		var num1=parseInt((monto).val());
+// 		$('#MT').val(num1);
+
+// 	})
+
+ //    var total = 0;	
+
+ //    valor1 = parseInt(valor1); // Convertir el valor a un entero (número).
+	// valor2 = parseInt(valor2);
+ //    // Aquí valido si hay un valor previo, si no hay datos, le pongo un cero "0".
+ //    total = (total == null || total == undefined || total == "") ? 0 : total;
+	
+ //    /* Esta es la suma. */
+ //    total = (parseInt(valor1)+parseInt(valor2));
+ //    console.log ('total',total);
+
+ //   ($('#MT')).val(total);
+//}
+

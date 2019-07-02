@@ -7,6 +7,7 @@
     <title>MinerUCAB - Explotaciones</title>
 
     <link rel="icon" href="public/images/favicon.png">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="public/css/animate.css">
     <link href="public/css/bootstrap.min.css" rel="stylesheet">
@@ -109,57 +110,42 @@
 
         
         <main role="main" class="ml-sm-auto col-lg-10 content">
-          <section class="container-fluid proBox">
+          <section class="container-fluid boxEliminar">
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-8"><h1 class="text-center title">Configuración de explotaciones</h1></div>
-              <div class="col-2"></div>
+              <div class="col-lg-1"></div>
+              <div class="col-lg-10"><h1 class="text-center title">Elminar la configuracion actual de un yacimiento</h1></div>
+              <div class="col-lg-1"></div>
             </div>
-            <div class="row sepRow">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemAgregarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-plus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Agregar</h2>
+
+
+            <form action="/Explotaciones-Configuracion-Eliminar" class="boxEliminarConfiguracion" method="POST" id="eliminarConfiguracion">
+              <div class="form-row">
+                <div class="col-md-4">
+                  <h4 class="text-center">Yacimientos con configuracion</h4>
+                </div>
+                <div class="col-md-4">
+                  <select class="form-control formsCRUD" id="configuracionEliminar" required>
+                    <% for(var i=0; i < yac.length; i++) {%>
+                      <option value='<%=yac[i].yac_codigo%>'><%=yac[i].yac_nombre%></option>
+                    <%}%>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <button class="btn btn-danger btn-block" id="removeConfig">Eliminar la configuración</button>
                 </div>
               </div>
-              <div class="col-4" id="menuItemConsultarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-search iconsMenu"></i></p>
-                  <h2 class="text-center">Cosultar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemModificarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-pen iconsMenu"></i></p>
-                  <h2 class="text-center">Modificar</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemEliminarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-minus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Eliminar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToExplotaciones"><i class="fas fa-arrow-left"></i> Volver al menú de explotaciones</button>
-              </div>
-              <div class="col-4"></div>
-            </div>
+            </form>
+  
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

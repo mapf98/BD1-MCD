@@ -111,55 +111,50 @@
         <main role="main" class="ml-sm-auto col-lg-10 content">
           <section class="container-fluid proBox">
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-8"><h1 class="text-center title">Configuración de explotaciones</h1></div>
-              <div class="col-2"></div>
+              <div class="col-lg-2"></div>
+              <div class="col-lg-8"><h1 class="text-center title">Iniciar explotación</h1></div>
+              <div class="col-lg-2"></div>
             </div>
-            <div class="row sepRow">
+            <div class="row">
               <div class="col-2"></div>
-              <div class="col-4" id="menuItemAgregarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-plus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Agregar</h2>
+              <div class="col-8">
+                <div class="boxFormAgregarYacimiento animated fadeIn">
+
+                  <form action="/Explotaciones-Agregar-Iniciar" method="POST" id="iniciarExplotacion">
+                    <div class="form-row">
+                      <div class="col-md-8 mb-3">
+                        <label for="yacimientoIniciar">Yacimientos con configuración</label>
+                        <select class="form-control formsCRUD" id="yacimientoIniciar" required>
+                          <% for(var i=0; i < yac.length; i++) {%>
+                            <option value='<%=yac[i].yac_codigo%>'><%=yac[i].yac_nombre%></option>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="col-4">
+                        <label for="addFormulario" class="hackerText">h</label>
+                        <button class="btn btn-success btn-block" id="addFormulario">Añadir</button>
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="animated fadeIn listFormulario" id="listFormulario">
+                    </div>                      
+
+                    <hr>
+
+                    <button class="btn btnForms btn-block" type="submit">Agregar</button>
+                  </form>
                 </div>
               </div>
-              <div class="col-4" id="menuItemConsultarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-search iconsMenu"></i></p>
-                  <h2 class="text-center">Cosultar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowDivider">
-              <div class="col-2"></div>
-              <div class="col-4" id="menuItemModificarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="fas fa-pen iconsMenu"></i></p>
-                  <h2 class="text-center">Modificar</h2>
-                </div>
-              </div>
-              <div class="col-4" id="menuItemEliminarConfiguracion">
-                <div class="boxMenuItem animated fadeIn">
-                  <p class="text-center"><i class="far fa-minus-square iconsMenu"></i></p>
-                  <h2 class="text-center">Eliminar</h2>
-                </div>
-              </div>
-              <div class="col-2"></div>
-            </div>
-            <div class="row rowButtonBack">
-              <div class="col-4"></div>
-              <div class="col-4">
-                <button type="button" class="btn btn-block btnBack" id="backToExplotaciones"><i class="fas fa-arrow-left"></i> Volver al menú de explotaciones</button>
-              </div>
-              <div class="col-4"></div>
-            </div>
           </section>
         </main>
       </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
     <script src="public/js/logic.js"></script>
     <script src="public/js/popper.min.js"></script>
     <script src="public/js/bootstrap.min.js"></script>

@@ -10,6 +10,14 @@ var userJSON ={
   "cargo": "none"
 };
 
+var compradorActual ={
+  "nombre": "none",
+  "apellido":"none", 
+  "cedula":"none",
+  "monto":"none"
+};
+
+
 //En esta parte se encuentra la configuración para conectarse a la base de datos
 const { Client } = require('pg');  //Requerimos el paquete postgres
 const connectionData = {
@@ -188,8 +196,6 @@ app.get("/Empleados-Eliminar",function(req,res){
   }
 });
 
-
-
 //Yacimientos
 app.get("/Yacimientos-Agregar",function(req,res){
   let dataLugar;
@@ -353,7 +359,6 @@ app.post("/Yacimientos-Eliminar",function(req,res){
     }
   });
 });
-
 
 //METODOS POST
 
@@ -845,8 +850,65 @@ app.get("/Explotaciones-Configuracion-Agregar",function(req,res){
   }
 });
 
+app.get("/Explotaciones-Agregar-Iniciar",function(req,res){
+  var filtro = 'CF';
+  if(userJSON.usuario != "none"){
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yac = result.rows;
+        res.render('explotacionesIniciarAgregar',{user: userJSON,yac: yac});
+      }else{
+        res.render('explotacionesIniciar',{user: userJSON,});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Explotaciones-Iniciar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('explotacionesIniciar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Explotaciones-Configuracion-Modificar",function(req,res){
+  var filtro = 'CF';
+  if(userJSON.usuario != "none"){
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yac = result.rows;
+        res.render('explotacionesConfiguracionModificar',{user: userJSON,yac: yac});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.get("/ER",function(req,res){
   var filtro = 'SCF';
+  client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var yac = result.rows;
+      res.send({yac: yac});
+    }
+  });
+});
+
+app.get("/ERCF",function(req,res){
+  var filtro = 'CF';
   client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
     if (err) {
       console.log(err.stack);
@@ -872,6 +934,32 @@ app.get("/getCargo",function(req,res){
 
 app.get("/getTipoMaquinaria",function(req,res){
   client.query('SELECT tm_codigo,tm_nombre FROM TIPO_MAQUINARIA',(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var TMmaq = result.rows;
+      res.send({TMmaq:TMmaq});
+    }
+  });
+});
+
+app.post("/getEmpleados",function(req,res){
+  var empleadoCargo = req.body.eC;
+  client.query('SELECT * FROM EMPLEADO AS E, CARGO AS C WHERE E.FK_EMP_CARGO = C.CAR_CODIGO AND C.CAR_NOMBRE = $1 ',[empleadoCargo],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var car = result.rows;
+      res.send({car:car});
+    }
+  });
+});
+
+app.post("/getMaquinarias",function(req,res){
+  var empleadoTM = req.body.mT;
+  client.query('SELECT * FROM MAQUINARIA AS M, TIPO_MAQUINARIA AS TM WHERE M.FK_MAQ_TIPO = TM.TM_CODIGO AND TM.TM_NOMBRE = $1',[empleadoTM],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -914,10 +1002,12 @@ app.post("/AExp",function(req,res){
           console.log(err.stack);
           res.send('failed'); 
         }else{
+          console.log('Modifico e inserto');
           res.send({cod: expCod}); 
         }
       });
     }else{
+      console.log('Error');
       res.send('failed');
     }
   });
@@ -927,9 +1017,10 @@ app.post("/AEta",function(req,res){
   var eta = req.body.AEta; 
   var exp = req.body.AExp;
   var est = req.body.AEst;
+  var estD = req.body.AEstD;
   var estatusEta = 'Disponible';
   console.log(eta);
-  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS,ETA_COSTOTOTAL) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4) RETURNING ETA_CODIGO',[eta,exp,estatusEta,est],(err,result)=>{
+  client.query('INSERT INTO ETAPA (ETA_NOMBRE,FK_ETA_EXPLOTACION,FK_ETA_ESTATUS,ETA_COSTOTOTAL,ETA_DURACION) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4,$5) RETURNING ETA_CODIGO',[eta,exp,estatusEta,est,estD],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -946,9 +1037,10 @@ app.post("/AFas",function(req,res){
   var eta = req.body.AEta; 
   var fas = req.body.AFas;
   var est = req.body.AEst;
+  var estD = req.body.AEstD;
   var estatusFas = 'Disponible';
   console.log(fas);
-  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS,FAS_COSTOTOTAL) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4) RETURNING FAS_CODIGO',[fas,eta,estatusFas,est],(err,result)=>{
+  client.query('INSERT INTO FASE (FAS_NOMBRE,FK_FAS_ETAPA,FK_FAS_ESTATUS,FAS_COSTOTOTAL,FAS_DURACION) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3),$4,$5) RETURNING FAS_CODIGO',[fas,eta,estatusFas,est,estD],(err,result)=>{
     if (err) {
       console.log(err.stack);
       res.send('failed'); 
@@ -1012,6 +1104,25 @@ app.get("/Explotaciones-Configuracion-Consultar",function(req,res){
   }
 });
 
+app.get("/Explotaciones-Configuracion-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    var filtro = 'CF';
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yac = result.rows;
+        res.render('explotacionesConfiguracionEliminar',{user: userJSON,yac: yac});
+      }else{
+        res.render('explotacionesConfiguracion',{user: userJSON,yac: yac});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
 app.post("/YS",function(req,res){
   var yacCod = req.body.yacCod;
   if(userJSON.usuario != "none"){
@@ -1049,7 +1160,7 @@ app.post("/ES",function(req,res){
 app.post("/EsDetalle",function(req,res){
   var faseCod = req.body.faseCod;
   if(userJSON.usuario != "none"){
-    client.query('SELECT F.FAS_NOMBRE, F.FAS_COSTOTOTAL FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
+    client.query('SELECT F.FAS_NOMBRE, F.FAS_COSTOTOTAL, F.FAS_DURACION FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND F.FAS_CODIGO = $1',[faseCod],(err,result)=>{
       if (err) {
         console.log(err.stack);
         res.send('failed'); 
@@ -1122,6 +1233,1519 @@ app.post("/detalleMaquinarias",function(req,res){
     res.redirect('login');
   }
 });
+
+app.post("/Explotaciones-Configuracion-Eliminar",function(req,res){
+  var yacEC = req.body.yacEC;
+  var uS = "SCF";
+  client.query('DELETE FROM EXPLOTACION WHERE FK_EXP_YACIMIENTO = $1',[yacEC],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      client.query('UPDATE YACIMIENTO SET FK_YAC_ESTATUS = (SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $1) WHERE YAC_CODIGO = $2',[uS,yacEC],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }else{
+          res.send('great');      
+        }
+      });
+    }
+  });
+});
+
+app.post("/Explotaciones-Configuracion-Verificar",function(req,res){
+  var yacMod = req.body.yacMod;
+  client.query('SELECT E.* FROM EXPLOTACION AS E, YACIMIENTO AS Y WHERE E.FK_EXP_YACIMIENTO = Y.YAC_CODIGO AND E.FK_EXP_YACIMIENTO = $1',[yacMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var explotacion = result.rows;
+      client.query('SELECT * FROM ESTATUS',(err,result)=>{
+        if (err){
+          console.log(err.stack);
+          res.send('failed'); 
+        }else if(result.rows[0] != null){
+          var estatus = result.rows;
+          res.send({explotacion: explotacion,estatus: estatus});
+        }else{
+          res.send('failed');
+        }
+      });
+    }
+  });
+});
+
+app.post("/ExpDATA",function(req,res){
+  var yacMod = req.body.yacMod;
+  client.query('SELECT E.* FROM EXPLOTACION AS E, YACIMIENTO AS Y WHERE E.FK_EXP_YACIMIENTO = Y.YAC_CODIGO AND E.FK_EXP_YACIMIENTO = $1',[yacMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var explotacion = result.rows;
+      res.send({explotacion: explotacion});
+    }
+  });
+});
+
+app.post("/ET",function(req,res){
+  var yacMod = req.body.yacMod;
+  client.query('SELECT E.* FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND Y.YAC_CODIGO = $1',[yacMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var etapas = result.rows;
+      res.send({etapas: etapas});
+    }
+  });
+});
+
+app.post("/FT",function(req,res){
+  var etapaMod = req.body.etapaMod;
+  client.query('SELECT F.* FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX, FASE AS F WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND F.FK_FAS_ETAPA = E.ETA_CODIGO AND E.ETA_CODIGO = $1',[etapaMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var fases = result.rows;
+      res.send({fases: fases});
+    }
+  });
+});
+
+app.get("/horarios",function(req,res){
+  client.query('SELECT * FROM HORARIO',(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var horarios = result.rows;
+      res.send({horarios: horarios});
+    }
+  });
+});
+
+
+app.post("/FC",function(req,res){
+  var faseMod = req.body.faseMod;
+  client.query('SELECT CAR.CAR_CODIGO, CAR.CAR_NOMBRE, CF.CF_CANTIDAD, CF.CF_COSTO, CF.CF_CODIGO FROM YACIMIENTO AS Y,EXPLOTACION AS EX, ETAPA AS E, FASE AS F,CARGO AS CAR, CAR_FAS AS CF WHERE Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND E.ETA_CODIGO = F.FK_FAS_ETAPA AND F.FAS_CODIGO = CF.FK_CF_FASE AND CAR.CAR_CODIGO = CF.FK_CF_CARGO AND F.FAS_CODIGO = $1',[faseMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var cargos = result.rows;
+      res.send({cargos: cargos});
+    }
+  });
+});
+
+app.post("/FM",function(req,res){
+  var faseMod = req.body.faseMod;
+  console.log('Llego aquixxx');
+  client.query('SELECT TM.TM_CODIGO, TM.TM_NOMBRE,TMF.TMF_CANTIDAD, TMF.TMF_COSTO, TMF.TMF_CODIGO FROM YACIMIENTO AS Y,EXPLOTACION AS EX, ETAPA AS E, FASE AS F,TIPO_MAQUINARIA AS TM, TM_FAS AS TMF WHERE Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND E.ETA_CODIGO = F.FK_FAS_ETAPA AND F.FAS_CODIGO = TMF.FK_TMF_FASE AND TM.TM_CODIGO = TMF.FK_TMF_TM AND F.FAS_CODIGO = $1',[faseMod],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+      console.log('Error bases');
+    }else if(result.rows[0] != null){
+      var maquinarias = result.rows;
+      console.log('envia las maquinarias');
+      res.send({maquinarias: maquinarias});
+    }else{
+      console.log('Error ultimo');
+      res.send('failed');
+    }
+  });
+});
+
+
+/// ARREGLAR
+app.post("/ExplotacionIniciarEmpleados",function(req,res){
+  var c = req.body.c;
+  var e = 'Ocupado';
+  for (var i = 0; i < c.length; i++) {
+    client.query('INSERT INTO EMP_CF (FK_ECF_EMPLEADO,FK_ECF_CARFAS,FK_ECF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING ECF_CODIGO',[c[i].codC,c[i].codCF,e],(err,result)=>{
+      if (err){
+        console.log(err.stack);
+        res.send('failed'); 
+      }else{
+        client.query('INSERT INTO HOR_ECF (FK_HECF_ECF,FK_HECF_HOR) VALUES ($1,$2) RETURNING ECF_CODIGO',[result.rows[0],c[i].h],(err,result)=>{
+          if (err){
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+      }
+    });
+  }
+  res.send('great');
+});
+
+app.post("/ExplotacionIniciarMaquinarias",function(req,res){
+  var m = req.body.m;
+  var e = 'Ocupado';
+  for (var i = 0; i < m.length; i++) {
+    client.query('INSERT INTO TM_FAS (FK_TMF_TM,FK_TMF_FASE,FK_TMF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3))',[m[i].codM,m[i].codF,e],(err,result)=>{
+      if (err){
+        console.log(err.stack);
+        res.send('failed'); 
+      } 
+    });
+  }
+  res.send('great');
+});
+
+app.post("/ExplotacionIniciarFases",function(req,res){
+  var f = req.body.f;
+  var e = 'Ocupado';
+  for (var i = 0; i < f.length; i++) {
+    client.query('UPDATE FASE SET FAS_FECHAINICIO=$1, FAS_FECHAFIN=$2 WHERE FAS_CODIGO = $3',[f[i].fi,f[i].ff,f[i].codFas],(err,result)=>{
+      if (err){
+        console.log(err.stack);
+        res.send('failed'); 
+      }
+    });
+  }  
+  res.send('great');
+});
+
+
+/////////////////MINERALES
+
+app.get("/Minerales",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('minerales',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/metalicos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('metalicos',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Metalicos-Agregar",function(req,res){
+  let dataPresentacion;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT pre_nombre FROM presentacion',(err,resultP)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(resultP.rows[0] != null){
+            dataPresentacion = resultP.rows;
+            res.render('metalicosAgregar',{dataPresentacion: dataPresentacion, user: userJSON});
+          }else{
+            res.send('failed');
+          };
+        });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Metalicos-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT met_codigo, met_nombre, met_escalamaleabilidad, met_escaladureza FROM min_metalico',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var infoMet = result.rows;
+        client.query('SELECT MP.fk_mp_presentacion, P.pre_nombre, MP.mp_precio, MP.fk_mp_metalico FROM min_pre AS MP, presentacion AS P WHERE P.pre_codigo = MP.fk_mp_presentacion',(err,resultPre)=>{
+          if (err){
+            console.log(err,stack);
+            res.send("failed");
+          } else if (resultPre.rows[0] != null){
+            var preMet = resultPre.rows;
+            res.render('metalicosConsultar',{dataTable: result.rows, preMet: preMet, user: userJSON});
+            } else {
+              res.send('failed');
+            }
+          });
+        
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Metalicos-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('metalicosEliminar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/nometalicos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('nometalicos',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/NoMetalicos-Agregar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('noMetalicosAgregar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/NoMetalicos-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT nom_codigo, nom_nombre, nom_utilidad FROM min_no_metalico',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var infoMet = result.rows;
+        client.query('SELECT MP.fk_mp_presentacion, P.pre_nombre, MP.mp_precio, MP.fk_mp_nometalico FROM min_pre AS MP, presentacion AS P WHERE P.pre_codigo = MP.fk_mp_presentacion',(err,resultPre)=>{
+          if (err){
+            console.log(err,stack);
+            res.send("failed");
+          } else if (resultPre.rows[0] != null){
+            var preNoMet = resultPre.rows;
+            res.render('noMetalicosConsultar',{dataTable: result.rows, preNoMet: preNoMet, user: userJSON});
+            } else {
+              res.send('failed');
+            }
+          });
+        
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/NoMetalicos-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('noMetalicosEliminar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Metalicos-Agregar",function(req,res){
+  var metalicoNombre = req.body.nombreMetalico;
+  var metalicoMaleabilidad = req.body.escalaMaleabilidad;
+  var metalicoDureza = req.body.escalaDureza;
+  var nombrePresentacion = req.body.nombrePresentacion;
+  var precioMP = req.body.precioMP;
+  var preTipo = req.body.preTipo;
+  // var metTipo = req.body.metTipo;
+  // var metProporcion = req.body.metProporcion;
+  // var metMetalico = req.body.metMetalico;
+
+  console.log(preTipo);
+
+  if(userJSON.usuario != "none"){
+
+  client.query('INSERT INTO min_metalico (met_nombre,met_escalamaleabilidad, met_escaladureza) VALUES ($1,$2,$3)',[metalicoNombre, metalicoMaleabilidad, metalicoDureza],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (nombrePresentacion != ""){
+
+      for (var i = preTipo.length - 1; i >= 0; i--) {
+
+        client.query('INSERT INTO min_pre (mp_precio, fk_mp_presentacion, fk_mp_metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[precioMP[i],nombrePresentacion[i],metalicoNombre],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }        
+      });
+      }
+
+      // for (var i = metTipo.length - 1; i >= 0; i--) {
+
+      //   client.query('INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1metalico, fk_mm_2metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[metProporcion[i],metMetalico[i],metalicoNombre],(err,result)=>{
+      //   if (err) {
+      //     console.log(err.stack);
+      //     res.send('failed'); 
+      //   }        
+      // });
+      // }
+
+      
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente (Mineral metálico)');
+    }
+  });
+  }else{
+    res.redirect('login');
+  }
+});   
+
+app.post("/Metalicos-AgregarPre",function(req,res){
+  var filtro = req.body.filtroPre;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var pre = result.rows;
+        res.send({pre: pre});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Metalicos-Eliminar",function(req,res){ 
+  var nombreMetalico = req.body.nombreMetalico;
+  client.query('DELETE FROM min_pre WHERE fk_mp_metalico = (SELECT met_codigo FROM min_metalico WHERE met_nombre = $1)',[nombreMetalico],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (nombreMetalico != null){
+
+      client.query('DELETE FROM min_metalico WHERE met_nombre = $1',[nombreMetalico],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');
+          
+
+        }else{
+          res.send('great');
+        }
+      });
+
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/NoMetalicos-Agregar",function(req,res){
+  var noMetalicoNombre = req.body.nombreNoMetalico;
+  var noMetalicoUtilidad = req.body.utilidadNoMetalico;
+  var nombrePresentacion = req.body.nombrePresentacion;
+  var precioMP = req.body.precioMP;
+  var preTipo = req.body.preTipo;
+
+  if(userJSON.usuario != "none"){
+
+  client.query('INSERT INTO min_no_metalico (nom_nombre,nom_utilidad) VALUES ($1,$2)',[noMetalicoNombre, noMetalicoUtilidad],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (nombrePresentacion != ""){
+
+      for (var i = preTipo.length - 1; i >= 0; i--) {
+
+        client.query('INSERT INTO min_pre (mp_precio, fk_mp_presentacion, fk_mp_nometalico) VALUES ($1,$2, (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $3))',[precioMP[i],nombrePresentacion[i],noMetalicoNombre],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+        });
+      }
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente (Mineral no metálico)');
+    }
+  });
+  }else{
+      res.send('great');
+    }
+});   
+
+app.post("/NoMetalicos-Eliminar",function(req,res){ 
+  var nombreNoMetalico = req.body.nombreNoMetalico;
+  client.query('DELETE FROM min_pre WHERE fk_mp_nometalico = (SELECT nom_codigo FROM min_no_metalico WHERE nom_nombre = $1)',[nombreNoMetalico],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (nombreNoMetalico != null){
+
+      client.query('DELETE FROM min_no_metalico WHERE nom_nombre = $1',[nombreNoMetalico],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');
+          
+
+        }else{
+          res.send('great');
+        }
+      });
+
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+app.get("/Metalicos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('metalicosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Metalicos-Verificar",function(req,res){ 
+  var nombreM = req.body.nombreMetV;
+  client.query('SELECT M.met_codigo, M.met_escalamaleabilidad, M.met_nombre, M.met_escaladureza  FROM min_metalico AS M WHERE M.met_nombre = $1',[nombreM],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      
+      var dataV = result.rows;
+      // var estatusDisponible = 'Disponible';
+      // var estatusEliminado = 'Eliminado';
+      // client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
+      //           if (err) {
+      //             console.log(err.stack);
+      //             res.send('failed'); 
+      //           }else if(estatuses.rows[0] != null){
+      //             var estatuses = estatuses.rows;                  
+      //             res.send({dataV: dataV, estatuses: estatuses});
+      //           }else{
+      //             res.send('failed');
+      //           }
+      //         });
+      client.query('SELECT MP.fk_mp_metalico, MP.mp_precio, P.pre_nombre, P.pre_codigo FROM min_pre AS MP,  presentacion AS P WHERE MP.fk_mp_presentacion = P.pre_codigo ',(err,resultPRE)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultPRE.rows[0] != null){
+                      console.log("vamos muy bien");
+                      var preMet = resultPRE.rows;
+                      res.send({dataV: dataV, preMet:preMet});
+                    }else{
+                      // res.send('failed');
+                      res.send({dataV: dataV});
+                    };
+                  });
+
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/Metalicos-Modificar",function(req,res){ 
+  var metalicoCodigo = req.body.codigoGC;
+  var metalicoNombre = req.body.nombreGC;
+  var metalicoMaleabilidad = req.body.maleabilidadGC;
+  var metalicoDureza = req.body.durezaGC;
+  var modMet = req.body.modMet;
+  var ready = true;
+
+  console.log(modMet);
+
+  client.query('UPDATE MIN_METALICO SET met_nombre=$1,met_escalamaleabilidad=$2,met_escaladureza=$3 WHERE met_nombre= $4',[metalicoNombre,metalicoMaleabilidad,metalicoDureza,metalicoNombre],(err,result)=>{
+    if (err) {
+      ready = false;
+      console.log(err.stack);
+      res.send('failed'); 
+    }
+    // }else{
+    //   res.send('great'); 
+    //   console.log('Query procesado correctamente (modificar mineral)');
+    // }
+  });
+
+  if(modMet.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modMet.d.length - 1; i >= 0; i--) {
+     
+
+        client.query('DELETE FROM MIN_PRE WHERE fk_mp_metalico = (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $1) AND fk_mp_metalico=$2',[metalicoNombre,modMet.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(modMet.u !== undefined){
+    for (var i = modMet.u.length - 1; i >= 0; i--) {
+      
+
+        client.query('UPDATE MIN_PRE SET fk_mp_presentacion = $1,fk_mp_nometalico = null,mp_precio = $2 WHERE fk_mp_metalico = (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3) AND fk_mp_presentacion=$4',[modMet.u[i].cod,modMet.u[i].p,metalicoNombre,modMet.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modMet.i !== undefined){
+    for (var i = modMet.i.length - 1; i >= 0; i--) {
+      
+        client.query('INSERT INTO MIN_PRE (fk_MP_METALICO,fk_mp_presentacion,mp_precio) VALUES ( (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $1) ,$2,$3)',[metalicoNombre,modMet.i[i].cod,modMet.i[i].p],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+
+});
+
+app.get("/NoMetalicos-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('noMetalicosModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/NoMetalicos-Verificar",function(req,res){ 
+  var nombreM = req.body.nombreNoMetV;
+  client.query('SELECT M.nom_codigo, M.nom_utilidad, M.nom_nombre FROM min_no_metalico AS M WHERE M.nom_nombre = $1',[nombreM],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      var dataV = result.rows;
+      
+      client.query('SELECT MP.fk_mp_nometalico, MP.mp_precio, P.pre_nombre, P.pre_codigo FROM min_pre AS MP,  presentacion AS P WHERE MP.fk_mp_presentacion = P.pre_codigo ',(err,resultPRE)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultPRE.rows[0] != null){
+                      console.log("vamos muy bien");
+                      var preNoMet = resultPRE.rows;
+                      res.send({dataV: dataV, preNoMet:preNoMet});
+                    }else{
+                      // res.send('failed');
+                      res.send({dataV: dataV});
+                    };
+                  });
+
+
+    }else{
+      console.log('Entraaaa aqui');
+      res.send('failed');
+    }
+  });
+});
+
+app.post("/NoMetalicos-Modificar",function(req,res){ 
+  var noMetalicoCodigo = req.body.codigoGC;
+  var noMetalicoNombre = req.body.nombreGC;
+  var noMetalicoUtilidad = req.body.utilidadGC;
+  var modNoMet = req.body.modNoMet;
+  var ready = true;
+
+  console.log(modNoMet);
+
+
+  client.query('UPDATE MIN_NO_METALICO SET nom_nombre=$1,nom_utilidad=$2 WHERE nom_nombre= $3',[noMetalicoNombre,noMetalicoUtilidad,noMetalicoNombre],(err,result)=>{
+    if (err) {
+      ready=false;
+      console.log(err.stack);
+      res.send('failed'); 
+    }
+  });
+
+  if(modNoMet.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modNoMet.d.length - 1; i >= 0; i--) {
+      
+
+        client.query('DELETE FROM MIN_PRE WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) AND fk_mp_presentacion=$2',[noMetalicoNombre,modNoMet.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(modNoMet.u !== undefined){
+    for (var i = modNoMet.u.length - 1; i >= 0; i--) {
+      
+
+        client.query('UPDATE MIN_PRE SET fk_mp_presentacion = $1,fk_mp_metalico = null,mp_precio = $2 WHERE fk_mp_nometalico = (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $3) AND fk_mp_presentacion=$4',[modNoMet.u[i].cod,modNoMet.u[i].p,noMetalicoNombre,modNoMet.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modNoMet.i !== undefined){
+    for (var i = modNoMet.i.length - 1; i >= 0; i--) {
+      
+
+        client.query('INSERT INTO MIN_PRE (fk_MP_NOMETALICO,fk_mp_presentacion,mp_precio) VALUES ( (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $1) ,$2,$3)',[noMetalicoNombre,modNoMet.i[i].cod,modNoMet.i[i].p],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+
+});
+
+// INVENTARIO
+
+app.get("/Inventario-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT inv_codigo, inv_cantidadmovimiento, inv_cantidadactual, inv_fechamovimiento, fk_inv_venta, fk_inv_explotacion, fk_inv_minpre FROM inventario',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+
+        
+            res.render('inventarioConsultar',{dataTable: result.rows, user: userJSON});
+  
+        
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/ErrorVenta",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('errorventa.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Pagos",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('pagos.ejs',{user: userJSON, compradorActual:compradorActual});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/Ventas",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('CRUDventas.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/NuevaVenta",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('nueva venta.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/CrearVenta",function(req,res){
+  if(userJSON.usuario != "none" && compradorActual.cedula != "none"){
+    res.render('crearventa.ejs',{user: userJSON,compradorActual:compradorActual});
+  }else if(userJSON.usuario != "none"){
+    res.redirect('CRUDventas.ejs');
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/ConsultaVenta",function(req,res){
+  var fy='yyyy';
+  var fm='mm';
+  var fd= 'dd';
+
+  if(userJSON.usuario != "none"){
+    client.query('SELECT V.ven_codigo, to_char(V.ven_fecha,$1)as Year, to_char(V.ven_fecha,$2)as Month, to_char(V.ven_fecha,$3)as Day, V.ven_montototal, Cli.cli_nombre,Cli.cli_apellido, U.usu_usuario FROM venta V, cliente Cli, Usuario U WHERE V.fk_ven_cliente = Cli.cli_codigo and V.fk_ven_usuario=U.usu_usuario_id',[fy,fm,fd],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        console.log(result.rows);
+        console.log ('entro aqui');
+        res.render('consultaventas.ejs',{dataTable: result.rows, user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/DetalleVenta",function(req,res){
+  if(userJSON.usuario != "none"){
+        client.query('SELECT Pr.pre_nombre,V.ven_codigo, D.dev_cantidad, D.dev_monto,Mp.mp_codigo, Nm.nom_nombre FROM detalle_ven D, Min_no_metalico Nm, Min_Pre Mp, Venta V, Presentacion Pr WHERE V.ven_codigo = D.fk_dev_venta and Mp.mp_codigo = D.fk_dev_min_pre and Pr.pre_codigo = Mp.fk_mp_presentacion and Mp.mp_codigo = D.fk_dev_min_pre and Mp.fk_mp_nometalico=Nm.nom_codigo',(err,result)=>{
+          if(err){
+            console.log(err.stack);
+            res.send('failed');
+          }
+          else if(result.rows[0] != null){
+            var DetalleNoMet = result.rows;
+            console.log('hizo el primer query');
+            client.query('SELECT Pr.pre_nombre,V.ven_codigo, D.dev_cantidad, D.dev_monto,Mp.mp_codigo, Mt.met_nombre FROM detalle_ven D, Min_metalico Mt, Min_Pre Mp, Venta V, Presentacion Pr WHERE V.ven_codigo = D.fk_dev_venta and Mp.mp_codigo = D.fk_dev_min_pre and Pr.pre_codigo = Mp.fk_mp_presentacion and Mp.mp_codigo = D.fk_dev_min_pre and Mp.fk_mp_metalico=Mt.met_codigo',
+              (err,result)=>{
+              if (err){
+                console.log(err.stack);
+                res.send('failed');
+              }
+              else if(result.rows[0] != null){
+              console.log('hizo el segundo query');
+              var DetalleMet= result.rows;
+              res.render('detalleventa.ejs',{DetalleMet:DetalleMet, DetalleNoMet:DetalleNoMet, user: userJSON});
+              }
+               else{
+              res.send('failed');
+                };
+            });  
+          }
+          else{
+          res.send('failed');
+          };
+        });
+      }
+      else {res.redirect('login');}
+    });
+
+
+// app.get("/VerificarComprador",function(req,res){
+//   if (userJSON.usuario !="none"){
+//     client.query( 'Select v.*, d.*, cli_cedula from venta v, cliente cl, detalle_ven d where v.fk_ven_cliente = cl.cli_codigo and v.ven_codigo = d.fk_dev_venta',
+//     (err,result)=>{
+//         if(err){
+//             console.log('fallo query')
+//             console.log(err.stack);
+//             res.send('failed');
+//         }
+//         else if(result.rows[0] != null){
+//           console.log(result.rows);
+//           res.render('modificarventas.ejs',{user: userJSON, dataTable:result.rows})
+//         }
+//         else {
+//           res.send('failed');
+//           console.log ('fallo consulta x cliente')
+//         }
+//   });
+//   }
+//   else {
+//     res.redirect('login');
+//   }
+// })
+
+
+app.get("/VerificarComprador",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('modificarventas.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/VerificarComprador2",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('eliminarventas.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+//--------------------------CLIENTES------------------------------------------
+
+app.get("/Clientes",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('CRUDclientes.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/AgregarCliente",function(req,res){
+  let dataLugar;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR',(err,resultB)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(resultB.rows[0] != null){
+            dataLugar = resultB.rows;
+            res.render('clienteAgregar.ejs',{dataLugar: dataLugar, user: userJSON});
+          }else{
+            res.send('failed');
+          };
+        });
+    
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/ConsultaCliente",function(req,res){
+  if(userJSON.usuario != "none"){
+    client.query('SELECT C.cli_cedula,C.cli_nombre,C.cli_apellido,C.cli_telefono,L.lug_nombre FROM cliente AS C,lugar AS L WHERE C.fk_cli_lugar = L.lug_codigo',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        console.log(result.rows);
+        res.render('clientesConsultar.ejs',{dataTable: result.rows, user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/ModificarCliente",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('clientesModificar.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/EliminarCliente",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('clientesEliminar.ejs',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/SolicitudCompra",function(req,res){
+  var fy='yyyy';
+  var fm='mm';
+  var fd= 'dd';
+
+  if(userJSON.usuario != "none"){
+    client.query('SELECT S.sc_codigo, to_char(S.sc_fechaemision,$1) AS year,to_char(S.sc_fechaemision,$2) AS month, to_char(S.sc_fechaemision,$3) AS day, S.sc_costototal, S.fk_sc_aliado, AC.ac_nombre, S.fk_sc_explotacion FROM solicitud_compra AS S, aliado_comercial AS AC WHERE S.fk_sc_aliado = AC.ac_numero_rif',[fy,fm,fd],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        console.log(result.rows);
+        res.render('SolicitudCompr.ejs',{dataTable: result.rows, user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/AgregarCliente",function(req,res){
+  var clienteNombre = req.body.nombre;
+  var clienteApellido = req.body.apellido;
+  var clienteCedula = req.body.cedula;
+  var clienteTelefono = req.body.telefono;
+  var clienteParroquia = req.body.parroquia;
+
+  client.query('INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES ($1,$2,$3,$4,$5)',
+    [clienteCedula,clienteNombre,clienteApellido,clienteTelefono,clienteParroquia],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente');
+    };
+  });
+});
+
+app.post("/EliminarCliente",function(req,res){ 
+  var cedulaEliminar = req.body.cedulaCli;
+  client.query('DELETE FROM cliente AS C WHERE C.cli_cedula = $1',[cedulaEliminar],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });
+});
+
+
+//URL para verificar empleado en modificacion
+app.post("/VerificarCliente",function(req,res){ 
+  var cedulaV = req.body.cedulaCliV;
+  client.query('SELECT Cli.cli_cedula,Cli.cli_nombre,Cli.cli_apellido,Cli.cli_telefono,Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod FROM cliente AS Cli , lugar AS Par, lugar AS Mun, lugar AS Est WHERE Cli.cli_cedula = $1 AND Par.lug_codigo = Cli.fk_cli_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo',[cedulaV],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      console.log('Hizo el primer query');
+      var estado = 'ESTADO';
+      var dataV = result.rows;
+      client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR WHERE lug_tipo = $1 ',[estado],(err,estados)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');        
+        }else{
+          var estados = estados.rows;
+          res.json({dataV:dataV,estados: estados});
+        }
+      });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});         
+
+app.post("/ModificarCliente",function(req,res){ 
+  var clientePrimerNombre = req.body.nombreGC;
+  var clientePrimerApellido = req.body.apellidoGC;
+  var clienteCedula = req.body.cedulaGC;
+  var clienteTelefono = req.body.telefonoGC;
+  var clienteParroquia = req.body.parroquiaGC;
+
+  client.query('UPDATE CLIENTE SET cli_nombre=$1,cli_apellido=$2,cli_telefono=$3,fk_cli_lugar= $4 WHERE cli_cedula= $5',[clientePrimerNombre,clientePrimerApellido,clienteTelefono,clienteParroquia,clienteCedula],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente');
+    };
+  });
+});
+
+
+//----------------VENTAS-------------------------------------
+
+app.post("/GuardarClienteNuevaVenta",function(req,res){
+  var ced = req.body.cedulaC;
+  var nom = req.body.nombreC;
+  var ape = req.body.apellidoC;
+
+  compradorActual.nombre = nom;
+  compradorActual.apellido = ape;
+  compradorActual.cedula = ced; 
+
+  res.send('guardado');
+
+});
+
+
+app.post("/NuevaVenta",function(req,res){
+  var cedula = req.body.cedulaCliente;
+    client.query ('Select cli_cedula,cli_nombre, cli_apellido from cliente where cli_cedula = $1',[cedula],(err,result)=>{
+      if (err){
+        console.log(err.stack);
+        res.send('failed'); 
+      }
+      else if (result.rows[0] != null){
+        console.log(result.rows);
+        var datacliente = result.rows;
+        res.send({datacliente:datacliente});
+      }
+      else {
+        console.log ('entra aqui');
+        res.send('new');
+      };
+    });
+});
+
+app.post("/VerificarCedula",function(req,res){ 
+  var cedulaV = req.body.cedulaCliV;
+  client.query('SELECT Cli.cli_cedula,Cli.cli_nombre,Cli.cli_apellido,Cli.cli_telefono,Par.lug_nombre AS Parroquia, Par.lug_codigo AS ParCod, Mun.lug_nombre AS Municipio, Mun.lug_codigo AS MunCod, Est.lug_nombre AS Estado,Est.lug_codigo AS EstCod FROM cliente AS Cli , lugar AS Par, lugar AS Mun, lugar AS Est WHERE Cli.cli_cedula = $1 AND Par.lug_codigo = Cli.fk_cli_lugar AND Par.fk_lug_lugar = Mun.lug_codigo AND Mun.fk_lug_lugar = Est.lug_codigo',[cedulaV],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      console.log('Hizo el primer query');
+      var estado = 'ESTADO';
+      var dataV = result.rows;
+      client.query('SELECT lug_codigo,lug_nombre,lug_tipo FROM LUGAR WHERE lug_tipo = $1 ',[estado],(err,estados)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');        
+        }else{
+          var estados = estados.rows;
+          res.json({dataV:dataV,estados: estados});
+        }
+      });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+});  
+
+
+app.post("/CrearVenta",function(req,res){
+  var minCantidad = req.body.minCantidad;
+  var devMonto = req.body.minMonto;
+  var minPresentacion = req.body.minPresentacion;
+  var minPrecio = req.body.minPrecio;
+  var minTotal = req.body.minTotal;
+  var cuenta= req.body.tcuen;
+  var tipopago = req.body.tipopago;
+  var banco = req.body.tban;
+  var montoparcial = req.body.tmon;
+  var tipotarjeta=req.body.ttip;
+  var nrotarj=req.body.ttarj;
+  var referencia = req.body.tref;
+
+  //compradorActual.monto = minTotal; 
+  for (var i = montoparcial.length - 1; i >= 0; i--) {
+  console.log (montoparcial[i]);
+  }
+
+  var estatus='Pagado';
+  
+  if(userJSON.usuario != "none"){
+    client.query('INSERT INTO VENTA (ven_fecha,ven_montototal,fk_ven_cliente,fk_ven_usuario,fk_ven_estatus) VALUES((SELECT NOW()),$1,(SELECT cli_codigo from cliente where cli_cedula =$2),(SELECT usu_usuario_id from usuario where usu_usuario =$3),(Select est_codigo from estatus where est_nombre=$4)) returning ven_codigo',
+      [minTotal,compradorActual.cedula,userJSON.usuario,estatus],(err,result)=>{
+      if (err) {
+        console.log('Entro en el error de venta');
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows!= null && devMonto != null){
+        console.log('Entro en la insercion de detalleventa');
+        var codigoventa=result.rows;
+        for (var i = devMonto.length - 1; i >= 0; i--) {
+            console.log (codigoventa);
+            console.log ('for 1'); 
+            console.log(montoparcial[i]);
+            client.query('INSERT INTO Detalle_Ven (fk_dev_venta,dev_monto,dev_cantidad,fk_dev_min_pre) VALUES($1,$2,$3,$4)',
+            [codigoventa[0].ven_codigo,devMonto[i], minCantidad[i], minPresentacion[i]],(err,resultM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+              else if (minCantidad !=null){
+                console.log(minCantidad[i]);
+                console.log ('entro en la insercion de inventario');
+                for (var i = minCantidad.length - 1; i >= 0; i--) {
+                console.log ('for 2'); 
+            console.log(montoparcial[i]);
+                client.query('INSERT INTO inventario(inv_cantidadmovimiento, inv_cantidadactual, inv_fechamovimiento, fk_inv_venta, fk_inv_explotacion, fk_inv_minpre) VALUES ($1,(select inv_cantidadactual-($2) from inventario where fk_inv_minpre = $3 and inv_fechamovimiento = (select max(inv_fechamovimiento) AS fecha from inventario where (fk_inv_minpre = $4))),(SELECT ven_fecha from venta where ven_codigo = $5),$6,$7,$8)', 
+                  [-(minCantidad[i]), minCantidad[i], minPresentacion[i],minPresentacion[i],codigoventa[0].ven_codigo,codigoventa[0].ven_codigo,null,minPresentacion[i]],(err,resultM)=>{
+                  if (err){
+                      console.log ('Entro en el error de inventario');
+                      console.log (err.stack);
+                      res.send ('failed');
+                  }
+                  else if(tipopago!=null){
+                    console.log('Entro en la insercion de tipos de pago');
+                    for (var i = tipopago.length - 1; i >= 0; i--) {
+                        console.log ('for 3'); 
+                        console.log(montoparcial[i]);
+                      // TRANSFERENCIA
+                        if (tipopago[i]=="Transf"){
+                          console.log('entro a transf');
+                          console.log(montoparcial[i]);
+                          var monto=montoparcial[i];
+                          client.query('INSERT INTO tp_transferencia(tpt_numero, tpt_banco, tpt_cuenta) VALUES ($1, $2, $3) returning tpt_codigo', 
+                          [referencia[i],banco[i],cuenta[i]],(err,result)=>{
+                          if(err){
+                            console.log ('error en transferencia');
+                            console.log(err.stack);
+                            res.send('failed');
+                          } 
+                          else if (result.rows!=null){
+                            console.log ('entro en ventip de transferencia')
+                            console.log(monto);
+                            var codigotransf = result.rows;
+                            console.log(codigotransf);
+                           client.query('INSERT INTO public.ven_tip(vt_fecha, vt_monto, fk_vt_tptransferencia, fk_vt_venta) VALUES ((Select now()),$1,$2,$3)', 
+                            [monto,codigotransf[0].tpt_codigo,codigoventa[0].ven_codigo],(err,resultM)=>{
+                              if(err){
+                                console.log ('error en transferencia');
+                                console.log(err.stack);
+                                res.send('failed');
+                              } 
+                            });
+                          } 
+                        });
+                        }
+
+                        //CREDITO
+                        else if (tipopago[i]=="Cred"){
+                          console.log('entro a cred');
+                          console.log(montoparcial[i]);
+                          var monto=montoparcial[i];
+                          client.query('INSERT INTO tp_credito(tpc_numero, tpc_banco, tpc_tipocredito) VALUES ($1, $2, $3) returning tpc_codigo', 
+                          [nrotarj[i],banco[i],tipotarjeta[i]],(err,result)=>{
+                          if(err){
+                            console.log ('error en credito');
+                            console.log(err.stack);
+                            res.send('failed');
+                          } 
+                          else if (result.rows!=null){
+                            console.log ('entro en ventip de credito')
+                            console.log(monto);
+                            var codigocred = result.rows;
+                            console.log(codigocred);
+                           client.query('INSERT INTO ven_tip(vt_fecha, vt_monto, fk_vt_tpcredito, fk_vt_venta) VALUES ((Select now()),$1,$2,$3)', 
+                            [monto,codigocred[0].tpt_codigo,codigoventa[0].ven_codigo],(err,result)=>{
+                              if(err){
+                                console.log ('error en credito');
+                                console.log(err.stack);
+                                res.send('failed');
+                              } 
+                            });
+                          } 
+                        });
+                        }
+
+                        //DEBITO
+                        else if (tipopago[i]=="Deb"){
+                          console.log('entro a deb');
+                          console.log(montoparcial[i]);
+                          var monto=montoparcial[i];
+                          client.query('INSERT INTO tp_debito(tpd_numero, tpd_banco, tpd_tipodebito) VALUES ($1, $2, $3) returning tpd_codigo', 
+                          [nrotarj[i],banco[i],tipotarjeta[i]],(err,result)=>{
+                          if(err){
+                            console.log ('error en debito');
+                            console.log(err.stack);
+                            res.send('failed');
+                          } 
+                          else if (result.rows!=null){
+                            console.log ('entro en ventip de debito')
+                            console.log(monto);
+                            var codigodeb = result.rows;
+                            console.log(codigodeb);
+                           client.query('INSERT INTO ven_tip(vt_fecha, vt_monto, fk_vt_tpdebito, fk_vt_venta) VALUES ((Select now()),$1,$2,$3)', 
+                            [monto,codigodeb[0].tpt_codigo,codigoventa[0].ven_codigo],(err,result)=>{
+                              if(err){
+                                console.log ('error en debito');
+                                console.log(err.stack);
+                                res.send('failed');
+                              } 
+                            });
+                          } 
+                        });
+                        }
+
+                        //CHEQUE
+                        else if (tipopago[i]=="Cheque"){
+                          console.log('entro a cheque');
+                          console.log(montoparcial[i]);
+                          var monto=montoparcial[i];
+                          client.query('INSERT INTO tp_cheque(tpch_numero, tpch_banco, tpch_cuenta) VALUES ($1, $2, $3) returning tpch_codigo', 
+                          [referencia[i],banco[i],cuenta[i]],(err,result)=>{
+                          if(err){
+                            console.log ('error en cheque');
+                            console.log(err.stack);
+                            res.send('failed');
+                          } 
+                          else if (result.rows!=null){
+                            console.log ('entro en ventip de cheque')
+                            console.log(monto);
+                            var codigoch = result.rows;
+                            console.log(codigoch);
+                           client.query('INSERT INTO ven_tip(vt_fecha, vt_monto, fk_vt_tpcheque, fk_vt_venta) VALUES ((Select now()),$1,$2,$3)', 
+                            [monto,codigoch[0].tpt_codigo,codigoventa[0].ven_codigo],(err,result)=>{
+                              if(err){
+                                console.log ('error en cheque');
+                                console.log(err.stack);
+                                res.send('failed');
+                              } 
+                            });
+                        } 
+                        });
+                        }
+                  }//cierre for3
+                }//cierre else de tercer query
+                }); //tercer query    
+                } // for 2  
+              }else{
+                console.log('Entro en la insercion de detalle venta sin inventario');
+                res.send('great');
+              }//else segundo query
+        res.send('great');
+      });//segundo query
+      }//1er for
+      }else{
+        console.log('Entro en la insercion de venta sin detalleventa');
+        res.send('great');
+      }//else primerquery
+    });//primer query
+  }else{
+    res.redirect('login');
+  };//cierra condicion usuario
+});//cierra el post
+
+
+app.post("/ConsultarInv",function(req,res){
+  console.log('estoy en app');
+  var minPresentacion = req.body.minPresentacion;
+  console.log (minPresentacion);
+  for (var i = minPresentacion.length - 1; i >= 0; i--) {
+
+  client.query('select inv_cantidadactual from inventario where fk_inv_minpre = $1 and inv_fechamovimiento = (select max(inv_fechamovimiento) AS fecha from inventario where (fk_inv_minpre = $2))',
+    [minPresentacion[i],minPresentacion[i]],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (result.rows != null){
+      var disp = result.rows;
+      res.send({disp:disp}); 
+      console.log(disp);
+      console.log('Query procesado correctamente');
+    }
+    else{
+      res.send ('failed');
+      console.log ('No entro');
+    }
+  });
+  };
+});
+
+app.post("/VerificarComprador",function(req,res){ 
+  var cedulaC = req.body.cedulacomprador;
+  console.log(cedulaC);
+  client.query('Select v.*, d.* from venta v, cliente cl, detalle_ven d where v.fk_ven_cliente = cl.cli_codigo and cl.cli_cedula = $1 and v.ven_codigo = d.fk_dev_venta',
+    [cedulaC],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      console.log('Consulto venta por cliente');
+      var dataC = result.rows;
+      console.log (dataC);
+      client.query('Select * from estatus',(err,result)=>{
+      if (err) {
+      console.log(err.stack);
+      res.send('failed');
+      } 
+      else if (result.rows!=null){
+          var estatus=result.rows;
+          console.log(estatus);
+          res.send ({dataC:dataC, estatus:estatus});
+      }
+    });
+    }else{
+      console.log('Entra aqui');
+      res.send('failed');
+    }
+  });
+}); 
+
+
+app.post("/ModificarVentaSelect",function(req,res){
+   var cod = req.body.codigo;
+   var estatus = req.body.estatus;
+   console.log(cod);
+   console.log(estatus);
+  if(userJSON.usuario != "none"){
+    client.query('update venta set fk_ven_estatus = $1 where ven_codigo=$2',
+    [estatus,cod],(err,result)=>{
+    console.log ('hizo la modificacion');
+    if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+    }
+    else {
+        res.send('great'); 
+     }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/EliminarVenta",function(req,res){
+   var cod = req.body.codigo;
+  if(userJSON.usuario != "none"){
+    client.query('delete from venta where ven_codigo= $1',[cod],(err,result)=>{
+    console.log ('elimino la venta');
+    if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+    }
+    else {
+      res.send('great');
+    }
+  });
+  }else{
+    res.redirect('login');
+  }
+});
+
+//CLIENTE
+app.post("/AgregarCliente",function(req,res){
+  var clienteNombre = req.body.nombre;
+  var clienteApellido = req.body.apellido;
+  var clienteCedula = req.body.cedula;
+  var clienteTelefono = req.body.telefono;
+  var clienteParroquia = req.body.parroquia;
+
+  client.query('INSERT INTO cliente (cli_cedula,cli_nombre,cli_apellido,cli_telefono,fk_cli_lugar) VALUES ($1,$2,$3,$4,$5)',
+    [clienteCedula,clienteNombre,clienteApellido,clienteTelefono,clienteParroquia],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+      console.log('Query procesado correctamente');
+    };
+  });
+});
+
+
+//QUERY DINAMICO
+app.post("/Ventas-AgregarDEV",function(req,res){
+  var filtro = req.body.filtroMin;
+  //var filtropre = req.body.filtroPre;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var min = result.rows;
+        res.send({min: min});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.post("/Ventas-AgregarPre",function(req,res){
+  var filtro = req.body.filtroPre;
+  var filtroT = req.body.filtroT;
+
+  console.log(filtro);
+  console.log(filtroT);
+
+    if (filtroT == 'MIN_NO_METALICO') {
+        console.log ('hola');
+         client.query('SELECT Pr.pre_nombre, Mp.mp_codigo FROM Min_no_metalico Nm, Presentacion Pr, Min_Pre Mp WHERE Mp.fk_mp_presentacion = Pr.pre_codigo  and Mp.fk_mp_nometalico= nm.nom_codigo and nm.nom_codigo = $1',
+          [filtro],(err,result)=>{ 
+          
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(result.rows[0] != null){
+            console.log(result.rows);
+            var min = result.rows;
+            res.send({min: min});
+          }
+          else {
+            res.send ('failed');
+          }
+    });
+    }
+    else if (filtroT == 'MIN_METALICO'){
+      console.log ('chao');
+      client.query('SELECT Pr.pre_nombre, Mp.mp_codigo FROM Min_metalico mt, Presentacion Pr, Min_Pre Mp WHERE Mp.fk_mp_presentacion = Pr.pre_codigo  and Mp.fk_mp_metalico= mt.met_codigo  and mt.met_codigo = $1',
+    [filtro],(err,result)=>{ 
+      if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+      }else if(result.rows[0] != null){
+      console.log(result.rows);
+      var min = result.rows;
+      res.send({min: min});
+    }else{
+    res.send('failed');
+      }
+      });
+    }
+});
+
+app.post("/Ventas-AgregarPrecio",function(req,res){
+  var filtro = req.body.filtroPre;
+
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT mp_precio from min_pre where mp_codigo = $1',[filtro],(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var min = result.rows;
+        res.send({min: min});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
