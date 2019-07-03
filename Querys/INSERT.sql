@@ -2771,6 +2771,42 @@ INSERT INTO yac_min(
 	(2103932049404290,	'BNC',					23231661313131600000);
 
 
+-- VEN TIP
+
+	INSERT INTO ven_tip(vt_fecha, vt_monto, fk_vt_tptransferencia, fk_vt_tpcredito, fk_vt_tpdebito, fk_vt_tpcheque, fk_vt_venta)
+	VALUES 
+	((select now()),16800.00	,1	,null	,null	,null	,1),
+	((select now()),11790.00	,2	,null	,null	,null	,2),
+	((select now()),2850.00	,3	,null	,null	,null	,3),
+	((select now()),2050.00	,4	,null	,null	,null	,4),
+	((select now()),4179.00	,5	,null	,null	,null	,5),
+	((select now()),5070.00	,6	,null	,null	,null	,6),
+	((select now()),15750.00	,7	,null	,null	,null	,7),
+	((select now()),950.00	,8	,null	,null	,null	,8),
+	((select now()),1111.00	,9	,null	,null	,null	,9),
+	((select now()),522.00	,null	,	1	,null	,null	,10),
+	((select now()),19920.00	,null	,	2	,null	,null	,11),
+	((select now()),7950.00	,null	,	3	,null	,null	,13),
+	((select now()),572.00	,null	,	4	,null	,null	,14),
+	((select now()),3600.00	,null	,	5	,null	,null	,15),
+	((select now()),4680.00	,null	,	6	,null	,null	,17),
+	((select now()),1620.00	,null	,	7	,null	,null	,18),
+	((select now()),18500.00	,null	,	8	,null	,null	,19),
+	((select now()),69000.00	,null	,	9	,null	,null	,20),
+	((select now()),6150.00	,null	,null	,1	,null	,21),
+	((select now()),10736.00	,null	,null	,2	,null	,22),
+	((select now()),2004.00	,null	,null	,3	,null	,23),
+	((select now()),1800.00	,null	,null	,4	,null	,24),
+	((select now()),7150.00	,null	,null	,5	,null	,26),
+	((select now()),3330.00	,null	,null	,6	,null	,27),
+	((select now()),18900.00	,null	,null	,7	,null	,29),
+	((select now()),216.00	,null	,null	,8	,null	,30),
+	((select now()),3430.00	,null	,null	,9	,null	,31),
+	((select now()),880.00	,null	,null	,null	,	1	,32),
+	((select now()),3168.00	,null	,null	,null	,	2	,33),
+	((select now()),5610.00	,null	,null	,null	,	3	,34),
+	((select now()),10500.00	,null	,null	,null	,	4	,35);
+
 -- MAQUINARIAS
 
 	INSERT INTO MAQUINARIA (maq_nombre,fk_maq_tipo) VALUES ('L7T 1X6',7),('O0G 8C9',8),('U1Y 2P9',3),('G8T 5V9',2),('K7O 2V4',3),('L6B 4R5',2),('E4I 0Q7',1),('Y2H 9N1',1),('A7Z 5J1',4),('A3V 4I7',7),('V3K 1V8',2),('V7Q 7K3',5),('K6J 3Z3',8),('N8C 6R2',1),('Z0X 8K3',1),('M3Z 8V7',3),('U5A 0I5',5),('K0F 2B6',6),('M6L 4I9',7),('B2B 5B1',8),('L9L 4Z4',2),('L2K 3X8',5),('I9Y 8Y6',5),('F4E 5H8',1),('J0E 0K7',1),('J9D 2V6',2),('L1G 2K4',1),('Y9P 2P9',5),('O5C 0T9',8),('K2L 1N7',5),('W0P 7M3',6),('K0G 4X4',4),('G2U 8S9',3),('B4O 3V0',8),('V5R 2W8',2),('M3E 5B1',5),('B4F 5Z7',1),('C3G 2S3',5),('W1I 7Q1',1),('Z2T 2K8',3),('J9X 0E8',5),('L2X 4Q8',4),('Q9I 0D9',3),('I9S 3N0',7),('M9L 6B9',3),('D5M 1Y3',3),('G8B 8I3',1),('Z4G 8N9',5),('N2B 0L6',4),('C5H 4Q0',4);
