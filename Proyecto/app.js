@@ -1433,6 +1433,7 @@ app.get("/metalicos",function(req,res){
 
 app.get("/Metalicos-Agregar",function(req,res){
   let dataPresentacion;
+  let dataMetalico;
   if(userJSON.usuario != "none"){
     client.query('SELECT pre_nombre FROM presentacion',(err,resultP)=>{
           if (err) {
@@ -1440,7 +1441,18 @@ app.get("/Metalicos-Agregar",function(req,res){
             res.send('failed'); 
           }else if(resultP.rows[0] != null){
             dataPresentacion = resultP.rows;
-            res.render('metalicosAgregar',{dataPresentacion: dataPresentacion, user: userJSON});
+            client.query('SELECT met_nombre FROM min_metalico',(err,resultM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }else if(resultM.rows[0] != null){
+                dataMetalico = resultM.rows;
+                
+                res.render('metalicosAgregar',{dataPresentacion: dataPresentacion,dataMetalico: dataMetalico, user: userJSON});
+              }else{
+                res.send('failed');
+              };
+            });
           }else{
             res.send('failed');
           };
@@ -1540,6 +1552,8 @@ app.get("/NoMetalicos-Eliminar",function(req,res){
   }
 });
 
+// QUITE LO COMENTADO PARA MIN_MIN - DAVID
+
 app.post("/Metalicos-Agregar",function(req,res){
   var metalicoNombre = req.body.nombreMetalico;
   var metalicoMaleabilidad = req.body.escalaMaleabilidad;
@@ -1547,11 +1561,13 @@ app.post("/Metalicos-Agregar",function(req,res){
   var nombrePresentacion = req.body.nombrePresentacion;
   var precioMP = req.body.precioMP;
   var preTipo = req.body.preTipo;
-  // var metTipo = req.body.metTipo;
-  // var metProporcion = req.body.metProporcion;
-  // var metMetalico = req.body.metMetalico;
+  var metTipo = req.body.metTipo;
+  var metProporcion = req.body.metProporcion;
+  var metMetalico = req.body.metMetalico;
 
   console.log(preTipo);
+  console.log(precioMP);
+  console.log(metMetalico);
 
   if(userJSON.usuario != "none"){
 
@@ -1562,6 +1578,7 @@ app.post("/Metalicos-Agregar",function(req,res){
     }else if (nombrePresentacion != ""){
 
       for (var i = preTipo.length - 1; i >= 0; i--) {
+        console.log(precioMP[i]);
 
         client.query('INSERT INTO min_pre (mp_precio, fk_mp_presentacion, fk_mp_metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[precioMP[i],nombrePresentacion[i],metalicoNombre],(err,result)=>{
         if (err) {
@@ -1571,15 +1588,17 @@ app.post("/Metalicos-Agregar",function(req,res){
       });
       }
 
-      // for (var i = metTipo.length - 1; i >= 0; i--) {
+      for (var i = metTipo.length - 1; i >= 0; i--) {
 
-      //   client.query('INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1metalico, fk_mm_2metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[metProporcion[i],metMetalico[i],metalicoNombre],(err,result)=>{
-      //   if (err) {
-      //     console.log(err.stack);
-      //     res.send('failed'); 
-      //   }        
-      // });
-      // }
+
+
+        client.query('INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1metalico, fk_mm_2metalico) VALUES ($1,$2, (SELECT met_codigo FROM MIN_METALICO WHERE met_nombre = $3))',[metProporcion[i],metMetalico[i],metalicoNombre],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }        
+      });
+      }
 
       
     }else{
@@ -1591,6 +1610,32 @@ app.post("/Metalicos-Agregar",function(req,res){
     res.redirect('login');
   }
 });   
+
+// AGREGUE ESTO - DAVID
+
+app.post("/Metalicos-AgregarMinMet",function(req,res){
+  var filtro = req.body.filtroMin;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var min = result.rows;
+        res.send({min: min});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
 
 app.post("/Metalicos-AgregarPre",function(req,res){
   var filtro = req.body.filtroPre;
@@ -1646,6 +1691,9 @@ app.post("/NoMetalicos-Agregar",function(req,res){
   var nombrePresentacion = req.body.nombrePresentacion;
   var precioMP = req.body.precioMP;
   var preTipo = req.body.preTipo;
+    var metTipo = req.body.metTipo;
+  var metProporcion = req.body.metProporcion;
+  var metMetalico = req.body.metMetalico;
 
   if(userJSON.usuario != "none"){
 
@@ -1664,6 +1712,19 @@ app.post("/NoMetalicos-Agregar",function(req,res){
         }
         });
       }
+
+      for (var i = metTipo.length - 1; i >= 0; i--) {
+
+
+
+        client.query('INSERT INTO min_min (mm_proporcionm1m2, fk_mm_1nometalico, fk_mm_2nometalico) VALUES ($1,$2, (SELECT nom_codigo FROM MIN_NO_METALICO WHERE nom_nombre = $3))',[metProporcion[i],metMetalico[i],noMetalicoNombre],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }        
+      });
+      }
+
     }else{
       res.send('great'); 
       console.log('Query procesado correctamente (Mineral no metálico)');

@@ -479,19 +479,7 @@ function verifyElementVal(){
 	return true;
 }
 
-function verifyMin(){
-	var start=1;
-	var ready = false;
-	while(globalIDMineralYacimiento>=start){
-		if($('#'+start+'').children(":selected").val() != null){
-			ready = true;
-			start = globalIDMineralYacimiento+1;
-		}else{
-			start++;
-		}
-	}
-	return ready;
-}
+
 
 $('#agregarYacimiento').on('submit',function(e){
 	e.preventDefault();
@@ -2574,7 +2562,7 @@ addEtapa($('#addEtapa'),$('#listEtapa'));
 
 var globalIDPresentacionMineral = 1;
 
-var globalIDMinetalMetalico = 1;
+var globalIDMineralMetalico = 1;
 
 var modMet = {
     "d": [],
@@ -2600,6 +2588,10 @@ $(document).ready( function () {
     $('#table_id_ventas').DataTable();
 });
 
+
+
+// AGREGUE MINERAL EN MINERAL - DAVID
+
 $('#agregarMetalico').on('submit',function(e){
 	e.preventDefault();
 	let nombreMetalico = $('#nombreMetalico');
@@ -2613,6 +2605,8 @@ $('#agregarMetalico').on('submit',function(e){
 	var prePrecio = [];
 	var preTipo = [];
 
+
+
 	
 	while(globalIDPresentacionMineral>=start){
 
@@ -2623,10 +2617,25 @@ $('#agregarMetalico').on('submit',function(e){
 	}
 
 
+	var metStart = 1;
+	var metTipo = [];
+	var metMetalico = [];
+	var metProporcion = [];
+	while(globalIDMineralMetalico>=metStart){
+		if($('#'+metStart+'').val() > 0){
+			metTipo.push( $('#t'+metStart+'').val() );
+			metMetalico.push( $('#m'+metStart+'').val() );
+			metProporcion.push($('#pr'+metStart+'').val());
+		}
+		metStart++;		
+	}
+
+
 	if(escalaDureza.val() == 'Selecciona un municipio'){
 		alert('Selecciona lugar valido, elige un estado primero!')
 	}else{
 		if((verifyElementValPre()==true)){
+			if((verifyElementValMinMet()==true)){
 			$.ajax({
 			url: '/Metalicos-Agregar',
 			method: 'POST',
@@ -2638,9 +2647,9 @@ $('#agregarMetalico').on('submit',function(e){
 				nombrePresentacion: prePresentacion,
 				precioMP: prePrecio,
 				preTipo: preTipo,
-				// metMetalico: metMetalico,
-				// metProporcion: metProporcion,
-				// metTipo: metTipo
+				metMetalico: metMetalico,
+				metProporcion: metProporcion,
+				metTipo: metTipo
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -2651,6 +2660,10 @@ $('#agregarMetalico').on('submit',function(e){
 			}
 		});
 			alert('Fino!');
+		}else{
+			alert('Existen minerales repetidos');
+		}
+
 		}else{
 			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
 		}
@@ -2722,56 +2735,56 @@ function addPre(button,list){
 });
 	}
 
+// AGREGUE - DAVID
+
 addMinMet($('#addMinMet'),$('#listMinMet'));
 
-//Presentacion
 function addMinMet(button,list){
 		button.on('click',function(e){
-	e.preventDefault();
-	listMinMet = $('#listMinMet');
+		e.preventDefault();
+		listMinMet = list;
 
-	var nextID = globalIDMinetalMetalico;
-				listMinMet.append(' \n\
-					<div class="boxAgregarMinID animated zoomIn" id="boxPre" value="'+nextID+'">\n\
-					<div class="form-row blockMin">\n\
-					<div class="col-md-4 mb-3">\n\
-					  <label for="t'+nextID+'" class="boxMinText">Compuesto</label>\n\
-					  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
-					  	<option value="MIN_METALICO">Metalico</option>\n\
-					  </select>\n\
-					</div>\n\
-					\n\
-					<div class="col-md-3 mb-3">\n\
-					  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
-					  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
-					</div>\n\
-					<div class="col-md-3 mb-3">\n\
-					    <label for="p'+nextID+'" class="boxMinText">Proporcion</label>\n\
-					    <div class="input-group mb-2 mr-sm-2">\n\
-					    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="p'+nextID+'" required>\n\
-					    <div class="input-group-append">\n\
-					    	<div class="input-group-text">Bs</div>\n\
-					  	</div>\n\
-					    </div>\n\
-					</div>\n\
-					\n\
-					<div class="col-md-2 mb-3">\n\
-					  <label for="removePre" class="hackerText">Hacker</label>\n\
-					  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
-					</div>\n\
-					</div>\n\
-					</div>\n\
-				');
-
-
-	metalicoSelect($('#t'+nextID+''),$('#'+nextID+''));
+		var nextID = globalIDMineralMetalico;
+					listMinMet.append(' \n\
+						<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
+						<div class="form-row blockMin">\n\
+						\n\
+						<div class="col-md-4 mb-3">\n\
+						  <label for="t'+nextID+'" class="boxMinText">Tipo</label>\n\
+						  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+						  	<option value="MIN_METALICO">Metalico</option>\n\
+						  </select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+						  <select class="form-control formsCRUD" id="m'+nextID+'" required></select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						    <label for="p'+nextID+'" class="boxMinText">Proporcion</label>\n\
+						    <div class="input-group mb-2 mr-sm-2">\n\
+						    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="pr'+nextID+'" required>\n\
+						    <div class="input-group-append">\n\
+						    	<div class="input-group-text">/1</div>\n\
+						  	</div>\n\
+						    </div>\n\
+						</div>\n\
+						\n\
+						<div class="col-md-2 mb-3">\n\
+						  <label for="removeMin" class="hackerText">Hacker</label>\n\
+						  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+						</div>\n\
+						</div>\n\
+						</div>\n\
+					');
 
 
-	$('#remove'+nextID+'').on('click',function(e){
+		mineralTipoMetalico($('#t'+nextID+''),$('#m'+nextID+''));
+
+		$('#remove'+nextID+'').on('click',function(e){
 			e.preventDefault();
-			modMet.d.push({"cod":$('#'+nextID+'').val(),"p":$('#p'+nextID+'').val(),"id":nextID});
-			$('#'+nextID+'').attr('id',(nextID)*(-1));
-			$('#p'+nextID+'').attr('value',$('#p'+nextID+'').val()*0);
+			modMet.d.push({"cod":$('#m'+nextID+'').val(),"pr":$('#pr'+nextID+'').val(),"t":$('#t'+nextID+'').val(),"id":nextID});
+			$('#m'+nextID+'').attr('id',(nextID)*(-1));
+			$('#pr'+nextID+'').attr('value',$('#pr'+nextID+'').val()*0);
 			boxButtonDelete = $(this).parent();
 			boxMinDelete = $(boxButtonDelete).parent();
 			boxDelete = $(boxMinDelete).parent();
@@ -2782,10 +2795,70 @@ function addMinMet(button,list){
 			},300);
 		});
 
-	globalIDMinetalMetalico++;
+		globalIDMineralMetalico++;
+		});
+}
 
-});
+function verifyElementValMinMet(){
+	var start=1;
+	while(globalIDMineralMetalico>=start){
+		var flag =1;
+		while(globalIDMineralMetalico>=flag){
+			if(($('#m'+start+'').children(":selected").val() == $('#m'+flag+'').children(":selected").val()) && (flag != start) && ($('#m'+start+'').children(":selected").val() !== undefined)  ){
+				return false;
+				start = globalIDMineralMetalico+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
 	}
+	return true;
+}
+
+function verifyMinMet(){
+	var start=1;
+	var ready = false;
+	while(globalIDMineralMetalico>=start){
+		if($('#'+start+'').children(":selected").val() != null){
+			ready = true;
+			start = globalIDMineralMetalico+1;
+		}else{
+			start++;
+		}
+	}
+	return ready;
+}
+
+function mineralTipoMetalico(tipo,minerales){
+	$(tipo).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+	console.log(optionTipo);
+		$.ajax({
+			url: '/Metalicos-AgregarMinMet',
+			method: 'POST',
+			data:{
+				filtroMin: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.min != null){
+						if(optionTipo == 'MIN_METALICO'){
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].met_codigo+'">'+response.min[i].met_nombre+'</option>');
+							}
+						}else{
+							minerales.html('');
+							for (var i = response.min.length - 1; i >= 0; i--) {
+								minerales.append('<option value="'+response.min[i].nom_codigo+'">'+response.min[i].nom_nombre+'</option>');
+							}
+						}
+					}	
+			}
+		});	
+	});
+}
+
 
 $('#eliminarMetalico').on('submit',function(e){
 	e.preventDefault();
@@ -2985,10 +3058,24 @@ $('#agregarNoMetalico').on('submit',function(e){
 		start++;
 	}
 
+	var metStart = 1;
+	var metTipo = [];
+	var metMetalico = [];
+	var metProporcion = [];
+	while(globalIDMineralMetalico>=metStart){
+		if($('#'+metStart+'').val() > 0){
+			metTipo.push( $('#t'+metStart+'').val() );
+			metMetalico.push( $('#m'+metStart+'').val() );
+			metProporcion.push($('#pr'+metStart+'').val());
+		}
+		metStart++;		
+	}
+
 	if(utilidadNoMetalico.val() == 'Selecciona un municipio'){
 		alert('Selecciona lugar valido, elige un estado primero!')
 	}else{
 		if(verifyElementValPre()==true){
+			if(verifyElementValPre()==true){
 			$.ajax({
 			url: '/NoMetalicos-Agregar',
 			method: 'POST',
@@ -2998,7 +3085,10 @@ $('#agregarNoMetalico').on('submit',function(e){
 				// presentacionMetalico: presentacionMetalico.val(),
 				nombrePresentacion: prePresentacion,
 				precioMP: prePrecio,
-				preTipo: preTipo
+				preTipo: preTipo,
+				metMetalico: metMetalico,
+				metProporcion: metProporcion,
+				metTipo: metTipo
 			},
 			success: function(response){
 				if(response == 'great'){
@@ -3008,13 +3098,77 @@ $('#agregarNoMetalico').on('submit',function(e){
 				}			
 			}
 		});
+
 			alert('Fino!');
+		}
 		}else{
 			alert('Existen minerales repetidos, porfavor verifique el formulario para continuar!');
 		}
 	}
 	
 });
+
+addMinNoMet($('#addMinNoMet'),$('#listMinNoMet'));
+
+function addMinNoMet(button,list){
+		button.on('click',function(e){
+		e.preventDefault();
+		listMinNoMet = list;
+
+		var nextID = globalIDMineralMetalico;
+					listMinNoMet.append(' \n\
+						<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
+						<div class="form-row blockMin">\n\
+						\n\
+						<div class="col-md-4 mb-3">\n\
+						  <label for="t'+nextID+'" class="boxMinText">Tipo</label>\n\
+						  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+						  	<option value="MIN_NO_METALICO">Metalico</option>\n\
+						  </select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						  <label for="'+nextID+'" class="boxMinText">Mineral</label>\n\
+						  <select class="form-control formsCRUD" id="m'+nextID+'" required></select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						    <label for="p'+nextID+'" class="boxMinText">Proporcion</label>\n\
+						    <div class="input-group mb-2 mr-sm-2">\n\
+						    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="pr'+nextID+'" required>\n\
+						    <div class="input-group-append">\n\
+						    	<div class="input-group-text">/1</div>\n\
+						  	</div>\n\
+						    </div>\n\
+						</div>\n\
+						\n\
+						<div class="col-md-2 mb-3">\n\
+						  <label for="removeMin" class="hackerText">Hacker</label>\n\
+						  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+						</div>\n\
+						</div>\n\
+						</div>\n\
+					');
+
+
+		mineralTipoMetalico($('#t'+nextID+''),$('#m'+nextID+''));
+
+		$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modMet.d.push({"cod":$('#m'+nextID+'').val(),"pr":$('#pr'+nextID+'').val(),"t":$('#t'+nextID+'').val(),"id":nextID});
+			$('#m'+nextID+'').attr('id',(nextID)*(-1));
+			$('#pr'+nextID+'').attr('value',$('#pr'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+		globalIDMineralMetalico++;
+		});
+}
 
 $('#eliminarNoMetalico').on('submit',function(e){
 	e.preventDefault();
