@@ -1572,7 +1572,8 @@ INSERT INTO lugar(
 	INSERT INTO privilegio(
 	pri_codigo, pri_nombre)
 	VALUES 
-	(nextval('privilegio_pri_codigo_seq'), 'CAJA'), (nextval('privilegio_pri_codigo_seq'), 'PERSONAL'), (nextval('privilegio_pri_codigo_seq'), 'PROYECTOS'), (nextval('privilegio_pri_codigo_seq'), 'GESTION');
+	(nextval('privilegio_pri_codigo_seq'), 'CAJA'), (nextval('privilegio_pri_codigo_seq'), 'PERSONAL'), (nextval('privilegio_pri_codigo_seq'), 'PROYECTOS'), (nextval('privilegio_pri_codigo_seq'), 'GESTION'),
+	(nextval('privilegio_pri_codigo_seq'), 'ESPECIALISTA');
 
 	-- ROLES CON PRIVILEGIOS --
 
