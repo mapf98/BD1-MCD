@@ -4867,3 +4867,23 @@ function verifyElementPrivilegio(){
 	return true;
 }
 
+$('#eliminarRol').on('submit',function(e){
+	e.preventDefault();
+	let nombreRol = $('#nombreRolEliminar');
+
+	$.ajax({
+		url: '/Roles-Eliminar',
+		method: 'POST',
+		data: {
+			nombreRol: nombreRol.val(),
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El rol fue ELIMINADO satisfactoriamente');
+			}else{
+				alert('El rol NO SE PUDO ELIMINAR, revisa los campos por informacion duplicada');
+			}			
+		}
+	});
+});
+

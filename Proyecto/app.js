@@ -2928,5 +2928,40 @@ app.post("/Roles-AgregarPrivilegio",function(req,res){
 });
 
 
+app.get("/Roles-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('rolesEliminar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.post("/Roles-Eliminar",function(req,res){ 
+  var nombreRol = req.body.nombreRol;
+  client.query('DELETE FROM rol_pri WHERE fk_rp_rol = (SELECT rol_codigo FROM rol WHERE rol_nombre = $1)',[nombreRol],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if (nombreRol != null){
+
+      client.query('DELETE FROM rol WHERE rol_nombre = $1',[nombreRol],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed');
+          
+
+        }else{
+          res.send('great');
+        }
+      });
+
+    }else{
+      res.send('failed');
+    }
+  });
+});
+
+
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
