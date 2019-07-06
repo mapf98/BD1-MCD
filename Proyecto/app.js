@@ -2807,6 +2807,126 @@ app.post("/Ventas-AgregarPrecio",function(req,res){
   }
 });
 
+// ROLES
+
+app.get("/Roles",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('roles',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Roles-Consultar",function(req,res){
+
+  if(userJSON.usuario != "none"){
+    client.query('SELECT rol_codigo,rol_nombre FROM rol AS R',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var infoRol = result.rows;
+        client.query('SELECT RP.fk_rp_privilegio, P.pri_nombre, RP.fk_rp_rol FROM rol_pri AS RP, privilegio AS P WHERE RP.fk_rp_privilegio = P.pri_codigo ',(err,resultPRI)=>{
+          if (err) {
+            console.log(err.stack);
+            res.send('failed'); 
+          }else if(resultPRI.rows[0] != null){
+            var privilegioRol = resultPRI.rows;
+            res.render('rolesConsultar',{dataTable: infoRol,privilegioRol: privilegioRol, user: userJSON});
+          }else{
+            res.send('failed');
+          };
+        });
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.get("/Roles-Agregar",function(req,res){
+  let dataPrivilegio;
+  let dataMM;
+  if(userJSON.usuario != "none"){
+    client.query('SELECT pri_codigo,pri_nombre FROM PRIVILEGIO',(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        dataPrivilegio = result.rows;
+        res.render('rolAgregar',{dataPrivilegio: dataPrivilegio,user: userJSON});
+      }else{
+        res.send('failed');
+      };
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.post("/Roles-Agregar",function(req,res){
+  var nombreRol = req.body.nombreRol;
+  var privilegioRol = req.body.privilegioRol;
+  var privilegioTipo = req.body.privilegioTipo;
+
+  if(userJSON.usuario != "none"){
+    client.query('INSERT INTO ROL (rol_nombre) VALUES($1)',[nombreRol],(err,result)=>{
+      if (err) {
+        console.log('Entro en el error esperado');
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(privilegioTipo != null){
+        console.log('Entro en la insersion de privilegios');
+        for (var i = privilegioTipo.length - 1; i >= 0; i--) {
+
+          if(privilegioTipo[i]=='PRIVILEGIO'){
+
+            client.query('INSERT INTO ROL_PRI (fk_rp_rol, fk_rp_privilegio) VALUES ( (SELECT rol_codigo FROM ROL WHERE rol_nombre = $1) ,$2)',[nombreRol,privilegioRol[i]],(err,resultM)=>{
+              if (err) {
+                console.log(err.stack);
+                res.send('failed'); 
+              }
+            });
+
+          }
+        }
+        res.send('great');
+
+      }else{
+        console.log('Entro en la insersion del yacimiento sin minerales');
+        res.send('great');
+      }
+    });
+  }else{
+    res.redirect('login');
+  };
+});
+
+app.post("/Roles-AgregarPrivilegio",function(req,res){
+  var filtro = req.body.filtroPrivilegio;
+  if(userJSON.usuario != "none"){
+
+    client.query('SELECT * FROM '+filtro+'',(err,result)=>{
+
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var pri = result.rows;
+        res.send({pri: pri});
+      }else{
+        res.send('failed');
+      };
+
+    });
+
+  }else{
+    res.redirect('login');
+  }
+});
+
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);

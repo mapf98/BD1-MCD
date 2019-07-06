@@ -4691,3 +4691,179 @@ function total (cantidad,response,monto,mt){
  //   ($('#MT')).val(total);
 //}
 
+
+// ROLES
+
+var globalIDPrivilegioRol = 1;
+
+
+var modRol = {
+    "d": [],
+    "u": [],
+    "i": []
+} 
+
+$(document).ready( function () {
+    $('#table_id_roles').DataTable();
+});
+
+$('#menuItemRoles').on('click',function(){
+	window.location.href = "/Roles";
+});
+
+
+$('#menuItemAgregarRol').on('click',function(){
+	window.location.href = "/Roles-Agregar";
+});
+
+$('#menuItemConsultarRol').on('click',function(){
+	window.location.href = "/Roles-Consultar";
+});
+
+$('#menuItemEliminarRol').on('click',function(){
+	window.location.href = "/Roles-Eliminar";
+});
+
+$('#menuItemModificarRol').on('click',function(){
+	window.location.href = "/Roles-Modificar";
+});
+
+$('#agregarRol').on('submit',function(e){
+	e.preventDefault();
+	var nombreRol = $('#nombreRol');
+
+
+	var start = 1;
+	var privilegioRol = [];
+	var privilegioTipo = [];
+
+	while(globalIDPrivilegioRol>=start){
+		if($('#'+start+'').val() > 0){
+			privilegioRol.push( $('#'+start+'').val() );
+			privilegioTipo.push( $('#t'+start+'').val() );
+
+		}
+		start++;		
+	}
+
+	if(nombreRol.val() == 'Selecciona un municipio'){
+		alert('Selecciona lugar valido, elige un estado primero!')
+	}else{
+		if(verifyElementPrivilegio()==true ){
+			$.ajax({
+			url: '/Roles-Agregar',
+			method: 'POST',
+			data: {
+				nombreRol: nombreRol.val(),
+				privilegioTipo: privilegioTipo,
+				privilegioRol: privilegioRol
+			},
+			success: function(response){
+					if(response == 'great'){
+						alert('El rol fue registrado satisfactoriamente');
+					}else{
+						alert('El rol no se pudo agregar, revisa los campos por informacion duplicados');
+					}			
+				}
+			});
+			alert('Fino!');
+		}else{
+			alert('Existen privilegios repetidos o no ha asignado al menos un privilegio, porfavor verifique el formulario para continuar!');
+		}
+	}
+});
+
+addPrivilegio($('#addPrivilegio'),$('#listPrivilegio'));
+
+function addPrivilegio(button,list){
+		button.on('click',function(e){
+		e.preventDefault();
+		listPrivilegio = list;
+
+		var nextID = globalIDPrivilegioRol;
+					listPrivilegio.append(' \n\
+						<div class="boxAgregarMinID animated fadeIn" id="boxAddMin" value="'+nextID+'">\n\
+						<div class="form-row blockMin">\n\
+						\n\
+						<div class="col-md-4 mb-3">\n\
+						  <label for="t'+nextID+'" class="boxMinText">Asignar</label>\n\
+						  <select class="form-control formsCRUD" id="t'+nextID+'" required>\n\
+						  	<option value="PRIVILEGIO">Privilegio</option>\n\
+						  </select>\n\
+						</div>\n\
+						<div class="col-md-3 mb-3">\n\
+						  <label for="'+nextID+'" class="boxMinText">Privilegio</label>\n\
+						  <select class="form-control formsCRUD" id="'+nextID+'" required></select>\n\
+						</div>\n\
+						\n\
+						<div class="col-md-2 mb-3">\n\
+						  <label for="removeMin" class="hackerText">Hacker</label>\n\
+						  <button class="btn btn-danger btn-block" id="remove'+nextID+'" >Eliminar</button>\n\
+						</div>\n\
+						</div>\n\
+						</div>\n\
+					');
+
+
+		privilegioSelect($('#t'+nextID+''),$('#'+nextID+''));
+
+		$('#remove'+nextID+'').on('click',function(e){
+			e.preventDefault();
+			modRol.d.push({"cod":$('#'+nextID+'').val(),"t":$('#t'+nextID+'').val(),"id":nextID});
+			$('#'+nextID+'').attr('id',(nextID)*(-1));
+			$('#c'+nextID+'').attr('value',$('#c'+nextID+'').val()*0);
+			boxButtonDelete = $(this).parent();
+			boxMinDelete = $(boxButtonDelete).parent();
+			boxDelete = $(boxMinDelete).parent();
+			$(boxDelete).removeClass('fadeIn');
+			$(boxDelete).addClass('fadeOut');
+			setTimeout(function(){
+				boxMinDelete.remove();
+			},300);
+		});
+
+		globalIDPrivilegioRol++;
+		});
+}
+
+function privilegioSelect(tipo,privilegios){
+	$(tipo).on('click',function(){
+	var optionTipo = tipo.children(":selected").val();
+	console.log(optionTipo);
+		$.ajax({
+			url: '/Roles-AgregarPrivilegio',
+			method: 'POST',
+			data:{
+				filtroPrivilegio: optionTipo.toString()
+			},
+			success: function(response){
+					if(response.pri != null){
+						if(optionTipo == 'PRIVILEGIO'){
+							privilegios.html('');
+							for (var i = response.pri.length - 1; i >= 0; i--) {
+								privilegios.append('<option value="'+response.pri[i].pri_codigo+'">'+response.pri[i].pri_nombre+'</option>');
+							}
+						}
+					}	
+			}
+		});	
+	});
+}
+
+function verifyElementPrivilegio(){
+	var start=1;
+	while(globalIDPrivilegioRol>=start){
+		var flag =1;
+		while(globalIDPrivilegioRol>=flag){
+			if(($('#'+start+'').children(":selected").val() == $('#'+flag+'').children(":selected").val()) && (flag != start) && ($('#'+start+'').children(":selected").val() !== undefined)  ){
+				return false;
+				start = globalIDPrivilegioRol+1;
+			}else{
+				flag++;
+			}
+		}
+		start++;
+	}
+	return true;
+}
+
