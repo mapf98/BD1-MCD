@@ -4887,3 +4887,162 @@ $('#eliminarRol').on('submit',function(e){
 	});
 });
 
+$('#verificarRol').on('submit',function(e){
+	e.preventDefault();
+	let nombreRolVerificar = $('#nombreRolVerificar');
+
+	$.ajax({
+		url: '/Roles-Verificar',
+		method: 'POST',
+		data: {
+			rolV: nombreRolVerificar.val()
+		},
+		success: function(response){
+			if(response.dataV != null){
+				var boxModRol = $('#guardarCambioRol');
+
+				boxModRol.html('');
+				boxModRol.append('<div class="animated fadeIn" id="boxGC">\n\
+				<div class="form-row animated fadeIn">\n\
+				<div class="col-md-6 mb-3">\n\
+				<label for="gcnombreRol">Nombre rol</label>\n\
+				<input type="text" class="form-control formsCRUD" id="gcnombreRol" value="'+response.dataV[0].rol_nombre+'" disabled>\n\
+				</div>\n\
+				</div>\n\
+				<hr>\n\
+						<div class="row">\n\
+	                    <div class="col-4"></div>\n\
+						<div class="col-4">\n\
+						<button class="btn btn-success btn-block" id="addPrivilegio">Asignar privilegio</button>\n\
+						</div>\n\
+						<div class="col-4"></div>\n\
+						</div>\n\
+						<div class="listPrivilegio" id="listPrivilegio">\n\
+						</div>\n\
+						</div>\n\
+	                    <button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>\n\
+	                </div>');
+
+
+				addPrivilegio($('#addPrivilegio'),$('#listPrivilegio'));
+
+				function setPri(t,k){
+					setTimeout(function(){
+						$('#'+t+' option[value='+k+']').attr('selected',true);
+					},150);
+				}
+
+				var pri=0;
+				while(response.priRol.length>pri){
+					if(response.priRol[pri].fk_rp_rol == response.dataV[0].rol_codigo){
+						$('#addPrivilegio').trigger('click');
+						$('#t'+(globalIDPrivilegioRol-1)+'').trigger('click');
+						setMin(globalIDPrivilegioRol-1,response.priRol[pri].pri_codigo);
+						modRol.u.push({"cod":response.priRol[pri].pri_codigo,"t":"PRIVILEGIO","id":globalIDPrivilegioRol-1,"o":response.priRol[pri].pri_codigo});
+					}
+					pri++;
+				}
+
+			}else if(response == 'failed'){
+				alert('Error, no se consigue a rol para modificar');				
+			}			
+		}
+	});
+});
+
+function verifyAndOrderRol(a,b){
+	var start = 0;
+	var forDelete = [];
+	while(a.length>start){
+		var flag = 0;
+		while(b.length >flag){
+			if(a[start].id == b[flag].id ){
+				a[start].t = b[flag].t;
+				a[start].cod = b[flag].cod;
+				forDelete.push(flag);
+			}else{
+				console.log('no son iguales');
+			}
+			flag++;
+		}
+		start++;
+	}
+
+	for (var k = forDelete.length - 1; k >= 0; k--) {
+		b.splice(forDelete[k], 1);
+	}
+}
+
+
+$('#guardarCambioRol').on('submit',function(e){
+	e.preventDefault();
+	var nombreRol = $('#gcnombreRol');
+
+
+	var start = 1;
+	clearArray(modRol.i);
+	while(globalIDPrivilegioRol>=start){
+		if($('#'+start+'').val() > 0){
+			var cod =$('#'+start+'').val();
+			var t = $('#t'+start+'').val();
+			modRol.i.push({"cod": cod , "t": t,"id":start});
+		}
+		start++;		
+	}
+
+	verifyAndOrderRol(modRol.u,modRol.i);
+	verifyAndOrderRol(modRol.d,modRol.u);
+
+	console.log('Por modificar');
+	var test =0;
+	while(modRol.u.length>test){
+		console.log(modRol.u[test].t  + "/"+modRol.u[test].cod );
+		test++;
+	}
+
+	console.log('Por insertar');
+	var test =0;
+	while(modRol.i.length>test){
+		console.log(modRol.i[test].t + "/"+modRol.i[test].cod);
+		test++;
+	}
+
+	console.log('Eliminados');
+	var test =0;
+	while(modRol.d.length>test){
+		console.log(modRol.d[test].t +  "/"+modRol.d[test].cod);
+		test++;
+	}
+
+	$.ajax({
+		url: '/Roles-Modificar',
+		method: 'POST',
+		data: {
+			nombreRol: nombreRol.val(),
+
+			modRol: modRol
+		},
+		success: function(response){
+			if(response == 'great'){
+				alert('El rol fue MODIFICADO satisfactoriamente');
+				var boxGCEmp = $('#boxGC');
+				boxGCEmp.addClass('fadeOut');
+				boxGCEmp.html('');
+				var boxModEmp = $('#guardarCambioRol');
+				boxModEmp.append(`\n\
+                    <div class="boxPrevMod animated fadeIn">\n\
+                      <h4 class="text-center">Selecciona un rol para modificar su registro</h4>\n\
+                      <p class="text-center"><i class="fas fa-toolbox iconMod"></i></p>\n\
+                    </div>\n\
+				`);
+				globalIDPrivilegioRol =1;
+				clearArray(modRol.i);
+				clearArray(modRol.d);
+				clearArray(modRol.u);
+			}else{
+				alert('El rol NO SE PUDO MOFICAR, revisa los campos por informacion duplicada');
+			}			
+		}
+	});
+});
+

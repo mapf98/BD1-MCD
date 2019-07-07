@@ -2962,6 +2962,129 @@ app.post("/Roles-Eliminar",function(req,res){
   });
 });
 
+app.get("/Roles-Modificar",function(req,res){
+  if(userJSON.usuario != "none"){
+    res.render('rolesModificar',{user: userJSON});
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Roles-Modificar",function(req,res){ 
+  var nombreRol = req.body.nombreRol;
+  var modRol = req.body.modRol;
+  var ready = true;
+
+  console.log(modRol);
+
+  // client.query('UPDATE ROL SET yac_extension = $1, fk_yac_lugar = $2,fk_yac_estatus= $3 WHERE yac_nombre =$4',[eYac,pYac,estYac,nombreRol],(err,result)=>{
+  //   if (err) {
+  //     ready = false;
+  //     console.log(err.stack);
+  //     res.send('failed'); 
+  //   }
+  // });
+
+  if(modRol.d !== undefined){
+    console.log('Entro en los deletes');
+    for (var i = modRol.d.length - 1; i >= 0; i--) {
+      if(modRol.d[i].t =='PRIVILEGIO'){
+
+        client.query('DELETE FROM ROL_PRI WHERE fk_rp_rol = (SELECT rol_codigo FROM ROL WHERE rol_nombre = $1) AND fk_rp_privilegio=$2',[nombreRol,modRol.d[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS DELETES LJJP');
+  }
+
+  if(modRol.u !== undefined){
+    for (var i = modRol.u.length - 1; i >= 0; i--) {
+      if(modRol.u[i].t =='PRIVILEGIO'){
+
+        client.query('UPDATE ROL_PRI SET fk_rp_privilegio = $1 WHERE fk_rp_rol = (SELECT rol_codigo FROM ROL WHERE rol_nombre = $2) AND fk_rp_privilegio=$3',[modRol.u[i].cod,nombreRol,modRol.u[i].o],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS UPDATES LJJP');
+  }
+
+  if(modRol.i !== undefined){
+    for (var i = modRol.i.length - 1; i >= 0; i--) {
+      if(modRol.i[i].t =='PRIVILEGIO'){
+
+        client.query('INSERT INTO ROL_PRI (fk_rp_rol,fk_rp_privilegio) VALUES ( (SELECT rol_codigo FROM ROL WHERE rol_nombre = $1) ,$2)',[nombreRol,modRol.i[i].cod],(err,resultM)=>{
+          if (err) {
+            ready = false;
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+
+      }
+    }
+    console.log('HIZO TODOS LOS INSERTS LJJP');
+  }
+
+  if(ready){
+    res.send('great');
+  }
+});
+
+app.post("/Roles-Verificar",function(req,res){ 
+  var rolV = req.body.rolV;
+  client.query('SELECT R.rol_codigo,  R.rol_nombre FROM ROL AS R WHERE R.rol_nombre = $1',[rolV],(err,result)=>{
+    if (err) {
+      console.log(err.stack);
+      res.send('failed'); 
+    }else if(result.rows[0] != null){
+      
+      var dataV = result.rows;
+      // var estatusDisponible = 'Disponible';
+      // var estatusEliminado = 'Eliminado';
+      // client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
+      //           if (err) {
+      //             console.log(err.stack);
+      //             res.send('failed'); 
+      //           }else if(estatuses.rows[0] != null){
+      //             var estatuses = estatuses.rows;                  
+      //             res.send({dataV: dataV, estatuses: estatuses});
+      //           }else{
+      //             res.send('failed');
+      //           }
+      //         });
+      client.query('SELECT RP.fk_rp_rol, P.pri_nombre, P.pri_codigo FROM rol_pri AS RP,  privilegio AS P WHERE RP.fk_rp_privilegio = P.pri_codigo ',(err,resultPRE)=>{
+                    if (err) {
+                      console.log(err.stack);
+                      res.send('failed'); 
+                    }else if(resultPRE.rows[0] != null){
+                      console.log("vamos muy bien");
+                      var priRol = resultPRE.rows;
+                      res.send({dataV: dataV, priRol:priRol});
+                    }else{
+                      // res.send('failed');
+                      res.send({dataV: dataV});
+                    };
+                  });
+
+    }else{
+      console.log('Entra aaß');
+      res.send('failed');
+    }
+  });
+});   
+
 
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);
