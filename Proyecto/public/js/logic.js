@@ -4937,7 +4937,7 @@ $('#verificarRol').on('submit',function(e){
 					if(response.priRol[pri].fk_rp_rol == response.dataV[0].rol_codigo){
 						$('#addPrivilegio').trigger('click');
 						$('#t'+(globalIDPrivilegioRol-1)+'').trigger('click');
-						setMin(globalIDPrivilegioRol-1,response.priRol[pri].pri_codigo);
+						setPri(globalIDPrivilegioRol-1,response.priRol[pri].pri_codigo);
 						modRol.u.push({"cod":response.priRol[pri].pri_codigo,"t":"PRIVILEGIO","id":globalIDPrivilegioRol-1,"o":response.priRol[pri].pri_codigo});
 					}
 					pri++;

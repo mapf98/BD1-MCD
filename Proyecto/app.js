@@ -48,18 +48,45 @@ app.get("/login",function(req,res){
   res.render('login');
 }); 
 
+// app.get("/Home",function(req,res){
+//   if(userJSON.usuario != "none"){
+//     if(userJSON.rol == "ADMINISTRADOR"){
+//           res.render('home',{user: userJSON});
+//     } else if(userJSON.rol == "VENDEDOR"){
+//           res.render('homeCaja',{user: userJSON});
+//     }else if(userJSON.rol == "RH"){
+//           res.render('home',{user: userJSON});
+//     }
+//   }else{
+//     res.redirect('login');
+//   }
+// });
+
 app.get("/Home",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('home',{user: userJSON});
+          res.render('home',{user: userJSON});
   }else{
     res.redirect('login');
   }
 });
 
 
+// AGREGUE EL QUERY, SI TIENE PRIVIEGIO DE CAJA, ENTRA
 app.get("/Caja",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('homeCaja',{user: userJSON});
+    var rol = userJSON.rol;
+    client.query('SELECT P.pri_codigo FROM privilegio P, rol_pri RP, rol R WHERE R.rol_nombre = $1 AND R.rol_codigo = RP.fk_rp_rol AND P.pri_codigo = fk_rp_privilegio AND P.pri_nombre = \'CAJA\' ',[rol],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if (result.rows[0] != null) {
+        res.render('homeCaja',{user: userJSON});
+      }else{
+        console.log(rol);
+        res.render('accesoDenegado',{user: userJSON});
+      }
+    });
+    
   }else{
     res.redirect('login');
   }
@@ -67,7 +94,19 @@ app.get("/Caja",function(req,res){
 
 app.get("/Proyectos",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('homeProyectos',{user: userJSON});
+    var rol = userJSON.rol;
+    client.query('SELECT P.pri_codigo FROM privilegio P, rol_pri RP, rol R WHERE R.rol_nombre = $1 AND R.rol_codigo = RP.fk_rp_rol AND P.pri_codigo = fk_rp_privilegio AND P.pri_nombre = \'PROYECTOS\' ',[rol],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if (result.rows[0] != null) {
+        res.render('homeProyectos',{user: userJSON});
+      }else{
+        console.log(rol);
+        res.render('accesoDenegado',{user: userJSON});
+      }
+    });
+    
   }else{
     res.redirect('login');
   }
@@ -75,7 +114,19 @@ app.get("/Proyectos",function(req,res){
 
 app.get("/Gestion",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('homeGestion',{user: userJSON});
+    var rol = userJSON.rol;
+    client.query('SELECT P.pri_codigo FROM privilegio P, rol_pri RP, rol R WHERE R.rol_nombre = $1 AND R.rol_codigo = RP.fk_rp_rol AND P.pri_codigo = fk_rp_privilegio AND P.pri_nombre = \'GESTION\' ',[rol],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if (result.rows[0] != null) {
+        res.render('homeGestion',{user: userJSON});
+      }else{
+        console.log(rol);
+        res.render('accesoDenegado',{user: userJSON});
+      }
+    });
+    
   }else{
     res.redirect('login');
   }
@@ -83,7 +134,19 @@ app.get("/Gestion",function(req,res){
 
 app.get("/Personal",function(req,res){
   if(userJSON.usuario != "none"){
-    res.render('homePersonal',{user: userJSON});
+    var rol = userJSON.rol;
+    client.query('SELECT P.pri_codigo FROM privilegio P, rol_pri RP, rol R WHERE R.rol_nombre = $1 AND R.rol_codigo = RP.fk_rp_rol AND P.pri_codigo = fk_rp_privilegio AND P.pri_nombre = \'PERSONAL\' ',[rol],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if (result.rows[0] != null) {
+        res.render('homePersonal',{user: userJSON});
+      }else{
+        console.log(rol);
+        res.render('accesoDenegado',{user: userJSON});
+      }
+    });
+    
   }else{
     res.redirect('login');
   }
@@ -366,7 +429,7 @@ app.post("/Yacimientos-Eliminar",function(req,res){
 app.post('/login',function(req,res){
   var userCheck = req.body.user;
   var userPassword = req.body.password;
-  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password FROM empleado AS E, usuario AS U , cargo AS Carg WHERE U.fk_usu_empleado_ci = E.emp_cedula AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1',[userCheck],(err,result)=>{
+  client.query('SELECT E.emp_nombre,E.emp_apellido,Carg.car_nombre,U.usu_password, R.rol_nombre FROM empleado AS E, usuario AS U , cargo AS Carg, rol AS R WHERE U.fk_usu_empleado_ci = E.emp_cedula AND E.fk_emp_cargo = Carg.car_codigo AND U.usu_usuario = $1 AND fk_usu_rol = rol_codigo',[userCheck],(err,result)=>{
       if(result.rows[0] != null && result.rows[1] == null){
         if (result.rows[0].usu_password == userPassword){
           userJSON.nombre = result.rows[0].emp_nombre;
@@ -374,6 +437,7 @@ app.post('/login',function(req,res){
           userJSON.cargo = result.rows[0].car_nombre;
           userJSON.usuario = userCheck;
           userJSON.password = userPassword;
+          userJSON.rol = result.rows[0].rol_nombre;
           res.send('access');  
         }else{
           res.send('notAccess');
@@ -3064,7 +3128,7 @@ app.post("/Roles-Verificar",function(req,res){
       //             res.send('failed');
       //           }
       //         });
-      client.query('SELECT RP.fk_rp_rol, P.pri_nombre, P.pri_codigo FROM rol_pri AS RP,  privilegio AS P WHERE RP.fk_rp_privilegio = P.pri_codigo ',(err,resultPRE)=>{
+      client.query('SELECT  RP.fk_rp_rol, P.pri_nombre, P.pri_codigo FROM rol_pri AS RP,  privilegio AS P WHERE RP.fk_rp_privilegio = P.pri_codigo ',(err,resultPRE)=>{
                     if (err) {
                       console.log(err.stack);
                       res.send('failed'); 
@@ -3079,7 +3143,7 @@ app.post("/Roles-Verificar",function(req,res){
                   });
 
     }else{
-      console.log('Entra aaß');
+      console.log('Entra aqui papa');
       res.send('failed');
     }
   });
