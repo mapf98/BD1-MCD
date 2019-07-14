@@ -1046,6 +1046,7 @@ app.post("/AFas",function(req,res){
       res.send('failed'); 
     }else if(result.rows[0].fas_codigo != null){
       var fasCod = result.rows[0];
+      console.log(fasCod.faseCod);
       res.send({cod: fasCod});
     }else{
       res.send('failed');
@@ -1344,7 +1345,7 @@ app.post("/FC",function(req,res){
 
 app.post("/FM",function(req,res){
   var faseMod = req.body.faseMod;
-  console.log('Llego aquixxx');
+  console.log(faseMod);
   client.query('SELECT TM.TM_CODIGO, TM.TM_NOMBRE,TMF.TMF_CANTIDAD, TMF.TMF_COSTO, TMF.TMF_CODIGO FROM YACIMIENTO AS Y,EXPLOTACION AS EX, ETAPA AS E, FASE AS F,TIPO_MAQUINARIA AS TM, TM_FAS AS TMF WHERE Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND E.ETA_CODIGO = F.FK_FAS_ETAPA AND F.FAS_CODIGO = TMF.FK_TMF_FASE AND TM.TM_CODIGO = TMF.FK_TMF_TM AND F.FAS_CODIGO = $1',[faseMod],(err,result)=>{
     if (err){
       console.log(err.stack);
@@ -1352,14 +1353,144 @@ app.post("/FM",function(req,res){
       console.log('Error bases');
     }else if(result.rows[0] != null){
       var maquinarias = result.rows;
-      console.log('envia las maquinarias');
       res.send({maquinarias: maquinarias});
     }else{
-      console.log('Error ultimo');
       res.send('failed');
     }
   });
 });
+
+app.post("/EALLD",function(req,res){
+  let dDE = req.body.dDE;
+  let dDF = req.body.dDF;
+  let dDC = req.body.dDC;
+  let dDM = req.body.dDM;
+
+  if(dDE != null){
+    console.log('Entro en eliminar etapas');
+    console.log(dDE.length);
+    for (var i = 0; i < dDE.length; i++) {
+      client.query('DELETE FROM ETAPA WHERE ETA_CODIGO=$1',[dDE[i].codE],(err,result)=>{
+        if (err){
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+      });
+    }
+  }
+  
+  if(dDF != null){
+    console.log('Entro en eliminar fases');
+    console.log(dDF.length);
+    for (var i = 0; i < dDF.length; i++) {
+      client.query('DELETE FROM FASE WHERE FAS_CODIGO=$1',[dDF[i].codF],(err,result)=>{
+        if (err){
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+      });
+    }
+  }
+
+  if(dDC != null){
+    console.log('Entro en eliminar cargo');
+    console.log(dDC.length);
+    for (var i = 0; i < dDC.length; i++) {
+      client.query('DELETE FROM CAR_FAS WHERE CF_CODIGO=$1',[dDC[i].codCF],(err,result)=>{
+        if (err){
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+      });
+    }
+  }
+
+  if(dDM != null){
+    console.log('Entro en eliminar maquinarias');
+    console.log(dDM.length);
+    for (var i = 0; i < dDM.length; i++) {
+      client.query('DELETE FROM TM_FAS WHERE TMF_CODIGO=$1',[dDM[i].codTMF],(err,result)=>{
+        if (err){
+          console.log(err.stack);
+          res.send('failed'); 
+        }
+      });
+    }
+  } 
+
+  res.send('great');
+});
+
+app.post("/EUEF",function(req,res){
+  let dGC = req.body.dGC;
+  let dU = req.body.dU;
+  // let dI = req.body.dI;
+  // let dDE = req.body.dDE;
+  // let dDF = req.body.dDF;
+  // let dDC = req.body.dDC;
+  // let dDM = req.body.dDM;
+
+  client.query('UPDATE EXPLOTACION SET EXP_DURACION=$1,EXP_COSTOTOTAL=$2,FK_EXP_ESTATUS=$3 WHERE FK_EXP_YACIMIENTO = $4 ',[dGC.duracion,dGC.estimado,dGC.estatus,dGC.codYac],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      for (var i = 0; i < dU.e.length; i++) {
+        client.query('UPDATE ETAPA SET ETA_DURACION=$1,ETA_COSTOTOTAL=$2,ETA_NOMBRE=$3 WHERE ETA_CODIGO = $4 ',[dU.e[i].dur,dU.e[i].est,dU.e[i].name,dU.e[i].cod],(err,result)=>{
+          if (err){
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });
+        console.log(i);
+        for (var k = 0; k < dU.e[i].f.length; k++){
+          client.query('UPDATE FASE SET FAS_DURACION=$1,FAS_COSTOTOTAL=$2,FAS_NOMBRE=$3 WHERE FAS_CODIGO = $4 ',[dU.e[i].f[k].dur,dU.e[i].f[k].est,dU.e[i].f[k].name,dU.e[i].f[k].cod],(err,result)=>{
+            if (err){
+              console.log(err.stack);
+              res.send('failed'); 
+            }
+          }); 
+        }       
+      }
+      res.send('great');
+    }
+  });
+});
+
+app.post("/EUCM",function(req,res){
+  let dU = req.body.dU;
+  // let dI = req.body.dI;
+  // let dDE = req.body.dDE;
+  // let dDF = req.body.dDF;
+  // let dDC = req.body.dDC;
+  // let dDM = req.body.dDM;
+  for (var i = 0; i < dU.e.length; i++){
+    for (var k = 0; k < dU.e[i].f.length; k++){
+      for (var p = 0; p < dU.e[i].f[k].c.length; p++){
+        console.log('entro');
+        console.log(dU.e[i].f[k].c[p].cod);
+        client.query('UPDATE CAR_FAS SET CF_CANTIDAD=$1,CF_COSTO=$2,FK_CF_CARGO=$3 WHERE CF_CODIGO=$4 ',[dU.e[i].f[k].c[p].q,dU.e[i].f[k].c[p].salario,dU.e[i].f[k].c[p].cod,dU.e[i].f[k].c[p].codCF],(err,result)=>{
+          if (err){
+            console.log(err.stack);
+            res.send('failed'); 
+          }
+        });  
+      }
+      if(dU.e[i].f[k].m != null){
+        for (var v = 0; v < dU.e[i].f[k].m.length; v++){
+          client.query('UPDATE TM_FAS SET TMF_CANTIDAD=$1,TMF_COSTO=$2,FK_TMF_TM=$3 WHERE TMF_CODIGO= $4 ',[dU.e[i].f[k].m[v].q,dU.e[i].f[k].m[v].costo,dU.e[i].f[k].m[v].cod,dU.e[i].f[k].m[v].codTMF],(err,result)=>{
+            if (err){
+              console.log(err.stack);
+              res.send('failed'); 
+            }
+          });  
+        } 
+      }      
+    }
+  }
+  res.send('great');
+});
+
 
 
 /// ARREGLAR
@@ -1716,19 +1847,6 @@ app.post("/Metalicos-Verificar",function(req,res){
     }else if(result.rows[0] != null){
       
       var dataV = result.rows;
-      // var estatusDisponible = 'Disponible';
-      // var estatusEliminado = 'Eliminado';
-      // client.query('SELECT est_nombre,est_codigo FROM estatus WHERE est_nombre=$1 OR est_nombre=$2',[estatusDisponible,estatusEliminado],(err,estatuses)=>{
-      //           if (err) {
-      //             console.log(err.stack);
-      //             res.send('failed'); 
-      //           }else if(estatuses.rows[0] != null){
-      //             var estatuses = estatuses.rows;                  
-      //             res.send({dataV: dataV, estatuses: estatuses});
-      //           }else{
-      //             res.send('failed');
-      //           }
-      //         });
       client.query('SELECT MP.fk_mp_metalico, MP.mp_precio, P.pre_nombre, P.pre_codigo FROM min_pre AS MP,  presentacion AS P WHERE MP.fk_mp_presentacion = P.pre_codigo ',(err,resultPRE)=>{
                     if (err) {
                       console.log(err.stack);
@@ -2069,32 +2187,6 @@ app.get("/DetalleVenta",function(req,res){
       }
       else {res.redirect('login');}
     });
-
-
-// app.get("/VerificarComprador",function(req,res){
-//   if (userJSON.usuario !="none"){
-//     client.query( 'Select v.*, d.*, cli_cedula from venta v, cliente cl, detalle_ven d where v.fk_ven_cliente = cl.cli_codigo and v.ven_codigo = d.fk_dev_venta',
-//     (err,result)=>{
-//         if(err){
-//             console.log('fallo query')
-//             console.log(err.stack);
-//             res.send('failed');
-//         }
-//         else if(result.rows[0] != null){
-//           console.log(result.rows);
-//           res.render('modificarventas.ejs',{user: userJSON, dataTable:result.rows})
-//         }
-//         else {
-//           res.send('failed');
-//           console.log ('fallo consulta x cliente')
-//         }
-//   });
-//   }
-//   else {
-//     res.redirect('login');
-//   }
-// })
-
 
 app.get("/VerificarComprador",function(req,res){
   if(userJSON.usuario != "none"){

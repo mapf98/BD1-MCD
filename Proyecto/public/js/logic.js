@@ -19,6 +19,7 @@ var gM = 0;
 var uE = false;
 var nU = false;
 var dU = false;
+var modificarConfig = false;
 
 var modYac = {
     "d": [],
@@ -31,7 +32,7 @@ var dataConfig = {
 	"dur": 0,
 	"estimado":0,
     "e": []
-} 
+}  
 
 var dataIniciar = {
 	"yac": "",
@@ -50,33 +51,6 @@ var dataIniciar = {
 //     "e": [{"f":[ { "c":[{"cod":"","q":"","sueldo":""}] , "m":[{"cod":"","q":"","costo":""}] ,"nF":"nombreFase","estF":"","dF":0} ],"nE":"NOMBRETAPA","estE":"","dE":0}]
 // } 
 
-// console.log(dataConfig.e[0].nE);
-
-//onsole.log(dataConfig.e);
-
-// console.log(dataConfig.yac);
-// console.log(dataConfig.e[0]);
-
-// dataConfig.e.push({"f":[]});
-
-// console.log(dataConfig.e[1].f);
-
-// dataConfig.e[1].f.push({"c":[],"m":[]});
-
-// dataConfig.e[1].f[0].c.push({"cod":"c1l","q":"co1"});
-
-// console.log(dataConfig.e[1].f[0].c[0].cod);
-
-/*modYac.d.push({"n":"vitrita","cod":220});
-modYac.d.push({"n":"vitritdsda","cod":2223});
-modYac.u.push({"n":"vitritax","cod":221,"c":1100});
-modYac.i.push({"n":"vitritaz","cod":222,"c":10000});
-
-console.log(modYac.d[0].n);
-console.log(modYac.u[0].n);
-console.log(modYac.i[0].n);
-
-clearArray(modYac.d);*/
 
 function clearArray(array){
 	var start = 0;
@@ -970,7 +944,6 @@ function verifyAndOrder(a,b){
 }
 
 function checkInserts(a,b){
-
 }
 
 $('#guardarCambioYacimiento').on('submit',function(e){
@@ -1051,7 +1024,49 @@ $('#guardarCambioYacimiento').on('submit',function(e){
 });
 
 ////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 function addEtapa(button,list){
 	button.on('click',function(e){
 			e.preventDefault();
@@ -1116,11 +1131,15 @@ function addEtapa(button,list){
 
 function addFase(button,list,etapa){
 	var globalFase =1;
+	var newFase = false;
 	button.on('click',function(e){
 			var addD = true;
 			var valueDPrev = 0;
+			if( $('#en'+etapa+'U').attr('name') === undefined ){
+				newFase = true;
+			}			
 			e.preventDefault();
-			listFase = list;;
+			listFase = list;
 
 			var nextID = globalFase;
 			listFase.append('\n\
@@ -1170,37 +1189,44 @@ function addFase(button,list,etapa){
 
 			$('#re'+etapa+'f'+nextID+'').on('click',function(e){
 				e.preventDefault();
-				$('#e'+etapa+'fn'+nextID+'').attr('value','xxkkzz');
-				boxButtonDelete = $(this).parent();
-				boxMinDelete = $(boxButtonDelete).parent();
-				boxDelete = $(boxMinDelete).parent();
-				$(boxDelete).removeClass('fadeIn');
-				$(boxDelete).addClass('fadeOut');
-				removeUpFase($('#e'+etapa+'fe'+nextID+'').val(),etapa);
-				removeUpExp($('#e'+etapa+'fe'+nextID+'').val());
-				removeDuracionFase(valueDPrev,etapa);
-				removeDUpExp(valueDPrev);
-				setTimeout(function(){
-					globalIDExplotacionFaseR++;
-					boxDelete.remove();
-				},300);
+				if(modificarConfig && newFase == false){
+					removeButtonUF(etapa,nextID);	
+				}else{
+					$('#e'+etapa+'fn'+nextID+'').attr('value','xxkkzz');
+					boxButtonDelete = $(this).parent();
+					boxMinDelete = $(boxButtonDelete).parent();
+					boxDelete = $(boxMinDelete).parent();
+					$(boxDelete).removeClass('fadeIn');
+					$(boxDelete).addClass('fadeOut');
+					removeUpFase($('#e'+etapa+'fe'+nextID+'').val(),etapa);
+					removeUpExp($('#e'+etapa+'fe'+nextID+'').val());
+					removeDuracionFase(valueDPrev,etapa);
+					removeDUpExp(valueDPrev);
+					setTimeout(function(){
+						globalIDExplotacionFaseR++;
+						boxDelete.remove();
+					},300);
+				}				
 			});
 
 			$('#e'+etapa+'d'+nextID+'').on('change',function(){
 				changeNaN(this);
 				if(addD == true){
 					valueDPrev = $(this).val();
+					addDuracionFaseU($(this).val(),etapa);
 					addDuracionFase($(this).val(),etapa);
 					addDUpExp($(this).val());
 					addD = false;
 				}else{
 					removeDuracionFase(valueDPrev,etapa);
+					removeDuracionFaseU(valueDPrev,etapa);
 					removeDUpExp(valueDPrev);
 					addDUpExp($('#e'+etapa+'d'+nextID+'').val());
 					addDuracionFase($('#e'+etapa+'d'+nextID+'').val(),etapa);
+					addDuracionFaseU($('#e'+etapa+'d'+nextID+'').val(),etapa);
 					valueDPrev = $('#e'+etapa+'d'+nextID+'').val();
 				}
-			});
+			});	
 
 			globalFase++;
 			globalIDExplotacionFase++;
@@ -1209,6 +1235,7 @@ function addFase(button,list,etapa){
 
 function addCargo(button,list,etapa,fase){
 	var globalCargo=1;
+	var newCargoA = false;
 	button.on('click',function(e){
 			e.preventDefault();
 			listCargo = list;
@@ -1218,8 +1245,12 @@ function addCargo(button,list,etapa,fase){
 				success: function(response){
 						var add = true;
 						var valuePrev = 0;
-						var cantAdd = true;
 						var cantPrev = false;
+						var cantAdd = true;
+						var cargo = {"total":0};
+						if( $('#e'+etapa+'fn'+fase+'U').attr('name') === undefined ){
+							newCargoA = true;
+						}
 						if(response.car != null){
 							var nextID = globalCargo;
 							listCargo.append('\n\
@@ -1259,67 +1290,81 @@ function addCargo(button,list,etapa,fase){
 
 							$('#re'+etapa+'f'+fase+'c'+nextID+'').on('click',function(e){
 								e.preventDefault();
-								$('#e'+etapa+'f'+fase+'cq'+nextID+'').attr('value',-1);
-								boxButtonDelete = $(this).parent();
-								boxMinDelete = $(boxButtonDelete).parent();
-								boxDelete = $(boxMinDelete).parent();
-								$(boxDelete).removeClass('fadeIn');
-								$(boxDelete).addClass('fadeOut');
-								removeEstimado(valuePrev);
-								removeEstimadoFase(valuePrev,etapa,fase);
-								removeEstimadoEtapa(valuePrev,etapa);
-								setTimeout(function(){
-									globalIDCargoR++;
-									boxDelete.remove();
-								},300);
-							});
-
-							$('#e'+etapa+'f'+fase+'cq'+nextID+'').on('change',function(){
-								var costo = $('#e'+etapa+'f'+fase+'cs'+nextID+'');
-								changeNaN(costo);
-								changeNaN(this);
-								var cantidad = $(this).val();
-								if(cantAdd == true){
-									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
-									addEstimado(cantidad*(costo.val()));
-									addEstimadoEtapa(cantidad*(costo.val()),etapa);
-									cantPrev = cantidad;
-									valuePrev = cantidad*(costo.val());
-									cantAdd = false;
+								if(modificarConfig && newCargoA == false){
+									removeButtonUC(etapa,fase,nextID);
 								}else{
+									$('#e'+etapa+'f'+fase+'cq'+nextID+'').attr('value',-1);
+									boxButtonDelete = $(this).parent();
+									boxMinDelete = $(boxButtonDelete).parent();
+									boxDelete = $(boxMinDelete).parent();
+									$(boxDelete).removeClass('fadeIn');
+									$(boxDelete).addClass('fadeOut');
 									removeEstimado(valuePrev);
 									removeEstimadoFase(valuePrev,etapa,fase);
 									removeEstimadoEtapa(valuePrev,etapa);
-									addEstimadoEtapa(cantidad*(costo.val()),etapa);
-									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
-									addEstimado(cantidad*(costo.val()));
-									cantPrev = cantidad;
-									valuePrev = cantidad*(costo.val());								
-								}
+									setTimeout(function(){
+										globalIDCargoR++;
+										boxDelete.remove();
+									},300);
+								}								
 							});
 
-
-							$('#e'+etapa+'f'+fase+'cs'+nextID+'').on('change',function(){
-								var cantidad = $('#e'+etapa+'f'+fase+'cq'+nextID+'');
-								changeNaN(cantidad);
-								changeNaN(this);
-								var value = $(this).val();
-								if(add == true){
-									addEstimadoEtapa(value*(cantidad.val()),etapa);
-									addEstimadoFase(value*(cantidad.val()),etapa,fase);
-									addEstimado(value*(cantidad.val()));
-									valuePrev = value*(cantidad.val());
-									add = false;
-								}else{
-									removeEstimado(valuePrev);
-									removeEstimadoFase(valuePrev,etapa,fase);
-									removeEstimadoEtapa(valuePrev,etapa);
-									addEstimadoEtapa(value*(cantidad.val()),etapa);
-									addEstimadoFase(value*(cantidad.val()),etapa,fase);
-									addEstimado(value*(cantidad.val()));
-									valuePrev = value*(cantidad.val());									
-								}
-							});
+							
+							if(modificarConfig && newCargoA == false){
+								genericUpdateCC(cargo,etapa,fase,nextID);
+							}else{
+								alert('Sirve el bool');
+								$('#e'+etapa+'f'+fase+'cq'+nextID+'').on('change',function(){
+									var costo = $('#e'+etapa+'f'+fase+'cs'+nextID+'');
+									changeNaN(costo);
+									changeNaN(this);
+									var cantidad = $(this).val();
+									if(cantAdd == true){
+										addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+										addEstimado(cantidad*(costo.val()));
+										addEstimadoEtapa(cantidad*(costo.val()),etapa);
+										cantPrev = cantidad;
+										valuePrev = cantidad*(costo.val());
+										cantAdd = false;
+									}else{
+										removeEstimado(valuePrev);
+										removeEstimadoFase(valuePrev,etapa,fase);
+										removeEstimadoEtapa(valuePrev,etapa);
+										addEstimadoEtapa(cantidad*(costo.val()),etapa);
+										addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+										addEstimado(cantidad*(costo.val()));
+										cantPrev = cantidad;
+										valuePrev = cantidad*(costo.val());																
+									}
+								});
+							}
+						
+							if(modificarConfig && newCargoA == false){
+								genericUpdateCS(cargo,etapa,fase,nextID);
+							}else{
+								alert('Sirve el bool');
+								$('#e'+etapa+'f'+fase+'cs'+nextID+'').on('change',function(){
+									var cantidad = $('#e'+etapa+'f'+fase+'cq'+nextID+'');
+									changeNaN(cantidad);
+									changeNaN(this);
+									var value = $(this).val();
+									if(add == true){
+										addEstimadoEtapa(value*(cantidad.val()),etapa);
+										addEstimadoFase(value*(cantidad.val()),etapa,fase);
+										addEstimado(value*(cantidad.val()));
+										valuePrev = value*(cantidad.val());
+										add = false;
+									}else{
+										removeEstimado(valuePrev);
+										removeEstimadoFase(valuePrev,etapa,fase);
+										removeEstimadoEtapa(valuePrev,etapa);
+										addEstimadoEtapa(value*(cantidad.val()),etapa);
+										addEstimadoFase(value*(cantidad.val()),etapa,fase);
+										addEstimado(value*(cantidad.val()));
+										valuePrev = value*(cantidad.val());									
+									}
+								});
+							}							
 
 							globalCargo++;
 							globalIDCargo++;
@@ -1335,6 +1380,7 @@ function addCargo(button,list,etapa,fase){
 
 function addMaquinaria(button,list,etapa,fase){
 	var globalMaquinaria =1;
+	var newMaquinariaA = false;
 	button.on('click',function(e){
 			e.preventDefault();
 			listMaquinaria = list;
@@ -1346,6 +1392,10 @@ function addMaquinaria(button,list,etapa,fase){
 						var valuePrev = 0;
 						var cantAdd = true;
 						var cantPrev = false;
+						var maquinaria = {"total":0};
+						if( $('#e'+etapa+'fn'+fase+'U').attr('name') === undefined ){
+							newMaquinariaA = true;
+						}
 						if(response.TMmaq != null){
 							var nextID = globalMaquinaria;
 							listMaquinaria.append('\n\
@@ -1386,66 +1436,77 @@ function addMaquinaria(button,list,etapa,fase){
 
 							$('#re'+etapa+'f'+fase+'m'+nextID+'').on('click',function(e){
 								e.preventDefault();
-								$('#e'+etapa+'f'+fase+'mq'+nextID+'').attr('value',-1);
-								boxButtonDelete = $(this).parent();
-								boxMinDelete = $(boxButtonDelete).parent();
-								boxDelete = $(boxMinDelete).parent();
-								$(boxDelete).removeClass('fadeIn');
-								$(boxDelete).addClass('fadeOut');
-								removeEstimado(valuePrev);
-								removeEstimadoFase(valuePrev,etapa,fase);
-								removeEstimadoEtapa(valuePrev,etapa);
-								setTimeout(function(){
-									boxDelete.remove();
-								},300);
-							});
-
-							$('#e'+etapa+'f'+fase+'mq'+nextID+'').on('change',function(){
-								var costo = $('#e'+etapa+'f'+fase+'mc'+nextID+'');
-								changeNaN(costo);
-								changeNaN(this);
-								var cantidad = $(this).val();
-								if(cantAdd == true){
-									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
-									addEstimado(cantidad*(costo.val()));
-									addEstimadoEtapa(cantidad*(costo.val()),etapa);
-									cantPrev = cantidad;
-									valuePrev = cantidad*(costo.val());
-									cantAdd = false;
+								if(modificarConfig && newMaquinariaA == false){
+									removeButtonUM(etapa,fase,nextID);
 								}else{
+									$('#e'+etapa+'f'+fase+'mq'+nextID+'').attr('value',-1);
+									boxButtonDelete = $(this).parent();
+									boxMinDelete = $(boxButtonDelete).parent();
+									boxDelete = $(boxMinDelete).parent();
+									$(boxDelete).removeClass('fadeIn');
+									$(boxDelete).addClass('fadeOut');
 									removeEstimado(valuePrev);
 									removeEstimadoFase(valuePrev,etapa,fase);
 									removeEstimadoEtapa(valuePrev,etapa);
-									addEstimadoEtapa(cantidad*(costo.val()),etapa);
-									addEstimadoFase(cantidad*(costo.val()),etapa,fase);
-									addEstimado(cantidad*(costo.val()));
-									cantPrev = cantidad;
-									valuePrev = cantidad*(costo.val());								
-								}
+									setTimeout(function(){
+										boxDelete.remove();
+									},300);
+								}								
 							});
 
+							if(modificarConfig && newMaquinariaA == false){
+								genericUpdateMQ(maquinaria,etapa,fase,nextID);
+							}else{
+								$('#e'+etapa+'f'+fase+'mq'+nextID+'').on('change',function(){
+									var costo = $('#e'+etapa+'f'+fase+'mc'+nextID+'');
+									changeNaN(costo);
+									changeNaN(this);
+									var cantidad = $(this).val();
+									if(cantAdd == true){
+										addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+										addEstimado(cantidad*(costo.val()));
+										addEstimadoEtapa(cantidad*(costo.val()),etapa);
+										cantPrev = cantidad;
+										valuePrev = cantidad*(costo.val());
+										cantAdd = false;
+									}else{
+										removeEstimado(valuePrev);
+										removeEstimadoFase(valuePrev,etapa,fase);
+										removeEstimadoEtapa(valuePrev,etapa);
+										addEstimadoEtapa(cantidad*(costo.val()),etapa);
+										addEstimadoFase(cantidad*(costo.val()),etapa,fase);
+										addEstimado(cantidad*(costo.val()));
+										cantPrev = cantidad;
+										valuePrev = cantidad*(costo.val());								
+									}
+								});
+							}
 
-							$('#e'+etapa+'f'+fase+'mc'+nextID+'').on('change',function(){
-								var cantidad = $('#e'+etapa+'f'+fase+'mq'+nextID+'');
-								changeNaN(cantidad);
-								changeNaN(this);
-								var value = $(this).val();
-								if(add == true){
-									addEstimadoEtapa(value*(cantidad.val()),etapa);
-									addEstimadoFase(value*(cantidad.val()),etapa,fase);
-									addEstimado(value*(cantidad.val()));
-									valuePrev = value*(cantidad.val());
-									add = false;
-								}else{
-									removeEstimado(valuePrev);
-									removeEstimadoFase(valuePrev,etapa,fase);
-									removeEstimadoEtapa(valuePrev,etapa);
-									addEstimadoEtapa(value*(cantidad.val()),etapa);
-									addEstimadoFase(value*(cantidad.val()),etapa,fase);
-									addEstimado(value*(cantidad.val()));
-									valuePrev = value*(cantidad.val());									
-								}
-							});
+							if(modificarConfig && newMaquinariaA == false){
+								genericUpdateMC(maquinaria,etapa,fase,nextID);
+							}else{
+								$('#e'+etapa+'f'+fase+'mc'+nextID+'').on('change',function(){
+									var cantidad = $('#e'+etapa+'f'+fase+'mq'+nextID+'');
+									changeNaN(cantidad);
+									changeNaN(this);
+									var value = $(this).val();
+									if(add == true){
+										addEstimadoEtapa(value*(cantidad.val()),etapa);
+										addEstimadoFase(value*(cantidad.val()),etapa,fase);
+										addEstimado(value*(cantidad.val()));
+										valuePrev = value*(cantidad.val());
+										add = false;
+									}else{
+										removeEstimado(valuePrev);
+										removeEstimadoFase(valuePrev,etapa,fase);
+										removeEstimadoEtapa(valuePrev,etapa);
+										addEstimadoEtapa(value*(cantidad.val()),etapa);
+										addEstimadoFase(value*(cantidad.val()),etapa,fase);
+										addEstimado(value*(cantidad.val()));
+										valuePrev = value*(cantidad.val());									
+									}
+								});
+							}
 
 							globalMaquinaria++;
 							globalIDMaquinaria++;
@@ -1457,8 +1518,6 @@ function addMaquinaria(button,list,etapa,fase){
 			});	
 	});
 }
-
-
 
 function verifyNameEtapa(){
 	var start=1;
@@ -1568,14 +1627,24 @@ function addDuracionFase(value,etapa){
 	duracion.val(parseInt(duracion.val())+parseInt(value));
 }
 
+function addDuracionFaseU(value,etapa){
+	var duracion = $('#ed'+etapa+'U');
+	duracion.val(parseInt(duracion.val())+parseInt(value));
+}
+
 function removeDuracionFase(value,etapa){
 	var duracion = $('#ed'+etapa+'');
 	duracion.val(parseInt(duracion.val())-parseInt(value));
 }
 
+function removeDuracionFaseU(value,etapa){
+	var duracion = $('#ed'+etapa+'U');
+	duracion.val(parseInt(duracion.val())-parseInt(value));
+}
 
 function removeEstimado(value){
 	var estimado = $('#estimadoExplotacionConfigurar');
+	//estimado.attr('value',parseFloat(estimado.val())-parseFloat(value));
 	estimado.val(parseFloat(estimado.val())-parseFloat(value));
 }
 
@@ -1584,9 +1653,30 @@ function addEstimadoFase(value,etapa,id){
 	estimado.val(parseFloat(estimado.val())+parseFloat(value));
 }
 
+function addEstimadoFaseU(value,nextID,nextIDF){
+	var estimado = $('#e'+nextID+'fe'+nextIDF+'U');
+	//estimado.attr('value',parseFloat(estimado.val())+parseFloat(value));
+	estimado.val(parseFloat(estimado.val())+parseFloat(value));
+}
+
 function removeEstimadoFase(value,etapa,id){
 	var estimado = $('#e'+etapa+'fe'+id+'');
 	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function removeEstimadoFaseU(value,nextID,nextIDF){
+	var estimado = $('#e'+nextID+'fe'+nextIDF+'U');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function removeGenericU(input,value){
+	var estimado = input;
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function addGenericU(input,value){
+	var duracion = input;
+	duracion.val(parseInt(duracion.val())+parseInt(value));
 }
 
 function addEstimadoEtapa(value,etapa){
@@ -1594,8 +1684,20 @@ function addEstimadoEtapa(value,etapa){
 	estimado.val(parseFloat(estimado.val())+parseFloat(value));
 }
 
+function addEstimadoEtapaU(value,nextID){
+	var estimado = $('#ee'+nextID+'U');
+	//estimado.attr('value',parseFloat(estimado.val())+parseFloat(value));
+	estimado.val(parseFloat(estimado.val())+parseFloat(value));
+}
+
 function removeEstimadoEtapa(value,etapa){
 	var estimado = $('#ee'+etapa+'');
+	estimado.val(parseFloat(estimado.val())-parseFloat(value));
+}
+
+function removeEstimadoEtapaU(value,nextID){
+	var estimado = $('#ee'+nextID+'U');
+	//estimado.attr('value',parseFloat(estimado.val())-parseFloat(value));
 	estimado.val(parseFloat(estimado.val())-parseFloat(value));
 }
 
@@ -1610,7 +1712,6 @@ function removeUpExp(value){
 }
 
 function addDUpExp(value){
-	console.log('entro AKI');
 	var duracion = $('#duracionExplotacionConfigurar');
 	duracion.val(parseInt(duracion.val())+parseInt(value));
 }
@@ -1850,8 +1951,7 @@ $('#agregarConfiguracion').on('submit',function(e){
 												}
 											},
 											async: false
-										});
-				
+										});				
 									}
 									alert('La configuracion para explotar el yacimiento fue realizada correctamente! Si desea agregar una nueva configuracion, porfavor seleccione un yacimiento valido nuevamente.');	
 									dataConfig = {
@@ -2045,18 +2145,86 @@ $('#eliminarConfiguracion').on('submit',function(e){
 	});
 });
 
+var dI = {
+    "e": []
+} 
+var dU = {
+    "e": []
+} 
+var dD = {
+    "e": []
+}
 
+var dataGC = {
+	"codYac":"",
+	"duracion":"",
+	"estimado":"",
+	"estatus":"",
+	"codExp":""
+}
 
-////////////////////////// MODIFICAR CONFIGURACION DE EXPLOTACION NO FUNCIONA
+var dataUpdate = {
+	"e":[]
+}
+
+var dataInsert = {
+	"e":[]
+}
+
+var dataInsertF = [];
+
+var dataInsertM = [];
+var dataInsertC = [];
+
+var dataDeleteE = [{
+	"codE":""
+}];
+
+var dataDeleteF = [{
+	"codF":""
+}]
+
+var dataDeleteC = []
+
+var dataDeleteM = []
+
 $('#verificarConfiguracion').on('submit',function(e){
+	modificarConfig = true;
 	e.preventDefault();
-	gF =0;
-	gM =0;
-	globalIDExplotacionEtapa = 1;
-	globalIDExplotacionFase = 1;
-	globalIDCargo =1;
-	globalIDMaquinaria =1;
 	var yacimientoVerificarConfiguracion = $('#yacimientoVerificarConfigurar').children(":selected");
+
+	var CG =[{}];
+	var TM =[{}];
+
+	$.ajax({
+		url: '/getCargo',
+		method: 'GET', 
+		success: function(response){
+			if(response.car != null){
+				CG = response.car;
+				console.log(CG);
+			}else{
+				alert('No se pueden obtener los cargos genericos');
+			}
+		},
+		async:false
+	});	
+
+	$.ajax({
+		url: '/getTipoMaquinaria',
+		method: 'GET', 
+		success: function(response){
+			if(response.TMmaq != null){
+				TM = response.TMmaq;
+				console.log(TM);
+			}else{
+				alert('No se pueden obtener las maquinarias genericas');
+			}
+		},
+		async:false
+	});
+
+
 	$.ajax({
 		url: '/Explotaciones-Configuracion-Verificar',
 		method: 'POST',
@@ -2079,7 +2247,7 @@ $('#verificarConfiguracion').on('submit',function(e){
 					  </div>\n\
 					  <div class="col-4">\n\
 					  	<label for="estatusExplotacion">Estatus</label>\n\
-						<select class="form-control formsCRUD" id="estatusExplotacion" required>\n\
+						<select class="form-control formsCRUD" id="estatusExplotacion" name="'+response.explotacion[0].exp_codigo+'" required>\n\
 						</select>\n\
 					  </div>\n\
 					</div>\n\
@@ -2094,7 +2262,8 @@ $('#verificarConfiguracion').on('submit',function(e){
 					<hr>\n\
 					<div class="animated fadeIn listEtapa" id="listEtapa">\n\
 					</div>\n\
-					<hr>\n\ ');
+					<hr>\n\
+					<button class="btn btnForms btn-block animated fadeIn" type="submit">Guardar cambios</button>');
 
 				addEtapa($('#addEtapa'),$('#listEtapa'));
 
@@ -2113,8 +2282,49 @@ $('#verificarConfiguracion').on('submit',function(e){
 					},
 					success:function(response){
 						if(response.etapas[0] != null){
+							var arrayPos = 0;
 							for (var i = 0; i < response.etapas.length; i++) {
-								$('#addEtapa').trigger('click');
+								listEtapa = $('#listEtapa');
+								var nextID = globalIDExplotacionEtapa;
+								dU.e.push({"f":[],"nE":response.etapas[i].eta_nombre,"codE":response.etapas[i].eta_codigo,"estE":response.etapas[i].eta_costototal,"dE":response.etapas[i].eta_duracion});
+								listEtapa.append('\n\
+										<div class="newEtapa animated fadeIn" id="'+nextID+'U">\n\
+										<div class="form-row">\n\
+										<div class="col-md-4 mb-3">\n\
+										<label for="en'+nextID+'U" class="textEtapa">Nombre de la etapa</label>\n\
+										<input type="text" class="form-control formsCRUD" id="en'+nextID+'U" name="'+response.etapas[i].eta_codigo+'" value="'+response.etapas[i].eta_nombre+'" required>\n\
+										</div>\n\
+										<div class="col-md-3 mb-3">\n\
+										<label for="ee'+nextID+'U" class="textEtapa">Estimado (Bs)</label>\n\
+										<input type="number"class="form-control formsCRUD" id="ee'+nextID+'U"   value="'+response.etapas[i].eta_costototal+'" disabled>\n\
+										</div>\n\
+										<div class="col-md-3 mb-3">\n\
+										<label for="ed'+nextID+'U" class="textEtapa">Duración (Días)</label>\n\
+										<input type="number" class="form-control formsCRUD" id="ed'+nextID+'U" value="'+response.etapas[i].eta_duracion+'" disabled>\n\
+										</div>\n\
+										<div class="col-md-2 mb-3">\n\
+										<label for="re'+nextID+'U" class="hackerText">H</label>\n\
+										<button class="btn btn-danger btn-block" id="re'+nextID+'U" >X</button>\n\
+										</div>\n\
+										</div>\n\
+										<hr class="hretapa">\n\
+										<div class="row">\n\
+										<div class="col-4"></div>\n\
+										<div class="col-4">\n\
+										<button class="btn btn-success btn-block" id="addFe'+nextID+'U">Agregar una nueva fase</button>\n\
+										</div>\n\
+										<div class="col-4"></div>\n\
+										</div>\n\
+										<hr class="hretapa">\n\
+										<div class="listFase" id="listFe'+nextID+'U">\n\
+										</div>\n\
+										</div>\n\
+								');
+
+								addFase($('#addFe'+nextID+'U'),$('#listFe'+nextID+'U'),nextID);
+
+								removeButtonUE(nextID);
+
 								$.ajax({
 									url: '/FT',
 									method: 'POST',
@@ -2123,52 +2333,176 @@ $('#verificarConfiguracion').on('submit',function(e){
 									},
 									success:function(res){
 										if(res.fases[0] != null){
-											console.log(res.fases.length);
-											for (var k = 0; k < res.fases.length; k++) {
-												$('#addFe'+(i+1)+'').trigger('click');
-												$.ajax({
-													url: '/FM',
-													method: 'POST',
-													data:{
-														faseMod: res.fases[k].fas_codigo
-													},
-													success:function(res){
-														if(res.maquinarias != null){
-															for (var j = 0; j < res.maquinarias.length; j++){
-																$('#addMe'+(i+1)+'f'+(k+1)+'').trigger('click');
-															}	
-														}
-													},
-													async:false
-												});
+											var arrayCargo = 0;
+											var arrayMaquinaria =0;
+											for (var k = 0; k < res.fases.length; k++) {											
+												listFase = $('#listFe'+nextID+'U');
 
-												$.ajax({
-													url: '/FC',
-													method: 'POST',
-													data:{
-														faseMod: res.fases[k].fas_codigo
-													},
-													success:function(res){
-														if(res.cargos != null){
-															console.log('i= '+i+' k= '+k);
-															console.log(res.cargos.length);
-															for (var g = 0; g < res.cargos.length; g++){
-																etapa = i+1;
-																fase = k+1;
-																console.log("#addCe"+etapa+"f"+fase+"");
-																$('#addCe'+etapa+'f'+fase+'').trigger('click');														
-															}			
+												var nextIDF = k+1;
+												dU.e[arrayPos].f.push({ "c":[] , "m":[] ,"nF":res.fases[k].fas_nombre,"codF":res.fases[k].fas_codigo, "estF": res.fases[k].fas_costototal,"dF":res.fases[k].fas_duracion});
+												listFase.append('\n\
+													<div class="newFase animated fadeIn" id="e'+nextID+'f'+nextIDF+'U">\n\
+													<div class="form-row">\n\
+													<div class="col-md-4 mb-3">\n\
+													<label for="e'+nextID+'fn'+nextIDF+'U" class="textEtapa">Nombre de la fase</label>\n\
+													<input type="text" class="form-control formsCRUD" id="e'+nextID+'fn'+nextIDF+'U" value="'+res.fases[k].fas_nombre+'" name="'+res.fases[k].fas_codigo+'" required>\n\
+													</div>\n\
+													<div class="col-md-3 mb-3">\n\
+													<label for="e'+nextID+'fe'+nextIDF+'U" class="textEtapa">Estimado (Bs)</label>\n\
+													<input type="text" class="form-control formsCRUD" id="e'+nextID+'fe'+nextIDF+'U" value="'+res.fases[k].fas_costototal+'" disabled>\n\
+													</div>\n\
+													<div class="col-md-3 mb-3">\n\
+													<label for="e'+nextID+'d'+nextIDF+'U" class="textEtapa">Duración (Días)</label>\n\
+													<input type="number" min="1" step="1" value="'+res.fases[k].fas_duracion+'" class="form-control formsCRUD" id="e'+nextID+'d'+nextIDF+'U" requiered>\n\
+													</div>\n\
+													<div class="col-md-2 mb-3">\n\
+													<label for="re'+nextID+'f'+nextIDF+'U" class="hackerText">H</label>\n\
+													<button class="btn btn-danger btn-block" id="re'+nextID+'f'+nextIDF+'U" >Eliminar</button>\n\
+													</div>\n\
+													</div>\n\
+													<hr class="hretapa">\n\
+													\n\
+													<div class="container-fluid">\n\
+													<div class="row">\n\
+													<div class="col-md-6 mb-3">\n\
+													<button class="btn btn-warning btn-block" id="addCe'+nextID+'f'+nextIDF+'U">Agregar un nuevo Cargo</button>\n\
+													<hr class="hretapa">\n\
+													<div class="listCargo" id="e'+nextID+'listCf'+nextIDF+'U">\n\
+													</div>\n\
+													</div>\n\
+													<div class="col-md-6 mb-3">\n\
+													<button class="btn btn-warning btn-block" id="addMe'+nextID+'f'+nextIDF+'U">Agregar una nueva Maquinaria</button>\n\
+													<hr class="hretapa">\n\
+													<div class="listMaquinaria" id="e'+nextID+'listMf'+nextIDF+'U">\n\
+													</div>\n\
+													</div>\n\
+													</div>\n\
+													</div>\n\
+													\n\
+													</div>\n\
+													');
+
+												addCargo($('#addCe'+nextID+'f'+nextIDF+'U'),$('#e'+nextID+'listCf'+nextIDF+'U'),nextID,nextIDF);
+												addMaquinaria($('#addMe'+nextID+'f'+nextIDF+'U'),$('#e'+nextID+'listMf'+nextIDF+'U'),nextID,nextIDF);
+												removeButtonUF(nextID,nextIDF);
+												genericUpdateF(dU.e[arrayPos].f[k],nextID,nextIDF);
+
+
+
+					
+												var cargos = [{}];
+												cargos = addCargoUpdate(res.fases[k].fas_codigo);
+												for (var v = 0; v < cargos.length; v++) {
+													dU.e[arrayPos].f[arrayCargo].c.push({"cod":cargos[v].car_codigo,"q":cargos[v].cf_cantidad,"salario":cargos[v].cf_costo,"total":(cargos[v].cf_costo)*(cargos[v].cf_cantidad)});
+													listCargo = $('#e'+nextID+'listCf'+nextIDF+'U');
+													var nextIDUC = v+1;
+													listCargo.append('\n\
+														<div class="newCargo animated fadeIn">\n\
+															<div class="form-row">\n\
+																<div class="col-md-8 mb-3">\n\
+																	<label for="e'+nextID+'f'+nextIDF+'c'+nextIDUC+'U" class="textEtapa">Cargo</label>\n\
+																	<select class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'c'+nextIDUC+'U" name="'+cargos[v].cf_codigo+'" required></select>\n\
+																</div>\n\
+																<div class="col-md-4 mb-3">\n\
+																	<label for="e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U" class="textEtapa">Cantidad</label>\n\
+																	<input type="number" min="1" class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U" value="'+cargos[v].cf_cantidad+'" required>\n\
+																</div>\n\
+															</div>\n\
+															<div class="form-row">\n\
+																<div class="col-md-8 mb-3">\n\
+																    <div class="input-group mb-2 mr-sm-2">\n\
+																    	<div class="input-group-prepend">\n\
+																	    	<div class="input-group-text">Bs</div>\n\
+																	  	</div>\n\
+																	    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'U" value="'+cargos[v].cf_costo+'" required>\n\
+																	</div>\n\
+																</div>\n\
+																<div class="col-md-4 mb-3">\n\
+																	<button class="btn btn-danger btn-block" id="re'+nextID+'f'+nextIDF+'c'+nextIDUC+'U" >X</button>\n\
+																</div>\n\
+															</div>\n\
+														\n\
+														</div>\n\
+														');
+
+													selectCargo = $('#e'+nextID+'f'+nextIDF+'c'+nextIDUC+'U');
+													selectCargo.html('');
+													for (var p = CG.length - 1; p >= 0; p--) {
+														selectCargo.append('<option value="'+CG[p].car_codigo+'">'+CG[p].car_nombre+'</option>');
+													}
+													$("#e"+nextID+"f"+nextIDF+"c"+nextIDUC+"U option[value="+ cargos[v].car_codigo +"]").attr("selected",true);
+
+													removeButtonUC(nextID,nextIDF,nextIDUC);
+													genericUpdateCC(dU.e[arrayPos].f[arrayCargo].c[v],nextID,nextIDF,nextIDUC);
+													genericUpdateCS(dU.e[arrayPos].f[arrayCargo].c[v],nextID,nextIDF,nextIDUC);
+													globalIDCargo++;
+												}	
+
+												var maquinarias = [{}];
+												maquinarias = addMaquinariaUpdate(res.fases[k].fas_codigo);
+												console.log(maquinarias.length);
+												if(maquinarias[0].tm_codigo !== undefined){
+													for (var v = 0; v < maquinarias.length; v++) {
+														dU.e[arrayPos].f[arrayMaquinaria].m.push({"cod":maquinarias[v].tm_codigo,"q":maquinarias[v].tmf_cantidad,"costo":maquinarias[v].tmf_costo,"total":(maquinarias[v].tmf_cantidad)*(maquinarias[v].tmf_costo)});
+														listMaquinaria = $('#e'+nextID+'listMf'+nextIDF+'U');
+														var nextIDUC = v+1;
+														listMaquinaria.append('\n\
+															<div class="newCargo animated fadeIn">\n\
+																<div class="form-row">\n\
+																	<div class="col-md-8 mb-3">\n\
+																		<label for="e'+nextID+'f'+nextIDF+'m'+nextIDUC+'U" class="textEtapa">Maquinaria</label>\n\
+																		<select class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'m'+nextIDUC+'U" name="'+maquinarias[v].tmf_codigo+'" required></select>\n\
+																	</div>\n\
+																	<div class="col-md-4 mb-3">\n\
+																		<label for="e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U" class="textEtapa">Cantidad</label>\n\
+																		<input type="number" min="1" class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U" value="'+maquinarias[v].tmf_cantidad+'" required>\n\
+																	</div>\n\
+																</div>\n\
+																<div class="form-row">\n\
+																	<div class="col-md-8 mb-3">\n\
+																		<div class="input-group mb-2 mr-sm-2">\n\
+																	    	<div class="input-group-prepend">\n\
+																		    	<div class="input-group-text">Bs</div>\n\
+																		  	</div>\n\
+																		    <input type="number" min="0.01" step="0.01" class="form-control formsCRUD" id="e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'U" value="'+maquinarias[v].tmf_costo+'" required>\n\
+																		</div>\n\
+																	</div>\n\
+																	<div class="col-md-4 mb-4">\n\
+																		<button class="btn btn-danger btn-block" id="re'+nextID+'f'+nextIDF+'m'+nextIDUC+'U" >X</button>\n\
+																	</div>\n\
+																</div>\n\
+															\n\
+															</div>\n\
+															');
+
+														selectMaquinaria = $('#e'+nextID+'f'+nextIDF+'m'+nextIDUC+'U');
+														selectMaquinaria.html('');
+														for (var p = TM.length - 1; p >= 0; p--) {
+															selectMaquinaria.append('<option value="'+TM[p].tm_codigo+'">'+TM[p].tm_nombre+'</option>');
 														}
-													},
-													async: false
-												});
-											}											
+														$("#e"+nextID+"f"+nextIDF+"m"+nextIDUC+"U option[value="+ maquinarias[v].tm_codigo +"]").attr("selected",true);
+
+														removeButtonUM(nextID,nextIDF,nextIDUC);
+														genericUpdateMQ(dU.e[arrayPos].f[arrayCargo].m[v],nextID,nextIDF,nextIDUC);
+														genericUpdateMC(dU.e[arrayPos].f[arrayCargo].m[v],nextID,nextIDF,nextIDUC);
+														globalIDMaquinaria++;
+													}			
+												}
+																													
+												
+												globalIDExplotacionFase++;
+												arrayCargo++;
+												arrayMaquinaria++;
+											}																				
 										}else{
 											alert('Hubo un error, verifique');
 										}
 									},
 									async: false
 								});									
+
+								globalIDExplotacionEtapa++;	
+								arrayPos++;						
 							}
 						}else{
 							alert('Hubo un error, verifique');
@@ -2183,8 +2517,898 @@ $('#verificarConfiguracion').on('submit',function(e){
 		},
 		async: false
 	});
+	console.log(dU);
 });
 
+$('#modificarConfiguracion').on('submit',function(e){
+	e.preventDefault();
+	var codigoYacimiento = $('#yacimientoVerificarConfigurar').children(':selected').val();
+	var duracionConfiguracion = $('#duracionExplotacionConfigurar').val();
+	var estimadoConfiguracion = $('#estimadoExplotacionConfigurar').val();
+	var estatusConfiguracion = $('#estatusExplotacion').children(':selected').val();
+	var explotacionConfiguracion = $('#estatusExplotacion').attr('name');
+	dataGC.codYac = codigoYacimiento;
+	dataGC.duracion = duracionConfiguracion;
+	dataGC.estimado = estimadoConfiguracion;
+	dataGC.estatus = estatusConfiguracion;
+	dataGC.codExp = explotacionConfiguracion;
+	console.log('Data GC');
+	console.log(dataGC);
+
+	var start = 1;
+	clearArray(dataUpdate.e);
+	while(globalIDExplotacionEtapa >= start){
+		if($('#en'+start+'U').val() != 'xxkkzz' && $('#en'+start+'U').val() !== undefined){
+			var cod =$('#en'+start+'U').attr('name');
+			var name = $('#en'+start+'U').val();
+			var est = $('#ee'+start+'U').val();
+			var dur = $('#ed'+start+'U').val();
+			dataUpdate.e.push({"cod":cod,"est":est,"dur":dur,"name":name,"f":[]});
+
+			var startF = 1;
+			while(globalIDExplotacionFase>= startF){
+				if($('#e'+start+'fn'+startF+'U').val() != 'xxkkzz' && $('#e'+start+'fn'+startF+'U').val() !== undefined){
+					var cod =$('#e'+start+'fn'+startF+'U').attr('name');
+					var name= $('#e'+start+'fn'+startF+'U').val();
+					var est = $('#e'+start+'fe'+startF+'U').val();
+					var dur = $('#e'+start+'d'+startF+'U').val();
+					dataUpdate.e[dataUpdate.e.length-1].f.push({"cod":cod,"est":est,"dur":dur,"name":name,"c":[],"m":[]});
+
+					var startC = 1;
+					while(globalIDCargo >= startC){
+						if($('#e'+start+'f'+startF+'cq'+startC+'U').val() > 0 && $('#e'+start+'f'+startF+'cq'+startC+'U').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'c'+startC+'U').children(':selected').val();
+							var codFas = $('#e'+start+'f'+startF+'c'+startC+'U').attr('name');
+							var q = $('#e'+start+'f'+startF+'cq'+startC+'U').val();
+							var salario = $('#e'+start+'f'+startF+'cs'+startC+'U').val();
+							dataUpdate.e[dataUpdate.e.length-1].f[dataUpdate.e[dataUpdate.e.length-1].f.length-1].c.push({"cod":cod,"q":q,"salario":salario,"codCF":codFas});
+						}
+						startC++;
+					}
+
+					var startM = 1;
+					while(globalIDMaquinaria >= startM){
+						if($('#e'+start+'f'+startF+'mq'+startM+'U').val() > 0 && $('#e'+start+'f'+startF+'mq'+startM+'U').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'m'+startM+'U').children(':selected').val();
+							var codFas =$('#e'+start+'f'+startF+'m'+startM+'U').attr('name');
+							var q = $('#e'+start+'f'+startF+'mq'+startM+'U').val();
+							var costo = $('#e'+start+'f'+startF+'mc'+startM+'U').val();
+							dataUpdate.e[dataUpdate.e.length-1].f[dataUpdate.e[dataUpdate.e.length-1].f.length-1].m.push({"cod":cod,"q":q,"costo":costo,"codTMF":codFas});
+						}
+						startM++;
+					}
+				}
+				startF++;
+			}
+		}
+		start++;		
+	}
+	console.log('Updates'); //LISTOS
+	console.log(dataUpdate);
+
+	var start = 1;
+	clearArray(dataDeleteE);
+	clearArray(dataDeleteF);
+	while(globalIDExplotacionEtapa >= start){
+		if($('#en'+start+'U').val() == 'xxkkzz' && $('#en'+start+'U').val() !== undefined){
+			var cod =$('#en'+start+'U').attr('name');
+			dataDeleteE.push({"codE":cod});
+		}
+
+		var startF = 1;
+		while(globalIDExplotacionFase>= startF){
+			if($('#e'+start+'fn'+startF+'U').val() == 'xxkkzz' && $('#e'+start+'fn'+startF+'U').val() !== undefined){
+				var cod =$('#e'+start+'fn'+startF+'U').attr('name');
+				dataDeleteF.push({"codF":cod});
+			}
+
+			startF++;
+		}
+		start++;		
+	}
+	console.log('Deletes'); //LISTOS
+	console.log('---------------------');
+	console.log('Etapas Delete');
+	console.log(dataDeleteE);
+	console.log('---------------------');
+	console.log('Fases Delete');
+	console.log(dataDeleteF);
+	console.log('---------------------');
+	console.log('Cargos Delete');
+	console.log(dataDeleteC);
+	console.log('---------------------');
+	console.log('Maquinarias Delete');
+	console.log(dataDeleteM);
+
+	var start = 1;
+	clearArray(dataInsert.e);
+	while(globalIDExplotacionEtapa >= start){
+		if($('#en'+start+'').val() != 'xxkkzz' && $('#en'+start+'').val() !== undefined){
+			//var cod =$('#en'+start+'').attr('name');
+			var name = $('#en'+start+'').val();
+			var est = $('#ee'+start+'').val();
+			var dur = $('#ed'+start+'').val();
+			dataInsert.e.push({"est":est,"dur":dur,"nE":name,"f":[]});
+
+			var startF = 1;
+			while(globalIDExplotacionFase>= startF){
+				if($('#e'+start+'fn'+startF+'').val() != 'xxkkzz' && $('#e'+start+'fn'+startF+'').val() !== undefined){
+					//var cod =$('#e'+start+'fn'+startF+'').attr('name');
+					var name =$('#e'+start+'fn'+startF+'').val();
+					var est = $('#e'+start+'fe'+startF+'').val();
+					var dur = $('#e'+start+'d'+startF+'').val();
+					dataInsert.e[dataInsert.e.length-1].f.push({"est":est,"dur":dur,"nF":name,"c":[],"m":[]});
+
+					var startC = 1;
+					while(globalIDCargo >= startC){
+						if($('#e'+start+'f'+startF+'cq'+startC+'').val() > 0 && $('#e'+start+'f'+startF+'cq'+startC+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'c'+startC+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'cq'+startC+'').val();
+							var salario = $('#e'+start+'f'+startF+'cs'+startC+'').val();
+							dataInsert.e[dataInsert.e.length-1].f[dataInsert.e[dataInsert.e.length-1].f.length-1].c.push({"cod":cod,"q":q,"salario":salario});
+						}
+						startC++;
+					}
+
+					var startM = 1;
+					while(globalIDMaquinaria >= startM){
+						if($('#e'+start+'f'+startF+'mq'+startM+'').val() > 0 && $('#e'+start+'f'+startF+'mq'+startM+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'m'+startM+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'mq'+startM+'').val();
+							var costo = $('#e'+start+'f'+startF+'mc'+startM+'').val();
+							dataInsert.e[dataInsert.e.length-1].f[dataInsert.e[dataInsert.e.length-1].f.length-1].m.push({"cod":cod,"q":q,"costo":costo});
+						}
+						startM++;
+					}
+				}
+				startF++;
+			}
+		}
+		start++;		
+	}
+	console.log('Inserts');// LISTOS
+	console.log(dataInsert);
+
+	var start = 1;
+	var ArrayPosInsert =0;
+	clearArray(dataInsertF);
+	while(globalIDExplotacionEtapa >= start){
+		if($('#en'+start+'U').val() != 'xxkkzz' && $('#en'+start+'U').val() !== undefined){
+			var codEta = $('#en'+start+'U').attr('name');
+			var startF = 1;
+			while(globalIDExplotacionFase>= startF){
+				if($('#e'+start+'fn'+startF+'').val() != 'xxkkzz' && $('#e'+start+'fn'+startF+'').val() !== undefined){
+					var name =$('#e'+start+'fn'+startF+'').val();
+					var est = $('#e'+start+'fe'+startF+'').val();
+					var dur = $('#e'+start+'d'+startF+'').val();
+					dataInsertF.push({"codEta":codEta,"est":est,"dur":dur,"name":name,"c":[],"m":[]});
+
+					var startC = 1;
+					while(globalIDCargo >= startC){
+						if($('#e'+start+'f'+startF+'cq'+startC+'').val() > 0 && $('#e'+start+'f'+startF+'cq'+startC+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'c'+startC+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'cq'+startC+'').val();
+							var salario = $('#e'+start+'f'+startF+'cs'+startC+'').val();
+							dataInsertF[ArrayPosInsert].c.push({"cod":cod,"q":q,"salario":salario});
+						}
+						startC++;
+					}
+
+					var startM = 1;
+					while(globalIDMaquinaria >= startM){
+						if($('#e'+start+'f'+startF+'mq'+startM+'').val() > 0 && $('#e'+start+'f'+startF+'mq'+startM+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'m'+startM+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'mq'+startM+'').val();
+							var costo = $('#e'+start+'f'+startF+'mc'+startM+'').val();
+							dataInsertF[ArrayPosInsert].m.push({"cod":cod,"q":q,"costo":costo});
+						}
+						startM++;
+					}
+					ArrayPosInsert++;
+				}
+				startF++;
+			}			
+		}
+		start++;		
+	}
+	console.log('Inserts de una fase nueva con sus maquinarias y cargos');//Listos
+	console.log(dataInsertF);	
+
+	var start = 1;
+	clearArray(dataInsertC);
+	clearArray(dataInsertM);
+	while(globalIDExplotacionEtapa >= start){
+		if($('#en'+start+'U').val() != 'xxkkzz' && $('#en'+start+'U').val() !== undefined){
+			var startF = 1;
+			while(globalIDExplotacionFase>= startF){
+				if($('#e'+start+'fn'+startF+'U').val() != 'xxkkzz' && $('#e'+start+'fn'+startF+'U').val() !== undefined && $('#e'+start+'fn'+startF+'').val() === undefined ){
+					var codFas = $('#e'+start+'fn'+startF+'U').attr('name');
+
+					var startC = 1;
+					while(globalIDCargo >= startC){
+						if($('#e'+start+'f'+startF+'cq'+startC+'').val() > 0 && $('#e'+start+'f'+startF+'cq'+startC+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'c'+startC+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'cq'+startC+'').val();
+							var salario = $('#e'+start+'f'+startF+'cs'+startC+'').val();
+							dataInsertC.push({"cod":cod,"q":q,"salario":salario,"codFas":codFas});
+						}
+						startC++;
+					}
+
+					var startM = 1;
+					while(globalIDMaquinaria >= startM){
+						if($('#e'+start+'f'+startF+'mq'+startM+'').val() > 0 && $('#e'+start+'f'+startF+'mq'+startM+'').val() !== undefined){
+							var cod =$('#e'+start+'f'+startF+'m'+startM+'').children(':selected').val();
+							var q = $('#e'+start+'f'+startF+'mq'+startM+'').val();
+							var costo = $('#e'+start+'f'+startF+'mc'+startM+'').val();
+							dataInsertM.push({"cod":cod,"q":q,"costo":costo,"codFas":codFas});
+						}
+						startM++;
+					}
+				}
+				startF++;
+			}			
+		}
+		start++;		
+	}
+	console.log('Inserts de maquinaria y cargo dentro de los updates');//Listos
+	console.log(dataInsertC);
+	console.log(dataInsertM);
+
+
+	$.ajax({
+		url: '/EUEF',
+		method: 'POST',
+		data: {
+			dGC: dataGC,
+			dU: dataUpdate
+		},
+		success: function(response){
+			if (response == 'great'){
+				alert('Se ha modificado correctamente');
+			}else{
+				alert('No se ha modificado correctamente');
+			}
+
+		},
+		async:false
+	});
+
+	$.ajax({
+		url: '/EUCM',
+		method: 'POST',
+		data: {
+			dU: dataUpdate
+		},
+		success: function(response){
+			if (response == 'great'){
+				alert('Se ha modificado correctamente');
+			}else{
+				alert('No se ha modificado correctamente');
+			}
+		},
+		async:false
+	});
+
+	$.ajax({
+		url: '/EALLD',
+		method: 'POST',
+		data: {
+			dDE: dataDeleteE,
+			dDF: dataDeleteF,
+			dDC: dataDeleteC,
+			dDM: dataDeleteM
+		},
+		success: function(response){
+			if (response == 'great'){
+				alert('Se ha eliminado correctamente');
+			}else{
+				alert('No se ha eliminado correctamente');
+			}
+		},
+		async:false
+	});	
+
+	var expCod = 0;
+
+	$.ajax({
+		url: '/ExpDATA',
+		method: 'POST',
+		data: {
+			yacMod: dataGC.codYac
+		},
+		success: function(response){
+			if (response.explotacion[0].exp_codigo != 0){
+				expCod = response.explotacion[0].exp_codigo;
+				alert('Se obtuvo el codigo de la explotacion correctamente: '+expCod);
+			}else{
+				alert('Hubo un error obteniendo el codigo de la explotacion');
+			}
+		},
+		async:false
+	});	
+
+	for (var i = 0; i < dataInsert.e.length; i++) {
+		$.ajax({
+			url: '/AEta',
+			method: 'POST',
+			data:{
+				AEta: dataInsert.e[i].nE,
+				AExp: expCod,
+				AEst: dataInsert.e[i].est,
+				AEstD: dataInsert.e[i].dur
+			},
+			success:function(eta){
+				if(eta != null){
+					//alert('Se inserto la etapa exitosamente con el codigo = '+ eta.cod.eta_codigo);
+					console.log(i);
+					for (var j = 0; j < dataInsert.e[i].f.length; j++) {
+						$.ajax({
+							url: '/AFas',
+							method: 'POST',
+							data:{
+								AEta: eta.cod.eta_codigo,
+								AFas: dataInsert.e[i].f[j].nF,
+								AEst: dataInsert.e[i].f[j].est,
+								AEstD: dataInsert.e[i].f[j].dur
+							},
+							success:function(fas){
+								if(fas != null){
+									//alert('Se inserto la fase exitosamente con el codigo = '+ fas.cod.fas_codigo+' en la etapa = '+eta.cod.eta_codigo);
+									for (var k = 0; k < dataInsert.e[i].f[j].c.length; k++) {
+										$.ajax({
+											url: '/ACar',
+											method: 'POST',
+											data:{
+												ACarT: dataInsert.e[i].f[j].c[k].cod,
+												ACarQ: dataInsert.e[i].f[j].c[k].q,
+												ACarS: dataInsert.e[i].f[j].c[k].salario,
+												AFas: fas.cod.fas_codigo
+											},
+											success:function(car){
+												if(car == 'great'){
+													//alert('Se inserto un cargo exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
+												}else{
+													alert('Error en agregar un cargo');
+												}
+											},
+											async: false
+										});
+									}
+
+									for (var v = 0; v < dataInsert.e[i].f[j].m.length; v++) {
+										$.ajax({
+											url: '/AMaq',
+											method: 'POST',
+											data:{
+												AMaqT: dataInsert.e[i].f[j].m[v].cod,
+												AMaqQ: dataInsert.e[i].f[j].m[v].q,
+												AMaqC: dataInsert.e[i].f[j].m[v].costo,
+												AFas: fas.cod.fas_codigo
+											},
+											success:function(maq){
+												if(maq == 'great'){
+													//alert('Se inserto una maquinaria exitosamente en la fase '+ fas.cod.fas_codigo+' en la etapa '+eta.cod.eta_codigo);																						
+												}else{
+													alert('Error en agregar una maquinaria');
+												}
+											},
+											async: false
+										});
+									}
+										
+								}else{
+									alert('Error en agregar una fase');
+								}
+							},
+							async: false
+						});
+					}												
+				}else{
+					alert('Error en agregar una etapa');
+				}
+			},
+			async: false
+		});
+	}
+
+	for (var i = 0; i < dataInsertC.length; i++) {
+		$.ajax({
+			url: '/ACar',
+			method: 'POST',
+			data: {
+				AFas:dataInsertC[i].codFas,
+				ACarT:dataInsertC[i].cod,
+				ACarQ:dataInsertC[i].q,
+				ACarS:dataInsertC[i].salario,
+			},
+			success: function(response){
+				if(response == 'great'){
+					console.log('Insert fino');
+				}
+			},
+			async:false
+		});	
+	}
+
+	for (var i = 0; i < dataInsertM.length; i++) {
+		$.ajax({
+			url: '/AMaq',
+			method: 'POST',
+			data: {
+				AFas:dataInsertM[i].codFas,
+				AMaqT:dataInsertM[i].cod,
+				AMaqQ:dataInsertM[i].q,
+				AMaqC:dataInsertM[i].costo,
+			},
+			success: function(response){
+				if(response == 'great'){
+					console.log('Insert fino');
+				}
+			},
+			async:false
+		});	
+	}
+
+	for (var i = 0; i < dataInsertF.length; i++) {
+		
+		$.ajax({
+			url: '/AFas',
+			method: 'POST',
+			data: {
+				AEta:dataInsertF[i].codEta,
+				AFas:dataInsertF[i].name,
+				AEst:dataInsertF[i].est,
+				AEstD:dataInsertF[i].dur,
+			},
+			success: function(response){
+				if (response.cod.fas_codigo > 0){
+					alert(response.cod.fas_codigo);
+
+					for (var v = 0; v < dataInsertF[i].c.length; v++) {
+						$.ajax({
+							url: '/ACar',
+							method: 'POST',
+							data: {
+								AFas:response.cod.fas_codigo,
+								ACarT:dataInsertF[i].c[v].cod,
+								ACarQ:dataInsertF[i].c[v].q,
+								ACarS:dataInsertF[i].c[v].salario,
+							},
+							success: function(response){
+								if(response == 'great'){
+									console.log('Insert fino');
+								}
+							},
+							async:false
+						});	
+					}
+
+					for (var k = 0; k < dataInsertF[i].m.length; k++) {
+						$.ajax({
+							url: '/AMaq',
+							method: 'POST',
+							data: {
+								AFas:response.cod.fas_codigo,
+								AMaqT:dataInsertF[i].m[k].cod,
+								AMaqQ:dataInsertF[i].m[k].q,
+								AMaqC:dataInsertF[i].m[k].costo,
+							},
+							success: function(response){
+								if(response == 'great'){
+									console.log('Insert fino');
+								}
+							},
+							async:false
+						});	
+					}
+				}else{	
+					alert('PAPA HAY UN PROBLEMON');
+				}
+			},
+			async:false
+		});	
+	}	
+});
+
+function checkInsert(dataTest,data){
+	for (var i = 0; i < data.length; i++) {
+		
+	}
+}
+
+
+function removeButtonUE(nextID){
+	$('#re'+nextID+'U').on('click',function(e){
+		e.preventDefault();
+		$('#en'+nextID+'U').attr('value','xxkkzz');
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		removeUpExp($('#ee'+nextID+'U').val());
+		removeDUpExp($('#ed'+nextID+'U').val());
+		setTimeout(function(){
+			globalIDExplotacionEtapaR++;
+			boxDelete.hide();
+		},300);
+	});
+}
+
+function removeButtonUF(nextID,nextIDF){
+	$('#re'+nextID+'f'+nextIDF+'U').on('click',function(e){
+		var valuePrev = $('#e'+nextID+'fe'+nextIDF+'U').val();
+	    var valueDPrev = $('#e'+nextID+'d'+nextIDF+'U').val();
+		e.preventDefault();
+		$('#e'+nextID+'fn'+nextIDF+'U').attr('value','xxkkzz');
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		removeGenericU($('#ee'+nextID+'U'), valuePrev);
+		removeGenericU($('#estimadoExplotacionConfigurar'),valuePrev);
+		removeGenericU($('#ed'+nextID+'U'),valueDPrev);
+		removeGenericU($('#duracionExplotacionConfigurar'),valueDPrev);
+		setTimeout(function(){
+			globalIDExplotacionFaseR++;
+			boxDelete.hide();
+		},300);
+	});
+
+	$('#re'+nextID+'f'+nextIDF+'').on('click',function(e){
+		var valuePrev = $('#e'+nextID+'fe'+nextIDF+'').val();
+	    var valueDPrev = $('#e'+nextID+'d'+nextIDF+'').val();
+		e.preventDefault();
+		$('#e'+nextID+'fn'+nextIDF+'').attr('value','xxkkzz');
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		removeGenericU($('#ee'+nextID+'U'), valuePrev);
+		removeGenericU($('#estimadoExplotacionConfigurar'),valuePrev);
+		removeGenericU($('#ed'+nextID+'U'),valueDPrev);
+		removeGenericU($('#duracionExplotacionConfigurar'),valueDPrev);
+		setTimeout(function(){
+			globalIDExplotacionFaseR++;
+			boxDelete.hide();
+		},300);
+	});
+}
+
+function addCargoUpdate(faseCod){
+	console.log('Entro');
+	var cargos = [{}];
+	$.ajax({
+		url: '/FC',
+		method: 'POST',
+		data:{
+			faseMod: faseCod
+		},
+		success:function(res){
+			if(res.cargos != null){
+				console.log('Salio fino');
+				//console.log(res.cargos);
+				cargos = res.cargos;
+
+			}else{
+				alert('Error al obtener los cargos de una fase');
+				return 0;
+			}
+		},
+		async: false
+	});
+	return cargos;
+}
+
+function addMaquinariaUpdate(faseCod){
+	var maquinarias = [{}];
+	$.ajax({
+		url: '/FM',
+		method: 'POST',
+		data:{
+			faseMod: faseCod
+		},
+		success:function(res){
+			if(res != "failed"){
+				console.log('Salio fino');
+				maquinarias = res.maquinarias;
+			}else{
+				return 0;
+			}
+		},
+		async: false
+	});
+	return maquinarias;
+}
+
+function genericUpdateF(fase,nextID,nextIDF){
+	$('#e'+nextID+'d'+nextIDF+'U').on('change',function(){
+		changeNaN(this);
+		console.log(fase.dF,nextID);
+		removeDuracionFaseU(fase.dF,nextID);
+		removeDUpExp(fase.dF);
+		addDUpExp($('#e'+nextID+'d'+nextIDF+'U').val());
+		addDuracionFaseU($('#e'+nextID+'d'+nextIDF+'U').val(),nextID);
+		fase.dF = $('#e'+nextID+'d'+nextIDF+'U').val();
+	});
+}
+
+function removeButtonUC(nextID,nextIDF,nextIDUC){
+	$('#re'+nextID+'f'+nextIDF+'c'+nextIDUC+'U').on('click',function(e){
+		var valuePrev =  ( ( $('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U').val() )*( $('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'U').val() ) );
+		e.preventDefault();
+		$('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U').attr('value',-1);
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		removeEstimado(valuePrev);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		var codCF =$('#e'+nextID+'f'+nextIDF+'c'+nextIDUC+'U').attr('name');
+		console.log(codCF);
+		dataDeleteC.push({"codCF":codCF})
+		setTimeout(function(){
+			boxDelete.remove();
+		},300);
+	});
+
+	$('#re'+nextID+'f'+nextIDF+'c'+nextIDUC+'').on('click',function(e){
+		var valuePrev =  ( ( $('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'').val() )*( $('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'').val() ) );
+		e.preventDefault();
+		$('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'').attr('value',-1);
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		removeEstimado(valuePrev);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		setTimeout(function(){
+			boxDelete.remove();
+		},300);
+	});
+}
+
+function removeButtonUM(nextID,nextIDF,nextIDUC){
+	$('#re'+nextID+'f'+nextIDF+'m'+nextIDUC+'U').on('click',function(e){
+		var valuePrev =  ( ( $('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U').val() )*( $('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'U').val() ) );
+		e.preventDefault();
+		$('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U').attr('value',-1);
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		console.log(valuePrev);
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		var codTMF =$('#e'+nextID+'f'+nextIDF+'m'+nextIDUC+'U').attr('name');
+		console.log(codTMF);
+		dataDeleteM.push({"codTMF":codTMF})
+		setTimeout(function(){
+			boxDelete.remove();
+		},300);
+	});
+
+	$('#re'+nextID+'f'+nextIDF+'m'+nextIDUC+'').on('click',function(e){
+		var valuePrev =  ( ( $('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'').val() )*( $('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'').val() ) );
+		e.preventDefault();
+		$('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'').attr('value',-1);
+		boxButtonDelete = $(this).parent();
+		boxMinDelete = $(boxButtonDelete).parent();
+		boxDelete = $(boxMinDelete).parent();
+		$(boxDelete).removeClass('fadeIn');
+		$(boxDelete).addClass('fadeOut');
+		console.log(valuePrev);
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		setTimeout(function(){
+			boxDelete.remove();
+		},300);
+	});
+}
+
+function genericUpdateCC(cargo,nextID,nextIDF,nextIDUC){
+	$('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U').on('change',function(){
+		var valuePrev = cargo.total;
+		console.log('Entro en CC');
+		var costo = $('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'U');
+		changeNaN(costo);
+		changeNaN(this);
+		var cantidad = $(this).val();
+		console.log('Valor a eliminar= '+valuePrev);
+		console.log('cantidad = '+cantidad+' costo ='+costo.val());
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+		addEstimadoFaseU(cantidad*(costo.val()),nextID,nextIDF);
+		addEstimado(cantidad*(costo.val()));	
+		cargo.salario = costo.val();
+		cargo.q = cantidad;	
+		cargo.total = (cargo.salario)*(cargo.q); 			
+	});
+
+	$('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'').on('change',function(){
+		alert('Cantidad con valuePrev: '+cargo.total);
+		var valuePrev = cargo.total;
+		var costo = $('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'');
+		changeNaN(costo);
+		changeNaN(this);
+		var cantidad = $(this).val();
+		
+		if($('#e'+nextID+'fn'+nextIDF+'').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			alert('Entra en este caso EN EL SEGUNDO IF');
+			removeEstimado(valuePrev);
+			removeEstimadoFase(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+			addEstimadoFase(cantidad*(costo.val()),nextID,nextIDF);
+			addEstimado(cantidad*(costo.val()));	
+			cargo.total = cantidad*(costo.val());
+		}else if($('#e'+nextID+'fn'+nextIDF+'U').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			removeEstimado(valuePrev);
+			removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+			addEstimadoFaseU(cantidad*(costo.val()),nextID,nextIDF);
+			addEstimado(cantidad*(costo.val()));	
+			cargo.total = cantidad*(costo.val());
+		}		 
+	});
+}
+
+function genericUpdateMQ(maquinaria,nextID,nextIDF,nextIDUC){
+	$('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U').on('change',function(){
+		var valuePrev = maquinaria.total;
+		console.log('Entro en MQ');
+		var costo = $('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'U');
+		changeNaN(costo);
+		changeNaN(this);
+		var cantidad = $(this).val();
+		console.log('Valor a eliminar= '+valuePrev);
+		console.log('cantidad = '+cantidad+' costo ='+costo.val());
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+		addEstimadoFaseU(cantidad*(costo.val()),nextID,nextIDF);
+		addEstimado(cantidad*(costo.val()));	
+		maquinaria.costo = costo.val();
+		maquinaria.q = cantidad;	
+		maquinaria.total = (maquinaria.costo)*(maquinaria.q); 			
+	});
+
+	$('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'').on('change',function(){
+		var valuePrev = maquinaria.total;
+		var costo = $('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'');
+		changeNaN(costo);
+		changeNaN(this);
+		var cantidad = $(this).val();
+		if($('#e'+nextID+'fn'+nextIDF+'').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			alert('Entra en este caso EN EL SEGUNDO IF');
+			removeEstimado(valuePrev);
+			removeEstimadoFase(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+			addEstimadoFase(cantidad*(costo.val()),nextID,nextIDF);
+			addEstimado(cantidad*(costo.val()));	
+			maquinaria.total = cantidad*(costo.val());
+		}else if($('#e'+nextID+'fn'+nextIDF+'U').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			removeEstimado(valuePrev);
+			removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(cantidad*(costo.val()),nextID);
+			addEstimadoFaseU(cantidad*(costo.val()),nextID,nextIDF);
+			addEstimado(cantidad*(costo.val()));	
+			maquinaria.total = cantidad*(costo.val());
+		}					
+	});
+}
+
+function genericUpdateCS(cargo,nextID,nextIDF,nextIDUC){
+	$('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'U').on('change',function(){
+		var valuePrev = cargo.total;
+		console.log('Entro en CS');
+		var cantidad = $('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'U');
+		changeNaN(cantidad);
+		changeNaN(this);
+		var value = $(this).val();
+		console.log('Valor a eliminar= '+valuePrev);
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		addEstimadoEtapaU(value*(cantidad.val()),nextID);
+		addEstimadoFaseU(value*(cantidad.val()),nextID,nextIDF);
+		addEstimado(value*(cantidad.val()));
+		cargo.salario = value;
+		cargo.q = cantidad.val();	
+		cargo.total = (cargo.salario)*(cargo.q); 
+	});	
+
+	$('#e'+nextID+'f'+nextIDF+'cs'+nextIDUC+'').on('change',function(){
+		alert('Salario con valuePrev: '+cargo.total);
+		var valuePrev = cargo.total;
+		var cantidad = $('#e'+nextID+'f'+nextIDF+'cq'+nextIDUC+'');
+		changeNaN(cantidad);
+		changeNaN(this);
+		var value = $(this).val();
+		if($('#e'+nextID+'fn'+nextIDF+'').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			alert('Entra en este caso EN EL SEGUNDO IF');
+			removeEstimado(valuePrev);
+			removeEstimadoFase(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(value*(cantidad.val()),nextID);
+			addEstimadoFase(value*(cantidad.val()),nextID,nextIDF);
+			addEstimado(value*(cantidad.val()));
+			cargo.total = cantidad.val()*(value);
+		}else if($('#e'+nextID+'fn'+nextIDF+'U').val() !== undefined && $('#en'+nextID+'U').val() !== undefined){
+			removeEstimado(valuePrev);
+			removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(value*(cantidad.val()),nextID);
+			addEstimadoFaseU(value*(cantidad.val()),nextID,nextIDF);
+			addEstimado(value*(cantidad.val()));
+			cargo.total = cantidad.val()*(value);
+		}		
+	});
+}
+
+function genericUpdateMC(maquinaria,nextID,nextIDF,nextIDUC){
+	$('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'U').on('change',function(){
+		var valuePrev = maquinaria.total;
+		console.log('Entro en MC');
+		var cantidad = $('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'U');
+		changeNaN(cantidad);
+		changeNaN(this);
+		var value = $(this).val();
+		console.log('Valor a eliminar= '+valuePrev);
+		removeEstimado(valuePrev);
+		removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+		removeEstimadoEtapaU(valuePrev,nextID);
+		addEstimadoEtapaU(value*(cantidad.val()),nextID);
+		addEstimadoFaseU(value*(cantidad.val()),nextID,nextIDF);
+		addEstimado(value*(cantidad.val()));
+		maquinaria.costo = value;
+		maquinaria.q = cantidad.val();	
+		maquinaria.total = (maquinaria.costo)*(maquinaria.q); 
+	});
+
+	$('#e'+nextID+'f'+nextIDF+'mc'+nextIDUC+'').on('change',function(){
+		var valuePrev = maquinaria.total;
+		var cantidad = $('#e'+nextID+'f'+nextIDF+'mq'+nextIDUC+'');
+		changeNaN(cantidad);
+		changeNaN(this);
+		var value = $(this).val();
+		if($('#e'+nextID+'fn'+nextIDF+'').val() !== undefined  && $('#en'+nextID+'U').val() !== undefined){
+			alert('Entra en este caso EN EL SEGUNDO IF');
+			removeEstimado(valuePrev);
+			removeEstimadoFase(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(value*(cantidad.val()),nextID);
+			addEstimadoFase(value*(cantidad.val()),nextID,nextIDF);
+			addEstimado(value*(cantidad.val()));
+			maquinaria.total = value*(cantidad.val()); 
+		}else if($('#e'+nextID+'fn'+nextIDF+'U').val() !== undefined  && $('#en'+nextID+'U').val() !== undefined){
+			removeEstimado(valuePrev);
+			removeEstimadoFaseU(valuePrev,nextID,nextIDF);
+			removeEstimadoEtapaU(valuePrev,nextID);
+			addEstimadoEtapaU(value*(cantidad.val()),nextID);
+			addEstimadoFaseU(value*(cantidad.val()),nextID,nextIDF);
+			addEstimado(value*(cantidad.val()));
+			maquinaria.total = value*(cantidad.val());
+		}
+		
+	});	
+}
 
 
 var dataIniciar = {
@@ -2209,6 +3433,56 @@ var dataFechaFases = [{}];
 //dataConfig.e.push({"f":[],"nE":$('#en'+start+'').val(),"estE":$('#ee'+start+'').val(),"dE":$('#ed'+start+'').val()});
 
 
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2719,8 +3993,8 @@ function addPre(button,list){
 
 	globalIDPresentacionMineral++;
 
-});
-	}
+	});
+}
 
 addMinMet($('#addMinMet'),$('#listMinMet'));
 
@@ -4502,38 +5776,5 @@ function total (cantidad,response,monto,mt){
 	monto.html('');
 	monto.val(total);
 
-	//var valor = mt.val();
-	//sumar (monto);
-	// parseInt(mt.val());
-	// console.log('del input',valor);
-	// console.log('total',parseInt(total));
-	// valor = valor + parseInt(total);
-	// console.log('valor 2',valor);
-	// mt.val(valor);
-
-
 	});
 }
-
-// function sumar (monto) {
-
-// 	$('#MT').on('change',monto,function(){
-// 		var num1=parseInt((monto).val());
-// 		$('#MT').val(num1);
-
-// 	})
-
- //    var total = 0;	
-
- //    valor1 = parseInt(valor1); // Convertir el valor a un entero (número).
-	// valor2 = parseInt(valor2);
- //    // Aquí valido si hay un valor previo, si no hay datos, le pongo un cero "0".
- //    total = (total == null || total == undefined || total == "") ? 0 : total;
-	
- //    /* Esta es la suma. */
- //    total = (parseInt(valor1)+parseInt(valor2));
- //    console.log ('total',total);
-
- //   ($('#MT')).val(total);
-//}
-
