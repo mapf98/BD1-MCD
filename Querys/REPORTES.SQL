@@ -22,9 +22,18 @@
 	from empleado EMP, emp_cf ECF, car_fas CF, fase FAS, etapa ET, explotacion EX
 	where emp.emp_codigo = ECF.fk_ecf_empleado AND fk_ecf_carfas = cf_codigo AND fk_cf_fase = fas_codigo
 		AND fk_fas_etapa = eta_codigo AND fk_eta_explotacion = exp_codigo
-		AND exp_fechainicio = '01-01-2015' AND exp_fechafin = '06-30-2019'
+		AND exp_fechainicio BETWEEN '01-01-2015' AND  '06-30-2019'
 	group by emp_codigo, emp_cedula, emp_nombre, emp_apellido, mes
-	having count(ex.*)> 2
+	having count(ex.*)> 2;
+
+-- 7
+
+	SELECT emp.emp_codigo, count(E.*)
+	FROM empleado EMP, emp_cf ECF, car_fas CF, fase, etapa, explotacion E
+	where emp.emp_codigo = ecf.fk_ecf_empleado AND emp.emp_codigo = ECF.fk_ecf_empleado AND fk_ecf_carfas = cf_codigo 
+		AND fk_cf_fase = fas_codigo	AND fk_fas_etapa = eta_codigo AND fk_eta_explotacion = exp_codigo
+		AND exp_fechainicio BETWEEN '01-01-2000' AND  '06-30-2019'
+	group by emp.emp_codigo;
 
 -- 8.- Presentacion del mineral menos solicitado por los clientes en un ano
 
