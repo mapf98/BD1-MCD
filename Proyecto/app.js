@@ -1459,11 +1459,6 @@ app.post("/EUEF",function(req,res){
 
 app.post("/EUCM",function(req,res){
   let dU = req.body.dU;
-  // let dI = req.body.dI;
-  // let dDE = req.body.dDE;
-  // let dDF = req.body.dDF;
-  // let dDC = req.body.dDC;
-  // let dDM = req.body.dDM;
   for (var i = 0; i < dU.e.length; i++){
     for (var k = 0; k < dU.e[i].f.length; k++){
       for (var p = 0; p < dU.e[i].f[k].c.length; p++){
@@ -1574,9 +1569,6 @@ app.post("/ExplotacionIniciarExp",function(req,res){
     }
   });
 });
-
-
-/////////////////MINERALES
 
 app.get("/Minerales",function(req,res){
   if(userJSON.usuario != "none"){
