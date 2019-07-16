@@ -1564,7 +1564,7 @@ app.post("/ExplotacionIniciarEtapas",function(req,res){
 
 app.post("/ExplotacionIniciarExp",function(req,res){
   var f = req.body.f;
-  var e = 'Ocupado';
+  var e = 'En proceso';
   client.query('UPDATE EXPLOTACION SET EXP_FECHAINICIO=$1, EXP_FECHAFIN=$2, FK_EXP_ESTATUS=(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3) WHERE EXP_CODIGO = $4',[f.fi,f.ff,e,f.codExp],(err,result)=>{
     if (err){
       console.log(err.stack);
