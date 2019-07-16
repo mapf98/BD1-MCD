@@ -1,10 +1,4 @@
--- MINERUCAB 2019 --
--- Por: 
-	-- Miguel Fraga
-	-- David Monroy
-	-- Carolina Patino
 
------------ INSERTS --------------
 
 INSERT INTO estatus(
 	est_codigo, est_nombre)

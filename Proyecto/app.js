@@ -1497,36 +1497,41 @@ app.post("/EUCM",function(req,res){
 app.post("/ExplotacionIniciarEmpleados",function(req,res){
   var c = req.body.c;
   var e = 'Ocupado';
-  for (var i = 0; i < c.length; i++) {
-    client.query('INSERT INTO EMP_CF (FK_ECF_EMPLEADO,FK_ECF_CARFAS,FK_ECF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING ECF_CODIGO',[c[i].codC,c[i].codCF,e],(err,result)=>{
-      if (err){
-        console.log(err.stack);
-        res.send('failed'); 
-      }else{
-        client.query('INSERT INTO HOR_ECF (FK_HECF_ECF,FK_HECF_HOR) VALUES ($1,$2) RETURNING ECF_CODIGO',[result.rows[0],c[i].h],(err,result)=>{
-          if (err){
-            console.log(err.stack);
-            res.send('failed'); 
-          }
-        });
-      }
-    });
-  }
-  res.send('great');
+  client.query('INSERT INTO EMP_CF (FK_ECF_EMPLEADO,FK_ECF_CARFAS,FK_ECF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3)) RETURNING ECF_CODIGO',[c.codC,c.codCF,e],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      var ecf = result.rows[0];
+      res.send({"ecf":ecf});
+    }
+  });  
+});
+
+app.post("/ExplotacionIniciarHorarioEmpleado",function(req,res){
+  var h = req.body.h;
+  var ecf = req.body.ecf;
+  client.query('INSERT INTO HOR_ECF (FK_HECF_ECF,FK_HECF_HOR) VALUES ($1,$2)',[ecf,h],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });
 });
 
 app.post("/ExplotacionIniciarMaquinarias",function(req,res){
   var m = req.body.m;
   var e = 'Ocupado';
-  for (var i = 0; i < m.length; i++) {
-    client.query('INSERT INTO TM_FAS (FK_TMF_TM,FK_TMF_FASE,FK_TMF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3))',[m[i].codM,m[i].codF,e],(err,result)=>{
-      if (err){
-        console.log(err.stack);
-        res.send('failed'); 
-      } 
-    });
-  }
-  res.send('great');
+  client.query('INSERT INTO MAQ_FAS (FK_MF_MAQUINARIA,FK_MF_TM_FASE,FK_MF_ESTATUS) VALUES ($1,$2,(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3))',[m.codM,m.codTMF,e],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great');
+    }
+  });  
 });
 
 app.post("/ExplotacionIniciarFases",function(req,res){
@@ -1541,6 +1546,33 @@ app.post("/ExplotacionIniciarFases",function(req,res){
     });
   }  
   res.send('great');
+});
+
+app.post("/ExplotacionIniciarEtapas",function(req,res){
+  var f = req.body.f;
+  var e = 'Ocupado';
+  for (var i = 0; i < f.length; i++) {
+    client.query('UPDATE ETAPA SET ETA_FECHAINICIO=$1, ETA_FECHAFIN=$2 WHERE ETA_CODIGO = $3',[f[i].fi,f[i].ff,f[i].codEta],(err,result)=>{
+      if (err){
+        console.log(err.stack);
+        res.send('failed'); 
+      }
+    });
+  }  
+  res.send('great');
+});
+
+app.post("/ExplotacionIniciarExp",function(req,res){
+  var f = req.body.f;
+  var e = 'Ocupado';
+  client.query('UPDATE EXPLOTACION SET EXP_FECHAINICIO=$1, EXP_FECHAFIN=$2, FK_EXP_ESTATUS=(SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $3) WHERE EXP_CODIGO = $4',[f.fi,f.ff,e,f.codExp],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      res.send('great'); 
+    }
+  });
 });
 
 

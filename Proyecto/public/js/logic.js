@@ -20,6 +20,8 @@ var uE = false;
 var nU = false;
 var dU = false;
 var modificarConfig = false;
+var iniciarExp = true;
+var globalIDEmpleado = 1;
 
 var modYac = {
     "d": [],
@@ -1777,7 +1779,6 @@ function resetYacCF(){
 	});
 }
 
-
 $('#agregarConfiguracion').on('submit',function(e){
 	e.preventDefault();
 	var yacimientoExp = $('#yacimientoConfigurar').children(":selected");
@@ -3419,9 +3420,9 @@ var dataIniciar = {
 } 
 
 
-var dataCargos = [{}];
-var dataMaquinarias = [{}];
-var dataFechaFases = [{}];
+var dataCargos = [];
+var dataMaquinarias = [];
+var dataFechaFases = [];
 
 //DEFINICION DEL JSON 
 
@@ -3483,8 +3484,65 @@ var dataFechaFases = [{}];
 
 ////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function checkFechas(fechaI,fechaF,duracion){
+	var inicio = new Date();
+	inicio = fechaI;
+	var fin = new Date();
+	fin = fechaF;
+	console.log(fechaI);
+	console.log(fechaF);
+	console.log(duracion);
+	if(duracion < daysNew(inicio,fin)){
+		iniciarExp = false;
+	}
+}
+
+function daysNew(inicio,fin){
+	var fechaini = new Date(inicio);
+	var fechafin = new Date(fin);
+	var diasdif= fechafin.getTime()-fechaini.getTime();
+	var contdias = Math.round(diasdif/(1000*60*60*24));
+	return contdias;
+}
+
+var dataFechaEtapas = [];
+
+var dataFechaExp ={
+	"codExp":0,
+	"fi":0,
+	"ff":0
+}
+
+function checkMinCargoOnFases(){
+	var ready = true;
+	console.log('E '+globalIDExplotacionEtapa);
+	console.log('F '+globalIDExplotacionFase);
+	console.log('C '+globalIDCargo);
+	console.log('Emp '+globalIDEmpleado);
+	for (var v = 0; v < globalIDExplotacionEtapa; v++) {
+		for (var i = 0; i < globalIDExplotacionFase; i++){
+			for (var p = 0; p < globalIDCargo; p++){
+				var aux = 0;
+				for (var k = 0; k < globalIDEmpleado; k++) {
+					if($('#e'+(1+v)+'f'+(1+i)+'c'+(1+p)+'e'+(1+k)+'').children(':selected').val() != 'ns' && $('#e'+(1+v)+'f'+(1+i)+'c'+(1+p)+'e'+(1+k)+'').children(':selected').val() !== undefined ){
+						alert('Entro');
+						aux++;
+					}
+				}
+				if(aux == 0){
+					ready = false;
+					i = 2000;
+					p = 2000;
+					v = 2000;
+					alert('Quiere decir que un cargo no tiene minimo uno de los empleados');
+				}
+			}
+		}
+	}
+	return ready;
+}
 
 $('#addFormulario').on('click',function(e){
 	dataIniciar.yac = "";
@@ -3504,7 +3562,9 @@ $('#addFormulario').on('click',function(e){
 			if(res.explotacion != null){
 				dataIniciar.yac = yacimientoIniciar;
 				dataIniciar.dur = res.explotacion[0].exp_duracion;
-				dataIniciar.estimado = res.explotacion[0].exp_costototal;	
+				dataIniciar.estimado = res.explotacion[0].exp_costototal;
+				dataFechaExp.codExp = res.explotacion[0].exp_codigo;
+				$('#DurExp').attr('value',dataIniciar.dur);	
 			}else{
 				alert('Hubo un error con la informacion de la explotacion');
 			}
@@ -3521,7 +3581,8 @@ $('#addFormulario').on('click',function(e){
 		success:function(response){
 			if(response.etapas[0] != null){
 				for (var i = 0; i < response.etapas.length; i++) {
-					dataIniciar.e.push({"f":[],"nE":response.etapas[i].eta_nombre,"estE":response.etapas[i].eta_costototal,"dE":response.etapas[i].eta_costototal,"codEta":response.etapas[i].eta_codigo});
+					globalIDExplotacionEtapa++;
+					dataIniciar.e.push({"f":[],"nE":response.etapas[i].eta_nombre,"estE":response.etapas[i].eta_costototal,"dE":response.etapas[i].eta_duracion,"codEta":response.etapas[i].eta_codigo});
 					$.ajax({
 						url: '/FT',
 						method: 'POST',
@@ -3531,6 +3592,7 @@ $('#addFormulario').on('click',function(e){
 						success:function(res){
 							if(res.fases[0] != null){
 								for (var k = 0; k < res.fases.length; k++) {
+									globalIDExplotacionFase++;
 									dataIniciar.e[i].f.push({ "c":[] , "m":[] ,"nF": res.fases[k].fas_nombre, "estF":  res.fases[k].fas_costototal,"dF": res.fases[k].fas_duracion,"codFas": res.fases[k].fas_codigo});
 									$.ajax({
 										url: '/FC',
@@ -3541,6 +3603,7 @@ $('#addFormulario').on('click',function(e){
 										success:function(res){
 											if(res.cargos != null){
 												for (var g = 0; g < res.cargos.length; g++) {
+													globalIDCargo++;
 													dataIniciar.e[i].f[k].c.push({"cod":res.cargos[g].car_codigo,"nC":res.cargos[g].car_nombre,"q":res.cargos[g].cf_cantidad,"salario":res.cargos[g].cf_costo,"cfC":res.cargos[g].cf_codigo});
 												}			
 											}
@@ -3556,6 +3619,7 @@ $('#addFormulario').on('click',function(e){
 										success:function(res){
 											if(res.maquinarias != null){
 												for (var j = 0; j < res.maquinarias.length; j++){
+													globalIDMaquinaria++;
 													dataIniciar.e[i].f[k].m.push({"cod":res.maquinarias[j].tm_codigo,"nM":res.maquinarias[j].tm_nombre,"q":res.maquinarias[j].tmf_cantidad,"costo":res.maquinarias[j].tmf_costo,"tmfC":res.maquinarias[j].tmf_codigo});
 												}	
 											}
@@ -3578,20 +3642,23 @@ $('#addFormulario').on('click',function(e){
 		async: false
 	});
 
-	// MODIFICAR CAMPOS, Y AGREGAR CONSULTA PRA EMPLEADOS Y MAQUINARIAS
 	var listE = $('#listFormulario');
 	listE.html('');
 	for (var i = 0; i < dataIniciar.e.length; i++) {
 		listE.append('\n\
 					<div class="newEtapa animated fadeIn" id="'+(i+1)+'">\n\
 					<div class="form-row">\n\
-					<div class="col-md-4 mb-3">\n\
-					<label for="en'+(i+1)+'" class="textEtapa">Nombre de la etapa</label>\n\
-					<input type="text" class="form-control formsCRUD" id="en'+(i+1)+'" value="'+dataIniciar.e[i].nE+'" required>\n\
+					<div class="col-md-2 mb-3">\n\
 					</div>\n\
 					<div class="col-md-4 mb-3">\n\
+					<label for="en'+(i+1)+'" class="textEtapa">Etapa</label>\n\
+					<input type="text" class="form-control formsCRUD" id="en'+(i+1)+'" value="'+dataIniciar.e[i].nE+'" disabled>\n\
 					</div>\n\
 					<div class="col-md-4 mb-3">\n\
+					<label for="e'+(i+1)+'d" class="textEtapa">Duración Estimada (Días)</label>\n\
+					<input type="text" class="form-control formsCRUD" id="e'+(i+1)+'d" value="'+dataIniciar.e[i].dE+'" disabled>\n\
+					</div>\n\
+					<div class="col-md-2 mb-3">\n\
 					</div>\n\
 					</div>\n\
 					<hr class="hretapa">\n\
@@ -3605,9 +3672,9 @@ $('#addFormulario').on('click',function(e){
 			listF.append('\n\
 				<div class="newFase animated fadeIn" id="e'+(i+1)+'f'+(k+1)+'">\n\
 				<div class="form-row">\n\
-				<div class="col-md-4 mb-3">\n\
-				<label for="e'+(i+1)+'fn'+(k+1)+'" class="textEtapa">Nombre de la fase</label>\n\
-				<input type="text" class="form-control formsCRUD" id="e'+(i+1)+'fn'+(k+1)+'" value="'+dataIniciar.e[i].f[k].nF+'" required>\n\
+				<div class="col-md-2 mb-3">\n\
+				<label for="e'+(i+1)+'fn'+(k+1)+'" class="textEtapa">Fase</label>\n\
+				<input type="text" class="form-control formsCRUD" id="e'+(i+1)+'fn'+(k+1)+'" value="'+dataIniciar.e[i].f[k].nF+'" disabled>\n\
 				</div>\n\
 				<div class="col-md-4 mb-3">\n\
 				<label for="e'+(i+1)+'fi'+(k+1)+'i" class="textEtapa">Fecha Inicio</label>\n\
@@ -3616,6 +3683,10 @@ $('#addFormulario').on('click',function(e){
 				<div class="col-md-4 mb-3">\n\
 				<label for="e'+(i+1)+'ff'+(k+1)+'" class="textEtapa">Fecha Fin</label>\n\
 				<input type="date" class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'f" requiered>\n\
+				</div>\n\
+				<div class="col-md-2 mb-3">\n\
+				<label for="e'+(i+1)+'f'+(k+1)+'d" class="textEtapa">Est (Días)</label>\n\
+				<input type="number" class="form-control formsCRUD" id="e'+(i+1)+'f'+(k+1)+'d" value="'+dataIniciar.e[i].f[k].dF+'" disabled>\n\
 				</div>\n\
 				</div>\n\
 				<hr class="hretapa">\n\
@@ -3644,6 +3715,7 @@ $('#addFormulario').on('click',function(e){
 			listC.html('');
 			for (var j = 0; j < dataIniciar.e[i].f[k].c.length; j++) {
 				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++) {
+					globalIDEmpleado++;
 					listC.append('\n\
 					<div class="newCargo animated fadeIn">\n\
 						<div class="form-row">\n\
@@ -3682,6 +3754,7 @@ $('#addFormulario').on('click',function(e){
 
 					selectCargo = $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'');
 					selectCargo.html('');
+					selectCargo.append('<option value="ns">No selecionado</option>');
 					for (var y = cargos.length - 1; y >= 0; y--) {
 						selectCargo.append('<option value="'+cargos[y].emp_codigo+'">'+cargos[y].emp_nombre+' '+cargos[y].emp_apellido+' / CI: '+cargos[y].emp_cedula+'</option>');
 					}
@@ -3744,6 +3817,7 @@ $('#addFormulario').on('click',function(e){
 
 					selectMaquinaria = $('#e'+(i+1)+'f'+(k+1)+'m'+(p+1)+'e'+(u+1)+'');
 					selectMaquinaria.html('');
+					selectMaquinaria.append('<option value="ns">No seleccionado</option>');
 					for (var v = maquinarias.length - 1; v >= 0; v--) {
 						selectMaquinaria.append('<option value="'+maquinarias[v].maq_codigo+'">'+maquinarias[v].maq_nombre+'</option>');
 					}
@@ -3754,89 +3828,237 @@ $('#addFormulario').on('click',function(e){
 			
 		}
 	}
-
-	// dataIniciar.yac = "";
-	// dataIniciar.dur = 0;
-	// dataIniciar.estimado = 0;
-	// dataIniciar.e = [];
 });
 
 $('#iniciarExplotacion').on('submit',function(e){
 	e.preventDefault();
+	iniciarExp = true;
 
 	for (var i = 0; i < dataIniciar.e.length; i++) {
-
+		dataFechaEtapas.push({"codEta":dataIniciar.e[i].codEta,"fi":0,"ff":0});
 		for (var k = 0; k < dataIniciar.e[i].f.length; k++) {
 			dataFechaFases.push({"codFas": dataIniciar.e[i].f[k].codFas,"fi":$('#e'+(i+1)+'f'+(k+1)+'i').val(),"ff":$('#e'+(i+1)+'f'+(k+1)+'f').val()});
-		
+			checkFechas($('#e'+(i+1)+'f'+(k+1)+'i').val(),$('#e'+(i+1)+'f'+(k+1)+'f').val(),$('#e'+(i+1)+'f'+(k+1)+'d').val());
+			if(dataFechaEtapas[i].fi==0 && dataFechaEtapas[i].ff==0){
+				dataFechaEtapas[i].fi= $('#e'+(i+1)+'f'+(k+1)+'i').val();
+				dataFechaEtapas[i].ff= $('#e'+(i+1)+'f'+(k+1)+'f').val();
+			}
+			if(dataFechaEtapas[i].fi > $('#e'+(i+1)+'f'+(k+1)+'i').val()){
+				dataFechaEtapas[i].fi = $('#e'+(i+1)+'f'+(k+1)+'i').val();
+			}
+			if(dataFechaEtapas[i].ff < $('#e'+(i+1)+'f'+(k+1)+'f').val()){
+				dataFechaEtapas[i].ff = $('#e'+(i+1)+'f'+(k+1)+'f').val();
+			}
+
+			
 			for (var j = 0; j < dataIniciar.e[i].f[k].c.length; j++) {
 				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++){
-					//console.log($('#en'+(i+1)+'').val());
-					dataCargos.push({"codCF":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').attr('name'),"codC":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').children(':selected').val(),"h": $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'').val()});
+					if($('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').children(':selected').val() != 'ns'){
+						dataCargos.push({"codCF":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').attr('name'),"codC":$('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'e'+(h+1)+'').children(':selected').val(),"h": $('#e'+(i+1)+'f'+(k+1)+'c'+(j+1)+'he'+(h+1)+'').val()});
+					}					
 				}	
 
 				for (var h = 0; h < dataIniciar.e[i].f[k].c[j].q; h++){
-					//console.log($('#en'+(i+1)+'').val());
-					dataMaquinarias.push({"codF":dataIniciar.e[i].f[k].codFas,"codM":$('#e'+(i+1)+'f'+(k+1)+'m'+(j+1)+'e'+(h+1)+'').children(':selected').val()});
+					if($('#e'+(i+1)+'f'+(k+1)+'m'+(j+1)+'e'+(h+1)+'').children(':selected').val() != 'ns'){
+						dataMaquinarias.push({"codTMF":$('#e'+(i+1)+'f'+(k+1)+'m'+(j+1)+'e'+(h+1)+'').attr('name'),"codF":dataIniciar.e[i].f[k].codFas,"codM":$('#e'+(i+1)+'f'+(k+1)+'m'+(j+1)+'e'+(h+1)+'').children(':selected').val()});
+					}					
 				}	
-				
-			}			
+			}
+
 		}								
+	}
+
+	for (var i = 0; i < dataFechaEtapas.length; i++){
+		if(dataFechaExp.fi == 0 && dataFechaExp.ff == 0){
+			dataFechaExp.fi = dataFechaEtapas[i].fi;
+			dataFechaExp.ff = dataFechaEtapas[i].ff;
+		}
+
+		if(dataFechaExp.fi > dataFechaEtapas[i].fi){
+			dataFechaExp.fi = dataFechaEtapas[i].fi;
+		}
+
+		if(dataFechaExp.ff < dataFechaEtapas[i].ff){
+			dataFechaExp.ff = dataFechaEtapas[i].ff;
+		}		
 	}
 	console.log(dataCargos);
 	console.log(dataMaquinarias);
 	console.log(dataFechaFases);
+	console.log(dataFechaEtapas);
+	console.log(dataFechaExp);
 
-	$.ajax({
-		url: '/ExplotacionIniciarEmpleados',
-		method: 'POST',
-		data:{
-			c: dataCargos[i]
-		},
-		success:function(res){
-			if(res == "great"){
-				alert('Moidificaciones realizadas correctamente');
-			}else{
-				alert('Hubo un error con la informacion de maquinarias');
-			}
-		},
-		async: false
-	});
+	if(iniciarExp){
 
-	$.ajax({
-		url: '/ExplotacionIniciarMaquinarias',
-		method: 'POST',
-		data:{
-			m: dataMaquinarias[i]
-		},
-		success:function(res){
-			if(res == "great"){
-				alert('Moidificaciones realizadas correctamente');
-			}else{
-				alert('Hubo un error con la informacion de maquinarias');
-			}
-		},
-		async: false
-	});
 
-	$.ajax({
-		url: '/ExplotacionIniciarFases',
-		method: 'POST',
-		data:{
-			f: dataFechaFases[i]
-		},
-		success:function(res){
-			if(res == "great"){
-				alert('Moidificaciones realizadas correctamente');
-			}else{
-				alert('Hubo un error con la informacion de maquinarias');
-			}
-		},
-		async: false
-	});
+		for (var i = 0; i < dataCargos.length; i++){
+			$.ajax({
+				url: '/ExplotacionIniciarEmpleados',
+				method: 'POST',
+				data:{
+					c: dataCargos[i]
+				},
+				success:function(res){
+					if(res.ecf.ecf_codigo > 0){
+						$.ajax({
+							url: '/ExplotacionIniciarHorarioEmpleado',
+							method: 'POST',
+							data:{
+								h: dataCargos[i].h,
+								ecf: res.ecf.ecf_codigo
+							},
+							success:function(res){
+								if(res == 'great'){
+									console.log('Registro bien el horario del empleado');
+								}else{
+									alert('Hubo un error al insetar los empleados');
+								}
+							},
+							async: false
+						});
+					}else{
+						alert('Hubo un error al insetar los empleados');
+					}
+				},
+				async: false
+			});
+		}
+		
+		for (var i = 0; i < dataMaquinarias.length; i++) {
+			$.ajax({
+				url: '/ExplotacionIniciarMaquinarias',
+				method: 'POST',
+				data:{
+					m: dataMaquinarias[i]
+				},
+				success:function(res){
+					if(res == "great"){
+						alert('Moidificaciones realizadas correctamente');
+					}else{
+						alert('Hubo un error con la informacion de maquinarias');
+					}
+				},
+				async: false
+			});
+		}
+		
+		$.ajax({
+			url: '/ExplotacionIniciarFases',
+			method: 'POST',
+			data:{
+				f: dataFechaFases
+			},
+			success:function(res){
+				if(res == "great"){
+					alert('Moidificaciones realizadas correctamente');
+				}else{
+					alert('Hubo un error con la informacion de maquinarias');
+				}
+			},
+			async: false
+		});
+
+		$.ajax({
+			url: '/ExplotacionIniciarEtapas',
+			method: 'POST',
+			data:{
+				f: dataFechaEtapas
+			},
+			success:function(res){
+				if(res == "great"){
+					alert('Moidificaciones realizadas correctamente');
+				}else{
+					alert('Hubo un error con la informacion de maquinarias');
+				}
+			},
+			async: false
+		});
+
+		$.ajax({
+			url: '/ExplotacionIniciarExp',
+			method: 'POST',
+			data:{
+				f: dataFechaExp
+			},
+			success:function(res){
+				if(res == "great"){
+					alert('Moidificaciones realizadas correctamente');
+				}else{
+					alert('Hubo un error con la informacion de maquinarias');
+				}
+			},
+			async: false
+		});
+		
+	}else{
+		alert('Hubo un error con las fechas, porfavor verifique que los intervalos seleccionados no excedan la duracion estimada');
+	}	
 });
 
 addEtapa($('#addEtapa'),$('#listEtapa'));
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////  EXPLOTACION  ///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
 
 
 
