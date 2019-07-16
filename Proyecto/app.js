@@ -2890,7 +2890,7 @@ app.get("/Explotaciones-Iniciar-Consultar",function(req,res){
 app.get("/Explotaciones-Iniciar-Eliminar",function(req,res){
   if(userJSON.usuario != "none"){
     var filtro = 'En proceso';
-    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS, EXPLOTACION WHERE fk_exp_yacimiento = yac_codigo AND est_codigo = fk_exp_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1)',[filtro],(err,result)=>{
       if (err) {
         console.log(err.stack);
         res.send('failed'); 
