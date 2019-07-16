@@ -2863,5 +2863,69 @@ app.post("/Ventas-AgregarPrecio",function(req,res){
 });
 
 
+// EXPLOTACIONES INICIAR -- DAVID
+
+
+app.get("/Explotaciones-Iniciar-Consultar",function(req,res){
+  if(userJSON.usuario != "none"){
+    var estatus = 'En proceso';
+    client.query('SELECT Y.YAC_NOMBRE, Y.YAC_CODIGO, EX.EXP_DURACION, EX.EXP_COSTOTOTAL, COUNT(E.ETA_NOMBRE) AS TotalEtapas FROM ETAPA AS E, YACIMIENTO AS Y, EXPLOTACION AS EX WHERE EX.EXP_CODIGO = E.FK_ETA_EXPLOTACION AND Y.YAC_CODIGO = EX.FK_EXP_YACIMIENTO AND EX.FK_EXP_ESTATUS = (SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $1) GROUP BY Y.YAC_NOMBRE, Y.YAC_CODIGO, EX.EXP_DURACION, EX.EXP_COSTOTOTAL',[estatus],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yacimientosExp = result.rows;
+        res.render('explotacionesIniciarConsultar',{user: userJSON,yacimientosExp: yacimientosExp});
+      }else{
+        var yacimientosExp = result.rows;
+        res.render('explotacionesIniciarConsultar',{user: userJSON,yacimientosExp: yacimientosExp});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+
+app.get("/Explotaciones-Iniciar-Eliminar",function(req,res){
+  if(userJSON.usuario != "none"){
+    var filtro = 'En proceso';
+    client.query('SELECT yac_nombre,yac_codigo FROM YACIMIENTO, ESTATUS WHERE est_codigo = fk_yac_estatus AND est_codigo = (SELECT est_codigo FROM ESTATUS WHERE est_nombre = $1) ',[filtro],(err,result)=>{
+      if (err) {
+        console.log(err.stack);
+        res.send('failed'); 
+      }else if(result.rows[0] != null){
+        var yac = result.rows;
+        res.render('explotacionesIniciarEliminar',{user: userJSON,yac: yac});
+      }else{
+        res.render('explotacionesIniciar',{user: userJSON,yac: yac});
+      }
+    });
+  }else{
+    res.redirect('login');
+  }
+});
+
+app.post("/Explotaciones-Iniciar-Eliminar",function(req,res){
+  var yacEC = req.body.yacEC;
+  var uS = "Eliminado";
+  client.query('DELETE FROM EXPLOTACION WHERE FK_EXP_YACIMIENTO = $1',[yacEC],(err,result)=>{
+    if (err){
+      console.log(err.stack);
+      res.send('failed'); 
+    }else{
+      client.query('UPDATE YACIMIENTO SET FK_YAC_ESTATUS = (SELECT EST_CODIGO FROM ESTATUS WHERE EST_NOMBRE = $1) WHERE YAC_CODIGO = $2',[uS,yacEC],(err,result)=>{
+        if (err) {
+          console.log(err.stack);
+          res.send('failed'); 
+        }else{
+          res.send('great');      
+        }
+      });
+    }
+  });
+});
+
+
 //Puerto donde se escuchan las peticiones http
 app.listen(8080);

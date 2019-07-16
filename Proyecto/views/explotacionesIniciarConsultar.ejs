@@ -116,44 +116,30 @@
               <div class="col-lg-2"></div>
             </div>
             <div class="row">
-              <div class="col-2"></div>
-              <div class="col-8">
-                <div class="boxFormAgregarYacimiento animated fadeIn">
-
-                  <form action="/Explotaciones-Agregar-Iniciar" method="POST" id="iniciarExplotacion">
-                    <div class="form-row">
-                      <div class="col-md-8 mb-3">
-                        <label for="yacimientoIniciar">Yacimientos con configuración</label>
-                        <select class="form-control formsCRUD" id="yacimientoIniciar" required>
-                          <% for(var i=0; i < yac.length; i++) {%>
-                            <option value='<%=yac[i].yac_codigo%>'><%=yac[i].yac_nombre%></option>
-                          <%}%>
-                        </select>
-                      </div>
-                      <div class="col-4">
-                        <label for="addFormulario" class="hackerText">h</label>
-                        <button class="btn btn-success btn-block" id="addFormulario">Añadir</button>
-                      </div>
-                    </div> 
-                    <div class="row rowDataExp">
-                      <div class="col-4"></div>
-                      <div class="col-4">
-                        <label for="DurExp">Duración Estimada (Días)</label>
-                        <input type="number" min=0 value=0 class="form-control formsCRUD" id="DurExp" disabled>
-                      </div>
-                      <div class="col-4"></div>
-                    </div>
-                    <hr>
-
-                    <div class="animated fadeIn listFormulario" id="listFormulario">
-                    </div>                      
-
-                   
-                    <button class="btn btnForms btn-block" type="submit">Agregar</button>
-                  </form>
+              <div class="col-12">
+                <div class="boxConsultarEmpleado animated fadeIn">
+                  <table id="table_id_explotaciones" class="display">
+                    <thead class="headDataTable">
+                        <tr>
+                          <th class="text-center">Yacimiento</th>
+                          <th class="text-center">Duración</th>
+                          <th class="text-center">Total Etapas</th>
+                          <th class="text-center">Costo total estimado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i=0; i < yacimientosExp.length; i++) {%>
+                        <tr>
+                          <td class="text-center"><%=yacimientosExp[i].yac_nombre%></td>
+                          <td class="text-center"><%=yacimientosExp[i].exp_duracion%> Días</td>
+                          <td class="text-center"><%=yacimientosExp[i].totaletapas%></td>
+                          <td class="text-center"><%=yacimientosExp[i].exp_costototal%> Bs</td>
+                        </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div class="col-2"></div>
             </div>
 
             

@@ -5997,6 +5997,44 @@ function total (cantidad,response,monto,mt){
 	var total = (cant*response.min[0].mp_precio);
 	monto.html('');
 	monto.val(total);
-
 	});
 }
+
+
+// EXPLOTACIONES INICIAR -- DAVID
+
+$(document).ready( function () {
+    $('#table_id_explotaciones').DataTable();
+});
+
+$('#menuItemConsultarIniciar').on('click',function(){
+	window.location.href = "/Explotaciones-Iniciar-Consultar";
+});
+
+$('#menuItemEliminarIniciar').on('click',function(){
+	window.location.href = "/Explotaciones-Iniciar-Eliminar";
+});
+
+$('#eliminarIniciar').on('submit',function(e){
+	e.preventDefault();
+	var yacimientoEliminarIniciar = $('#iniciarEliminar').children(":selected");
+	console.log( yacimientoEliminarIniciar.val());
+	$.ajax({
+		url: '/Explotaciones-Iniciar-Eliminar',
+		method: 'POST',
+		data:{
+			yacEC: yacimientoEliminarIniciar.val()
+		},
+		success:function(response){
+			if(response == 'great'){
+				alert('Se ha eliminado la configuracion para el yacimiento seleccionado');
+				resetYacCF();
+			}else{
+				alert('Hubo un error, verifique');
+			}
+		}
+	});
+});
+
+
+
